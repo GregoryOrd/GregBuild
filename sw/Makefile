@@ -3,7 +3,16 @@ libDirectory = "../ExampleSrcRepo/lib"
 
 GregBuild: $(distDirectory) GregTestDll
 	# Compile 
-	gcc core/GregBuildMain.c fileSystemRecursion/FileAndTestCaseGatherer.c testMainWriting/TestMainWriter.c fileSystemRecursion/TestAndSrcDefinitions.c -o ../dist/GregBuild.exe
+	gcc core/GregBuildMain.c \
+		core/StringUtils.c \
+		core/FileSystemOperations.c \
+		core/CompileAndLinkCommands.c \
+		core/RunTests.c \
+		fileSystemRecursion/FileAndTestCaseGatherer.c \
+		fileSystemRecursion/TestAndSrcDefinitions.c \
+		testMainWriting/TestMainWriter.c \
+		commandLineCalls/ExternalProgramExecution.c \
+		-o ../dist/GregBuild.exe
 	
 	cp ../dist/GregBuild.exe ../ExampleSrcRepo
 
@@ -17,5 +26,6 @@ $(libDirectory):
 	mkdir ../ExampleSrcRepo/lib
 
 clean:
+	rm ../ExampleSrcRepo/lib -r
 	rm ../dist/GregBuild.exe
 	rm ../ExampleSrcRepo/GregBuild.exe

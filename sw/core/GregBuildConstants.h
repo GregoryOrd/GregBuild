@@ -1,5 +1,5 @@
-#ifndef GREG_TEST_CONSTANTS
-#define GREG_TEST_CONSTANTS
+#ifndef GREG_TEST_CONSTANTS_H
+#define GREG_TEST_CONSTANTS_H
 
 #define TEST_PROJECT_DLL "TestProject.dll"
 #define GREG_TEST_DLL "GregTest.dll"

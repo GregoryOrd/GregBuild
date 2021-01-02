@@ -1,8 +1,9 @@
 #include "FileAndTestCaseGatherer.h"
 
-#include <ctype.h>
-#include "../testMainWriting/TestMainWriter.h"
 #include "TestAndSrcDefinitions.h"
+#include "../testMainWriting/TestMainWriter.h"
+
+#include <ctype.h>
 
 void initTestFiles(TestFileList* testFiles)
 {

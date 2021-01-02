@@ -1,4 +1,4 @@
-1) Move the forkAndRunChildProcess() function from GregBuildMain.h/.c to commandLineCalls/ExternalProgramExecution.h/.c
-2) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
+1) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
 inside of it.
-3) Look to see if GregBuildMain can reasonable be split. It is starting to get a little big.
+2) Get a code formatter for this repo
+3) Try to add GregBuild.exe to /usr/bin in Cygwin

@@ -1,10 +1,11 @@
 #ifndef FILE_AND_TEST_CASE_GATHERER_H
 #define FILE_AND_TEST_CASE_GATHERER_H
 
+#include "SourceFileStructureDefs.h"
+#include "TestStructureDefs.h"
+
 #include <dirent.h>
 #include <stdbool.h>
-#include "TestStructureDefs.h"
-#include "SourceFileStructureDefs.h"
 
 void initTestFiles(TestFileList* testFiles);
 void initSourceFiles(SourceFileList* sourceFiles);

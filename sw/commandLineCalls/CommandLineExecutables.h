@@ -1,5 +1,5 @@
-#ifndef COMMAND_LINE_EXECUTABLES
-#define COMMAND_LINE_EXECUTABLES
+#ifndef COMMAND_LINE_EXECUTABLES_H
+#define COMMAND_LINE_EXECUTABLES_H
 
 #define mkdir "/usr/bin/mkdir.exe"
 #define gcc "/usr/bin/gcc.exe"
