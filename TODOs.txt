@@ -1,0 +1,4 @@
+1) Move the forkAndRunChildProcess() function from GregBuildMain.h/.c to commandLineCalls/ExternalProgramExecution.h/.c
+2) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
+inside of it.
+3) Look to see if GregBuildMain can reasonable be split. It is starting to get a little big.
