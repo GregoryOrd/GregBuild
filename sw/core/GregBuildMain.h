@@ -1,13 +1,13 @@
 #ifndef GREG_TEST_MAIN
 #define GREG_TEST_MAIN 
 
-#include "TestGatherer/TestStructureDefs.h"
-#include "TestGatherer/SourceFileStructureDefs.h"
-#include "ObjectFileStructureDefs.h"
-#include "ArgListDefs.h"
+#include "../fileSystemRecursion/TestStructureDefs.h"
+#include "../fileSystemRecursion/SourceFileStructureDefs.h"
+#include "../fileSystemRecursion/ObjectFileStructureDefs.h"
+#include "../commandLineCalls/ArgListDefs.h"
 
 void makeDir(char* dirName);
-void runTestGatherer(TestFileList* testFiles, SourceFileList* sourceFiles);
+void runFileAndTestCaseGatherer(TestFileList* testFiles, SourceFileList* sourceFiles);
 int runTestsAndCompileIfTheyPass();
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void createTestMainExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);

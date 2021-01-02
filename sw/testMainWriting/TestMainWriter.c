@@ -1,6 +1,6 @@
 #include "TestMainWriter.h"
 
-#include "../GregTestConstants.h"
+#include "../core/GregBuildConstants.h"
 
 void writeTestsToTestMain(TestFileList* testFiles)
 {

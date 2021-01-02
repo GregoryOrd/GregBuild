@@ -1,5 +1,5 @@
-#ifndef TESTGATHERER_H
-#define TESTGATHERER_H
+#ifndef FILE_AND_TEST_CASE_GATHERER_H
+#define FILE_AND_TEST_CASE_GATHERER_H
 
 #include <dirent.h>
 #include <stdbool.h>

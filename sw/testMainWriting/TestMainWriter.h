@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "TestStructureDefs.h"
+#include "../fileSystemRecursion/TestStructureDefs.h"
 
 void writeTestsToTestMain(TestFileList* testFiles);
 void writeToTestMainC(TestFileList* testFiles);

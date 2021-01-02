@@ -1,7 +1,7 @@
-#include "TestGatherer.h"
+#include "FileAndTestCaseGatherer.h"
 
 #include <ctype.h>
-#include "TestMainWriter.h"
+#include "../testMainWriting/TestMainWriter.h"
 #include "TestAndSrcDefinitions.h"
 
 void initTestFiles(TestFileList* testFiles)

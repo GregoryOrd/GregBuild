@@ -1,9 +1,9 @@
-#include "GregTestMain.h"
+#include "GregBuildMain.h"
 
-#include "TestGatherer/TestGatherer.h"
-#include "GregTestConstants.h"
-#include "TestGatherer/TestMainWriter.h"
-#include "CommandLineExecutables.h"
+#include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
+#include "GregBuildConstants.h"
+#include "../testMainWriting/TestMainWriter.h"
+#include "../commandLineCalls/CommandLineExecutables.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h> /* for pid_t */
@@ -27,7 +27,7 @@ int main()
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    runTestGatherer(testFiles, sourceFiles);
+    runFileAndTestCaseGatherer(testFiles, sourceFiles);
     createTestMainExecutable(testFiles, sourceFiles, tempObjectFiles);
     retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
 
@@ -105,7 +105,7 @@ void makeDir(char* dirName)
     forkAndRunChildProcess(mkdir, argv);
 }
 
-void runTestGatherer(TestFileList* testFiles, SourceFileList* sourceFiles)
+void runFileAndTestCaseGatherer(TestFileList* testFiles, SourceFileList* sourceFiles)
 {
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 

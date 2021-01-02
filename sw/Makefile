@@ -1,13 +1,21 @@
 distDirectory = ../dist
+libDirectory = "../ExampleSrcRepo/lib"
 
-GregTestMain: $(distDirectory)
-	gcc GregTestMain.c TestGatherer/TestGatherer.c TestGatherer/TestMainWriter.c TestGatherer/TestAndSrcDefinitions.c -o ../dist/GregTest.exe
+GregBuild: $(distDirectory) GregTestDll
+	# Compile 
+	gcc core/GregBuildMain.c fileSystemRecursion/FileAndTestCaseGatherer.c testMainWriting/TestMainWriter.c fileSystemRecursion/TestAndSrcDefinitions.c -o ../dist/GregBuild.exe
 	
-	cp ../dist/GregTest.exe ../ExampleSrcRepo
+	cp ../dist/GregBuild.exe ../ExampleSrcRepo
+
+GregTestDll: $(libDirectory)
+	cp external/GregTest/dist/GregTest.dll ../ExampleSrcRepo/lib/GregTest.dll
 
 $(distDirectory):
 	mkdir ../dist
 
+$(libDirectory):
+	mkdir ../ExampleSrcRepo/lib
+
 clean:
-	rm ../dist/GregTest.exe
-	rm ../ExampleSrcRepo/GregTest.exe
+	rm ../dist/GregBuild.exe
+	rm ../ExampleSrcRepo/GregBuild.exe
