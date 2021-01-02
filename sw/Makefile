@@ -1,7 +1,12 @@
-distDirectory = ../dist
-libDirectory = "../ExampleSrcRepo/lib"
+EXE_NAME = GregBuild.exe
+DIST_DIR = ../dist
+USR_BIN_DIR = /usr/bin
+DIST_EXE = $(DIST_DIR)/$(EXE_NAME)
+USR_BIN_EXE = $(USR_BIN_DIR)/$(EXE_NAME)
+EXAMPLE_LIB = ../ExampleSrcRepo/lib
+GREG_TEST_DLL = external/GregTest/dist/GregTest.dll
 
-GregBuild: $(distDirectory) GregTestDll
+GregBuild: $(DIST_DIR) GregTestDll
 	# Compile 
 	gcc core/GregBuildMain.c \
 		core/StringUtils.c \
@@ -12,20 +17,20 @@ GregBuild: $(distDirectory) GregTestDll
 		fileSystemRecursion/TestAndSrcDefinitions.c \
 		testMainWriting/TestMainWriter.c \
 		commandLineCalls/ExternalProgramExecution.c \
-		-o ../dist/GregBuild.exe
+		-o $(DIST_EXE)
 	
-	cp ../dist/GregBuild.exe ../ExampleSrcRepo
+	cp $(DIST_EXE) $(USR_BIN_EXE)
 
-GregTestDll: $(libDirectory)
-	cp external/GregTest/dist/GregTest.dll ../ExampleSrcRepo/lib/GregTest.dll
+GregTestDll: $(EXAMPLE_LIB)
+	cp $(GREG_TEST_DLL) $(EXAMPLE_LIB)/GregTest.dll
 
-$(distDirectory):
-	mkdir ../dist
+$(DIST_DIR):
+	mkdir  -p $(DIST_DIR)
 
-$(libDirectory):
-	mkdir ../ExampleSrcRepo/lib
+$(EXAMPLE_LIB):
+	mkdir -p $(EXAMPLE_LIB)
 
 clean:
-	rm ../ExampleSrcRepo/lib -r
-	rm ../dist/GregBuild.exe
-	rm ../ExampleSrcRepo/GregBuild.exe
+	rm $(EXAMPLE_LIB) -r
+	rm $(DIST_EXE)
+	rm $(USR_BIN_EXE)
