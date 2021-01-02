@@ -1,0 +1,3 @@
+[submodule "GregTest"]
+	path = GregTest
+	url = https://github.com/GregoryOrd/GregTest.git
