@@ -11,12 +11,18 @@
 
 void compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testFiles, SourceFileList* sourceFiles)
 {
+    int testFilesSize = 0;
+    if(testFiles != NULL)
+    {
+        testFilesSize = testFiles->size;
+    }
+
     ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
-    gccArgs->size = testFiles->size + sourceFiles->size + 3;
+    gccArgs->size = testFilesSize + sourceFiles->size + 3;
     gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
 
     ArgList* mvArgs = (ArgList*)malloc(sizeof(ArgList));
-    mvArgs->size = testFiles->size + sourceFiles->size + 3;
+    mvArgs->size = testFilesSize + sourceFiles->size + 3;
     mvArgs->args = (char**)malloc(mvArgs->size * sizeof(char*));
 
     populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles);
@@ -38,7 +44,10 @@ void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles,
     mvArgs->args[mvArgs->size-1] = NULL;
 
     int argIndex = 0;
-    getArgsForTestFiles(tempObjectFiles, &argIndex, testFiles, gccArgs, mvArgs);
+    if(testFiles != NULL)
+    {
+        getArgsForTestFiles(tempObjectFiles, &argIndex, testFiles, gccArgs, mvArgs);
+    }
     getArgsForSourceFiles(tempObjectFiles, &argIndex, sourceFiles, gccArgs, mvArgs);
 }
 

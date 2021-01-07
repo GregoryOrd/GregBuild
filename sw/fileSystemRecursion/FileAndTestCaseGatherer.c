@@ -102,23 +102,29 @@ void freeSourceFileList(SourceFileList* list)
 
 void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
 {
-    list->files = (SourceFile*)realloc(list->files, ((list->size + 1) * sizeof(SourceFile)));
-    list->files[list->size].name = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
-    strcpy(list->files[list->size].name, pathToSourceFile);
-    list->size++; 
+    if(list != NULL)
+    {
+        list->files = (SourceFile*)realloc(list->files, ((list->size + 1) * sizeof(SourceFile)));
+        list->files[list->size].name = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+        strcpy(list->files[list->size].name, pathToSourceFile);
+        list->size++; 
+    }
 }
 
 void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
 {
-    testFileList->files = (TestFile*)realloc(testFileList->files, (testFileList->size + 1) * sizeof(TestFile));
-    testFileList->files[testFileList->size].name = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
-    testFileList->files[testFileList->size].numTestCases = 0;
-    testFileList->files[testFileList->size].cases = (TestCase*)malloc(sizeof(TestCase));
-    strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
+    if(testFileList != NULL)
+    {
+        testFileList->files = (TestFile*)realloc(testFileList->files, (testFileList->size + 1) * sizeof(TestFile));
+        testFileList->files[testFileList->size].name = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+        testFileList->files[testFileList->size].numTestCases = 0;
+        testFileList->files[testFileList->size].cases = (TestCase*)malloc(sizeof(TestCase));
+        strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
 
-    addTestCasesToList(testFileList, pathToTestFile);
+        addTestCasesToList(testFileList, pathToTestFile);
 
-    testFileList->size++;
+        testFileList->size++;
+    }
 }
 
 void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)

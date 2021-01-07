@@ -9,30 +9,46 @@
 
 int main()
 {
-    int retval = 1;
+    bool tests = false;
+
+    int retval = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 
-    TestFileList* testFiles = (TestFileList*)malloc(sizeof(TestFileList));
+    TestFileList* testFiles =  NULL;
+    if(tests)
+    {
+        testFiles = (TestFileList*)malloc(sizeof(TestFileList));
+        initTestFiles(testFiles);
+    }
+
     SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
     loadTestsAndSourceFiles(testFiles, sourceFiles, startingDirectory);
-    writeTestsToTestMain(testFiles);
 
     compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
     linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
-    createTestMainExecutableFromProjectDllAndGregTestDll();
 
-    retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
-    compileObjectFilesIntoProjectExecutable(tempObjectFiles, retval);
+    if(tests)
+    {
+        writeTestsToTestMain(testFiles);
+        createTestMainExecutableFromProjectDllAndGregTestDll();
+        retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
+    }
+    else
+    {
+        printf("No Test Build");
+    }
+    
+
+    retval = compileObjectFilesIntoProjectExecutable(tempObjectFiles, retval);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return retval;
 }
 
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
-    initTestFiles(testFiles);
     initSourceFiles(sourceFiles);
     initObjectFileList(tempObjectFiles);
     makeDir(TEMP_DIR);
@@ -57,7 +73,10 @@ void freeObjectFileList(ObjectFileList* list)
 void removeTempDirAndFreeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
     removeDir(TEMP_DIR);
-    freeTestFileList(testFiles);
+    if(testFiles != NULL)
+    {
+        freeTestFileList(testFiles);
+    }
     freeSourceFileList(sourceFiles);
     freeObjectFileList(tempObjectFiles);
 }

@@ -2,7 +2,7 @@ EXE_NAME = GregBuild.exe
 DIST_DIR = ../dist
 USR_BIN_DIR = /usr/bin
 DIST_EXE = $(DIST_DIR)/$(EXE_NAME)
-USR_BIN_EXE = $(USR_BIN_DIR)/$(EXE_NAME)
+USR_BIN_EXE = $(USR_BIN_DIR)/GB.exe
 EXAMPLE_LIB = ../ExampleSrcRepo/lib
 GREG_TEST_DLL = external/GregTest/dist/GregTest.dll
 
