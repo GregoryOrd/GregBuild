@@ -2,10 +2,11 @@
 
 #include "../core/GregBuildConstants.h"
 
-void writeTestsToTestMain(TestFileList* testFiles)
+int writeTestsToTestMain(TestFileList* testFiles)
 {
     writeToTestMainC(testFiles);
     writeToTestMainH(testFiles);
+    return 0;
 }
 
 void writeToTestMainC(TestFileList* testFiles)

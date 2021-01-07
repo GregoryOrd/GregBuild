@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testFiles, SourceFileList* sourceFiles)
+int compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testFiles, SourceFileList* sourceFiles)
 {
     int testFilesSize = 0;
     if(testFiles != NULL)
@@ -31,6 +31,7 @@ void compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* t
 
     freeArgList(gccArgs);
     free(mvArgs);
+    return 0;
 }
 
 void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, TestFileList* testFiles, SourceFileList* sourceFiles)
@@ -51,7 +52,7 @@ void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles,
     getArgsForSourceFiles(tempObjectFiles, &argIndex, sourceFiles, gccArgs, mvArgs);
 }
 
-void linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjectFiles)
+int linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjectFiles)
 {
     ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
     gccArgs->size = tempObjectFiles->size + 7;
@@ -72,12 +73,13 @@ void linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObje
     forkAndRunChildProcess(gcc, gccArgs->args);
 
     freeArgList(gccArgs);
+    return 0;
 }
 
-void createTestMainExecutableFromProjectDllAndGregTestDll()
+int createTestMainExecutableFromProjectDllAndGregTestDll()
 {
     char * const argv[] = {gcc, "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
-    forkAndRunChildProcess(gcc, argv); 
+    return forkAndRunChildProcess(gcc, argv); 
 }
 
 int compileObjectFilesIntoProjectExecutable(ObjectFileList* tempObjectFiles, int previousStepFailed)

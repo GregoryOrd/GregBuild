@@ -13,8 +13,12 @@ int main(int argc, char *argv[])
     CommandLineOptions* options = (CommandLineOptions*)malloc(sizeof(CommandLineOptions));
     initCommandLineOptions(options);
     processCommandLineArgs(argc, argv, options);
+    if(!options->runTests)
+    {
+        printf("No Test Build");
+    }
 
-    int retval = 0;
+    int error = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 
     TestFileList* testFiles =  NULL;
@@ -28,28 +32,38 @@ int main(int argc, char *argv[])
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    loadTestsAndSourceFiles(testFiles, sourceFiles, startingDirectory);
-
-    compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
-    linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
-
-    if(options->runTests)
+    if(!error)
     {
-        writeTestsToTestMain(testFiles);
-        createTestMainExecutableFromProjectDllAndGregTestDll();
-        retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
+        error = loadTestsAndSourceFiles(testFiles, sourceFiles, startingDirectory);
     }
-    else
+    if(!error)
     {
-        printf("No Test Build");
+        error = compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
     }
-    
-
-    retval = compileObjectFilesIntoProjectExecutable(tempObjectFiles, retval);
+    if(!error)
+    {
+        error = linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
+    }
+    if(!error && options->runTests)
+    {
+       error = writeTestsToTestMain(testFiles); 
+    }
+    if(!error && options->runTests)
+    {
+       error = createTestMainExecutableFromProjectDllAndGregTestDll();
+    }
+    if(!error && options->runTests)
+    {
+        error = runTestsAndCompileIfTheyPass(tempObjectFiles);
+    }
+    if(!error)
+    {
+        error = compileObjectFilesIntoProjectExecutable(tempObjectFiles, error);
+    }
 
     free(options);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
-    return retval;
+    return error;
 }
 
 void initCommandLineOptions(CommandLineOptions* options)

@@ -11,7 +11,7 @@
 #include <string.h>
 #include "../fileSystemRecursion/TestStructureDefs.h"
 
-void writeTestsToTestMain(TestFileList* testFiles);
+int writeTestsToTestMain(TestFileList* testFiles);
 void writeToTestMainC(TestFileList* testFiles);
 void populateTestMainCContents(char* contents, TestFileList* testFiles);
 void addTestMainCIncludes(char* main);

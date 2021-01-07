@@ -21,7 +21,7 @@ void initSourceFiles(SourceFileList* sourceFiles)
     sourceFiles->files[0].name = NULL;
 }
 
-void loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, char* basePath)
+int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, char* basePath)
 {
     char* fileOrSubDirectoryFullPath = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
     struct dirent *fileOrSubDirectory;
@@ -29,7 +29,7 @@ void loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFile
     DIR *basePathDirectory = opendir(basePath);
     if (!basePathDirectory)
     {
-        return;
+        return 1;
     }
 
     while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL)
@@ -40,6 +40,7 @@ void loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFile
 
     closedir(basePathDirectory);
     free(fileOrSubDirectoryFullPath);
+    return 0;
 }
 
 void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFileList* sourceFiles, char* basePath, struct dirent *fileOrSubDirectory, char* fileOrSubDirectoryFullPath)
