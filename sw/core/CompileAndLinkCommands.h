@@ -6,7 +6,6 @@
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/TestStructureDefs.h"
 
-void createTestMainExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testCases, SourceFileList* sourceFiles);
 void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, TestFileList* testCases, SourceFileList* sourceFiles);
 void linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjectFiles);

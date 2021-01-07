@@ -5,15 +5,9 @@
 #include "../commandLineCalls/ExternalProgramExecution.h"
 #include "../commandLineCalls/CommandLineExecutables.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-void createTestMainExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
-{
-    compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
-    linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
-    createTestMainExecutableFromProjectDllAndGregTestDll();
-}
 
 void compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testFiles, SourceFileList* sourceFiles)
 {
@@ -77,30 +71,42 @@ void createTestMainExecutableFromProjectDllAndGregTestDll()
     forkAndRunChildProcess(gcc, argv); 
 }
 
-int compileObjectFilesIntoProjectExecutable(ObjectFileList* tempObjectFiles)
+int compileObjectFilesIntoProjectExecutable(ObjectFileList* tempObjectFiles, int previousStepFailed)
 {
-    ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
-    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
-    gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
-
-    gccArgs->args[0] = gcc;
-    int numObjectFilesFromSourceAddedToArgsList = 0;
-    for(int i = 0; i < tempObjectFiles->size; i++)
+    if(!previousStepFailed)
     {
-        ObjectFile* file = &tempObjectFiles->files[i];
-        if(file->isFromSource)
-        {
-            gccArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
-            numObjectFilesFromSourceAddedToArgsList++;
-        }
-    }
-    gccArgs->args[gccArgs->size-3] = "-o";
-    gccArgs->args[gccArgs->size-2] = PROJECT_EXE;
-    gccArgs->args[gccArgs->size-1] = NULL;
+        ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
+        gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
+        gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
 
-    int retval = forkAndRunChildProcess(gcc, gccArgs->args);   
-    freeArgList(gccArgs);
-    return retval;
+        gccArgs->args[0] = gcc;
+        int numObjectFilesFromSourceAddedToArgsList = 0;
+        for(int i = 0; i < tempObjectFiles->size; i++)
+        {
+            ObjectFile* file = &tempObjectFiles->files[i];
+            if(file->isFromSource)
+            {
+                gccArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
+                numObjectFilesFromSourceAddedToArgsList++;
+            }
+        }
+        gccArgs->args[gccArgs->size-3] = "-o";
+        gccArgs->args[gccArgs->size-2] = PROJECT_EXE;
+        gccArgs->args[gccArgs->size-1] = NULL;
+
+        int retval = forkAndRunChildProcess(gcc, gccArgs->args);   
+        freeArgList(gccArgs);
+        if(retval == 0)
+        {
+            printf("\nBuild Successful!\n");
+        }
+        else
+        {
+            printf("Error Compiling the Code After Tests Completed\n");
+        }
+        return retval;
+    }
+    return 1;
 }
 
 void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)

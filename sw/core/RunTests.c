@@ -24,16 +24,7 @@ int runTestsAndCompileIfTheyPass(ObjectFileList* tempObjectFiles)
     int retval = 1;
     int testResults = runTests();
     if(!testResults)
-    {
-        if(!compileObjectFilesIntoProjectExecutable(tempObjectFiles))
-        {
-            printf("\nBuild Successful!\n");
-        }
-        else
-        {
-            printf("Error Compiling the Code After Tests Completed\n");
-        }
-        
+    {   
         retval = 0;
     }
     else if(testResults == 139)

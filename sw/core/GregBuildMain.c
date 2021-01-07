@@ -19,9 +19,13 @@ int main()
 
     loadTestsAndSourceFiles(testFiles, sourceFiles, startingDirectory);
     writeTestsToTestMain(testFiles);
-    createTestMainExecutable(testFiles, sourceFiles, tempObjectFiles);
-    retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
 
+    compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
+    linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
+    createTestMainExecutableFromProjectDllAndGregTestDll();
+
+    retval = runTestsAndCompileIfTheyPass(tempObjectFiles);
+    compileObjectFilesIntoProjectExecutable(tempObjectFiles, retval);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return retval;
 }

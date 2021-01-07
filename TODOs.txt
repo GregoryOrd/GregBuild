@@ -1,4 +1,4 @@
-1) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
+1) Use wildcards inside Makefile
+2) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
 inside of it.
-2) Use wildcards inside Makefile
 3) Get a code formatter for this repo
