@@ -1,4 +1,13 @@
-1) Use wildcards inside Makefile
-2) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
+1) Implement plugin-loader and plugin-api
+2) Use wildcards inside Makefile
+3) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
 inside of it.
-3) Get a code formatter for this repo
+4) Get a code formatter for this repo
+5) Investigate multithreaded approach for execution of test cases
+    a) Figure out when the dataset is large enough that multithreading is worth it
+    b) Implement logic to swtich between single and multithreaded approach based on this information
+6) Can we also use a multithreaded solution for gathering the test and source files?
+    a) Split the subdirectories from the top level?
+    b) Each thread does a recursion starting from a second level directory and working in?
+7) Add logic to check if a module has been changed since it was last build. Only build modules that have been modified.
+8) Verify support for different platforms

@@ -10,5 +10,19 @@ We should also consider if a plugin would be allowed to remove a command line op
 
 With this, we will also need to write a plugin loader.
 
+## Plugin Categories?
+Managing multiple plugins. Maybe we can have plugin "categories". Each plugin must register itself with
+a specific category. The categories can be designed such that a plugin from one category will not overlap, 
+interfere, or conflict with a plugin from another category. From there, the plugin loader selects only a single plugin from that category.
+
+Some thoughts about this idea:
+    - Does this break the idea that the plugin knows about the core, but the core doesn't know about the plugin?
+    - If we have this set of "catergories", then different plugins within the same category are really 
+    just different implementations of the same functionality that is predefined by the categories.
+        - This means that the plugin isn't really extending the core functionality, it is just switching
+        out the implmentation of part of the core's functionality.
+        - Maybe this flexibility is good? Or maybe we should just implement these core functionalities once
+        in the core of the application.
+
 ## Function Pointer Rules
 The function pointer must return an integer exit status, 1 for failure and 0 for success.
