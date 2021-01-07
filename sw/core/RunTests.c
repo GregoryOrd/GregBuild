@@ -3,6 +3,7 @@
 #include "CompileAndLinkCommands.h"
 #include "FileSystemOperations.h"
 #include "GregBuildConstants.h"
+#include "GregBuildMain.h"
 #include "../commandLineCalls/ExternalProgramExecution.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 
@@ -19,8 +20,9 @@ int runTests()
     return testResult;
 }
 
-int runTestsAndCompileIfTheyPass(ObjectFileList* tempObjectFiles)
+int runTestsWithExitStatusCheck(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
+    exitIfPreviousStepFailed(previousStepFailed);
     int retval = 1;
     int testResults = runTests();
     if(!testResults)

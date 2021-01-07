@@ -5,6 +5,7 @@
 #include "FileSystemOperations.h"
 #include "GregBuildConstants.h"
 #include "RunTests.h"
+#include "Sequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 
@@ -34,31 +35,31 @@ int main(int argc, char *argv[])
 
     if(!error)
     {
-        error = loadTestsAndSourceFiles(testFiles, sourceFiles, startingDirectory);
+        error = (*loadTestsAndSourceFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
     }
     if(!error)
     {
-        error = compileIntoTempObjectFiles(tempObjectFiles, testFiles, sourceFiles);
+        error = (*compileIntoTempObjectFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
     if(!error)
     {
-        error = linkObjectFilesWithGregTestDllToMakeProjectTestDll(tempObjectFiles);
+        error = (*linkObjectFilesWithGregTestDllToMakeProjectTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
     if(!error && options->runTests)
     {
-       error = writeTestsToTestMain(testFiles); 
+       error = (*writeTestsToTestMain_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
     if(!error && options->runTests)
     {
-       error = createTestMainExecutableFromProjectDllAndGregTestDll();
+       error = (*createTestMainExecutableFromProjectDllAndGregTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
     if(!error && options->runTests)
     {
-        error = runTestsAndCompileIfTheyPass(tempObjectFiles);
+        error = (*runTestsWithExitStatusCheck_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
     if(!error)
     {
-        error = compileObjectFilesIntoProjectExecutable(tempObjectFiles, error);
+        error = (*compileObjectFilesIntoProjectExecutable_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
 
     free(options);
@@ -66,31 +67,11 @@ int main(int argc, char *argv[])
     return error;
 }
 
-void initCommandLineOptions(CommandLineOptions* options)
+void exitIfPreviousStepFailed(int previousStepFailed)
 {
-    options->runTests = true;
-}
-
-void processCommandLineArgs(int arc, char* argv[], CommandLineOptions* options)
-{
-    for(int i = 1; i < arc; i++)
+    if(previousStepFailed)
     {
-        bool optionFound = false;
-        if(strcmp(argv[i], NO_TEST_OPTION_TEXT) == 0)
-        {
-            options->runTests = false;
-            optionFound = true;
-        }
-        if(!optionFound)
-        {
-            printf("Unrecognized command line option provided: %s\n\n", argv[1]);
-            printf("Supported Options:\n");
-            for(int optionNum = 0; optionNum < sizeof(optionsList) / sizeof(char*); optionNum++)
-            {
-                printf("%s    %s\n", optionsList[optionNum], descriptionsList[optionNum]);
-            }
-            exit(1);
-        }
+        exit(1);
     }
 }
 

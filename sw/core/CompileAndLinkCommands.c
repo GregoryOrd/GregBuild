@@ -1,6 +1,7 @@
 #include "CompileAndLinkCommands.h"
 
 #include "GregBuildConstants.h"
+#include "GregBuildMain.h"
 #include "StringUtils.h"
 #include "../commandLineCalls/ExternalProgramExecution.h"
 #include "../commandLineCalls/CommandLineExecutables.h"
@@ -9,8 +10,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-int compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testFiles, SourceFileList* sourceFiles)
+int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
+    exitIfPreviousStepFailed(previousStepFailed);
+
     int testFilesSize = 0;
     if(testFiles != NULL)
     {
@@ -52,8 +55,10 @@ void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles,
     getArgsForSourceFiles(tempObjectFiles, &argIndex, sourceFiles, gccArgs, mvArgs);
 }
 
-int linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjectFiles)
+int linkObjectFilesWithGregTestDllToMakeProjectTestDll(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
+    exitIfPreviousStepFailed(previousStepFailed);
+
     ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
     gccArgs->size = tempObjectFiles->size + 7;
     gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
@@ -76,48 +81,47 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjec
     return 0;
 }
 
-int createTestMainExecutableFromProjectDllAndGregTestDll()
+int createTestMainExecutableFromProjectDllAndGregTestDll(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
+    exitIfPreviousStepFailed(previousStepFailed);
     char * const argv[] = {gcc, "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
     return forkAndRunChildProcess(gcc, argv); 
 }
 
-int compileObjectFilesIntoProjectExecutable(ObjectFileList* tempObjectFiles, int previousStepFailed)
+int compileObjectFilesIntoProjectExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
-    if(!previousStepFailed)
+    exitIfPreviousStepFailed(previousStepFailed);
+
+    ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
+    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
+    gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
+
+    gccArgs->args[0] = gcc;
+    int numObjectFilesFromSourceAddedToArgsList = 0;
+    for(int i = 0; i < tempObjectFiles->size; i++)
     {
-        ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
-        gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
-        gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));
-
-        gccArgs->args[0] = gcc;
-        int numObjectFilesFromSourceAddedToArgsList = 0;
-        for(int i = 0; i < tempObjectFiles->size; i++)
+        ObjectFile* file = &tempObjectFiles->files[i];
+        if(file->isFromSource)
         {
-            ObjectFile* file = &tempObjectFiles->files[i];
-            if(file->isFromSource)
-            {
-                gccArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
-                numObjectFilesFromSourceAddedToArgsList++;
-            }
+            gccArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
+            numObjectFilesFromSourceAddedToArgsList++;
         }
-        gccArgs->args[gccArgs->size-3] = "-o";
-        gccArgs->args[gccArgs->size-2] = PROJECT_EXE;
-        gccArgs->args[gccArgs->size-1] = NULL;
-
-        int retval = forkAndRunChildProcess(gcc, gccArgs->args);   
-        freeArgList(gccArgs);
-        if(retval == 0)
-        {
-            printf("\nBuild Successful!\n");
-        }
-        else
-        {
-            printf("Error Compiling the Code After Tests Completed\n");
-        }
-        return retval;
     }
-    return 1;
+    gccArgs->args[gccArgs->size-3] = "-o";
+    gccArgs->args[gccArgs->size-2] = PROJECT_EXE;
+    gccArgs->args[gccArgs->size-1] = NULL;
+
+    int retval = forkAndRunChildProcess(gcc, gccArgs->args);   
+    freeArgList(gccArgs);
+    if(retval == 0)
+    {
+        printf("\nBuild Successful!\n");
+    }
+    else
+    {
+        printf("Error Compiling the Code After Tests Completed\n");
+    }
+    return retval;
 }
 
 void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)

@@ -12,6 +12,7 @@ GregBuild: $(DIST_DIR) GregTestDll
 		core/StringUtils.c \
 		core/FileSystemOperations.c \
 		core/CompileAndLinkCommands.c \
+		core/CommandLineOptions.c \
 		core/RunTests.c \
 		fileSystemRecursion/FileAndTestCaseGatherer.c \
 		fileSystemRecursion/TestAndSrcDefinitions.c \

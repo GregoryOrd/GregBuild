@@ -6,11 +6,11 @@
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/TestStructureDefs.h"
 
-int compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, TestFileList* testCases, SourceFileList* sourceFiles);
+int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, TestFileList* testCases, SourceFileList* sourceFiles);
-int linkObjectFilesWithGregTestDllToMakeProjectTestDll(ObjectFileList* tempObjectFiles);
-int createTestMainExecutableFromProjectDllAndGregTestDll();
-int compileObjectFilesIntoProjectExecutable();
+int linkObjectFilesWithGregTestDllToMakeProjectTestDll(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
+int createTestMainExecutableFromProjectDllAndGregTestDll(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
+int compileObjectFilesIntoProjectExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs);
 void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs);
 void determineObjectFileName(char* objectFileName, const char* filePath);

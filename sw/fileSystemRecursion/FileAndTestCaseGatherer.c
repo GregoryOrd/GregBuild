@@ -1,6 +1,8 @@
 #include "FileAndTestCaseGatherer.h"
 
+#include "ObjectFileStructureDefs.h"
 #include "TestAndSrcDefinitions.h"
+#include "../core/GregBuildMain.h"
 #include "../testMainWriting/TestMainWriter.h"
 
 #include <ctype.h>
@@ -21,8 +23,10 @@ void initSourceFiles(SourceFileList* sourceFiles)
     sourceFiles->files[0].name = NULL;
 }
 
-int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, char* basePath)
+int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
+    exitIfPreviousStepFailed(previousStepFailed);
+
     char* fileOrSubDirectoryFullPath = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
     struct dirent *fileOrSubDirectory;
 
@@ -35,7 +39,7 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
     while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL)
     {
         copyFileOrSubDirectoryNameIntoPath(fileOrSubDirectoryFullPath, basePath, fileOrSubDirectory->d_name);
-        addToListOrEnterSubDirectoryForRecursion(testFiles, sourceFiles, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
+        addToListOrEnterSubDirectoryForRecursion(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
     }
 
     closedir(basePathDirectory);
@@ -43,7 +47,7 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
     return 0;
 }
 
-void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFileList* sourceFiles, char* basePath, struct dirent *fileOrSubDirectory, char* fileOrSubDirectoryFullPath)
+void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath, struct dirent *fileOrSubDirectory, char* fileOrSubDirectoryFullPath)
 {
     if(isTestDir(basePath) && isTestFile(fileOrSubDirectory))
     {
@@ -55,7 +59,7 @@ void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFil
     }
     else if(isVisibleDirectory(fileOrSubDirectory))
     {
-        loadTestsAndSourceFiles(testFiles, sourceFiles, fileOrSubDirectoryFullPath);
+        loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, basePath);
     }
 }
 
