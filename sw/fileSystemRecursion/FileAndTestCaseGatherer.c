@@ -59,7 +59,7 @@ void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFil
     }
     else if(isVisibleDirectory(fileOrSubDirectory))
     {
-        loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, basePath);
+        loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, fileOrSubDirectoryFullPath);
     }
 }
 
