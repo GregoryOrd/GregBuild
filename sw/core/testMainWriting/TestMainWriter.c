@@ -1,7 +1,7 @@
 #include "TestMainWriter.h"
 
-#include "../core/GregBuildConstants.h"
-#include "../core/GregBuildMain.h"
+#include "../application/GregBuildConstants.h"
+#include "../main/GregBuildMain.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 

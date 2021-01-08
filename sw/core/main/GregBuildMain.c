@@ -1,11 +1,11 @@
 #include "GregBuildMain.h"
 
-#include "CommandLineOptions.h"
-#include "CompileAndLinkCommands.h"
-#include "FileSystemOperations.h"
-#include "GregBuildConstants.h"
-#include "RunTests.h"
-#include "Sequence.h"
+#include "../application/CommandLineOptions.h"
+#include "../application/CompileAndLinkCommands.h"
+#include "../application/FileSystemOperations.h"
+#include "../application/GregBuildConstants.h"
+#include "../application/RunTests.h"
+#include "../application/Sequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 

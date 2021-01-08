@@ -1,7 +1,7 @@
 #ifndef GREG_TEST_MAIN_H
 #define GREG_TEST_MAIN _H
 
-#include "CommandLineOptions.h"
+#include "../application/CommandLineOptions.h"
 #include "../fileSystemRecursion/TestStructureDefs.h"
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"

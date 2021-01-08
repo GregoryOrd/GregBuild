@@ -1,10 +1,10 @@
 #include "CompileAndLinkCommands.h"
 
 #include "GregBuildConstants.h"
-#include "GregBuildMain.h"
-#include "StringUtils.h"
 #include "../commandLineCalls/ExternalProgramExecution.h"
 #include "../commandLineCalls/CommandLineExecutables.h"
+#include "../main/GregBuildMain.h"
+#include "../utils/StringUtils.h"
 
 #include <stdio.h>
 #include <stdlib.h>

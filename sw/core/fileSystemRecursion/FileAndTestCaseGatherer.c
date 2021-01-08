@@ -1,9 +1,9 @@
 #include "FileAndTestCaseGatherer.h"
 
-#include "../core/CommandLineOptions.h"
 #include "ObjectFileStructureDefs.h"
 #include "TestAndSrcDefinitions.h"
-#include "../core/GregBuildMain.h"
+#include "../application/CommandLineOptions.h"
+#include "../main/GregBuildMain.h"
 #include "../testMainWriting/TestMainWriter.h"
 
 #include <ctype.h>

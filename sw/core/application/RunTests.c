@@ -3,9 +3,9 @@
 #include "CompileAndLinkCommands.h"
 #include "FileSystemOperations.h"
 #include "GregBuildConstants.h"
-#include "GregBuildMain.h"
 #include "../commandLineCalls/ExternalProgramExecution.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
+#include "../main/GregBuildMain.h"
 
 #include <stdio.h>
 #include <stdlib.h>
