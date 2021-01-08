@@ -33,33 +33,22 @@ int main(int argc, char *argv[])
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    if(!error)
+    for(int i = 0; i < NUM_FUNCTIONS_IN_SEQUENCE; i++)
     {
-        error = (*loadTestsAndSourceFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
-    }
-    if(!error)
-    {
-        error = (*compileIntoTempObjectFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    }
-    if(!error)
-    {
-        error = (*linkObjectFilesWithGregTestDllToMakeProjectTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    }
-    if(!error && options->runTests)
-    {
-       error = (*writeTestsToTestMain_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    }
-    if(!error && options->runTests)
-    {
-       error = (*createTestMainExecutableFromProjectDllAndGregTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    }
-    if(!error && options->runTests)
-    {
-        error = (*runTestsWithExitStatusCheck_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    }
-    if(!error)
-    {
-        error = (*compileObjectFilesIntoProjectExecutable_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+        if(!error)
+        {
+            if(i >= 3 && i <= 5)
+            {
+                if(options->runTests)
+                {
+                    error = (sequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+                }
+            }
+            else
+            {
+                error = (sequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+            }
+        }
     }
 
     free(options);
