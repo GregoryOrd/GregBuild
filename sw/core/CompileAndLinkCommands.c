@@ -20,11 +20,6 @@ int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFi
         testFilesSize = testFiles->size;
     }
 
-    if(sourceFiles->size == 0)
-    {
-        printf("No source files found\n");
-    }
-
     ArgList* gccArgs = (ArgList*)malloc(sizeof(ArgList));
     gccArgs->size = testFilesSize + sourceFiles->size + 3;
     gccArgs->args = (char**)malloc(gccArgs->size * sizeof(char*));

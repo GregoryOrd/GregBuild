@@ -49,7 +49,6 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
 
 void addToListOrEnterSubDirectoryForRecursion(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath, struct dirent *fileOrSubDirectory, char* fileOrSubDirectoryFullPath)
 {
-    printf("Trying to add for %s\n", fileOrSubDirectoryFullPath);
     if(isTestDir(basePath) && isTestFile(fileOrSubDirectory))
     {
         addTestFileToList(testFiles, fileOrSubDirectoryFullPath);

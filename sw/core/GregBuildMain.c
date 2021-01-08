@@ -36,37 +36,31 @@ int main(int argc, char *argv[])
     if(!error)
     {
         error = (*loadTestsAndSourceFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
-        printf("Source Files Size: %d\n", sourceFiles->size);
     }
     if(!error)
     {
         error = (*compileIntoTempObjectFiles_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
     }
-    // if(!error)
-    // {
-    //     error = (*linkObjectFilesWithGregTestDllToMakeProjectTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    //     exitIfPreviousStepFailed(error);
-    // }
-    // if(!error && options->runTests)
-    // {
-    //    error = (*writeTestsToTestMain_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    //    exitIfPreviousStepFailed(error);
-    // }
-    // if(!error && options->runTests)
-    // {
-    //    error = (*createTestMainExecutableFromProjectDllAndGregTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    //    exitIfPreviousStepFailed(error);
-    // }
-    // if(!error && options->runTests)
-    // {
-    //     error = (*runTestsWithExitStatusCheck_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    //     exitIfPreviousStepFailed(error);
-    // }
-    // if(!error)
-    // {
-    //     error = (*compileObjectFilesIntoProjectExecutable_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
-    //     exitIfPreviousStepFailed(error);
-    // }
+    if(!error)
+    {
+        error = (*linkObjectFilesWithGregTestDllToMakeProjectTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+    }
+    if(!error && options->runTests)
+    {
+       error = (*writeTestsToTestMain_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+    }
+    if(!error && options->runTests)
+    {
+       error = (*createTestMainExecutableFromProjectDllAndGregTestDll_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+    }
+    if(!error && options->runTests)
+    {
+        error = (*runTestsWithExitStatusCheck_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+    }
+    if(!error)
+    {
+        error = (*compileObjectFilesIntoProjectExecutable_func_ptr)(testFiles, sourceFiles, tempObjectFiles, error, NULL);
+    }
 
     free(options);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
@@ -77,7 +71,6 @@ void exitIfPreviousStepFailed(int previousStepFailed)
 {
     if(previousStepFailed)
     {
-        printf("Error. Exiting");
         exit(1);
     }
 }
