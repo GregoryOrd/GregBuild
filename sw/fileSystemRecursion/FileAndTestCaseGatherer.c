@@ -1,5 +1,6 @@
 #include "FileAndTestCaseGatherer.h"
 
+#include "../core/CommandLineOptions.h"
 #include "ObjectFileStructureDefs.h"
 #include "TestAndSrcDefinitions.h"
 #include "../core/GregBuildMain.h"
@@ -9,11 +10,14 @@
 
 void initTestFiles(TestFileList* testFiles)
 {
-    testFiles->size = 0;
-    testFiles->files = (TestFile*)malloc(sizeof(TestFile));
-    testFiles->files[0].name = NULL;
-    testFiles->files[0].numTestCases = 0;
-    testFiles->files[0].cases = (TestCase*)malloc(sizeof(TestCase));
+    if(testFiles != NULL)
+    {
+        testFiles->size = 0;
+        testFiles->files = (TestFile*)malloc(sizeof(TestFile));
+        testFiles->files[0].name = NULL;
+        testFiles->files[0].numTestCases = 0;
+        testFiles->files[0].cases = (TestCase*)malloc(sizeof(TestCase));
+    }
 }
 
 void initSourceFiles(SourceFileList* sourceFiles)

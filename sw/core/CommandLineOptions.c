@@ -44,4 +44,9 @@ void processCommandLineArgs(int arc, char* argv[], CommandLineOptions* options)
             exit(1);
         }
     }
+
+    if(!options->runTests)
+    {
+        printf("No Test Build");
+    }
 }

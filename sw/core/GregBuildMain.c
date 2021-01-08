@@ -12,26 +12,28 @@
 int main(int argc, char *argv[])
 {
     CommandLineOptions* options = (CommandLineOptions*)malloc(sizeof(CommandLineOptions));
-    initCommandLineOptions(options);
-    processCommandLineArgs(argc, argv, options);
-    if(!options->runTests)
-    {
-        printf("No Test Build");
-    }
-
-    int error = 0;
-    char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
-
     TestFileList* testFiles =  NULL;
+    SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
+    ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
+
+    initAndProcessCommandLineOptions(options, argc, argv);
     if(options->runTests)
     {
         testFiles = (TestFileList*)malloc(sizeof(TestFileList));
-        initTestFiles(testFiles);
     }
-
-    SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
-    ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
+
+    int error = executeSequence(options, testFiles, sourceFiles, tempObjectFiles);
+
+    free(options);
+    removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
+    return error;
+}
+
+int executeSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+{
+    int error = 0;
+    char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 
     for(int i = 0; i < NUM_FUNCTIONS_IN_SEQUENCE; i++)
     {
@@ -50,9 +52,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-
-    free(options);
-    removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;
 }
 
@@ -64,8 +63,15 @@ void exitIfPreviousStepFailed(int previousStepFailed)
     }
 }
 
+void initAndProcessCommandLineOptions(CommandLineOptions* options, int argc, char* argv[])
+{
+    initCommandLineOptions(options);
+    processCommandLineArgs(argc, argv, options);
+}
+
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
+    initTestFiles(testFiles);
     initSourceFiles(sourceFiles);
     initObjectFileList(tempObjectFiles);
     makeDir(TEMP_DIR);
