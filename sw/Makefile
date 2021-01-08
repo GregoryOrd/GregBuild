@@ -17,7 +17,7 @@ GregBuild: $(DIST_DIR) GregTestDll
 		core/fileSystemRecursion/FileAndTestCaseGatherer.c \
 		core/fileSystemRecursion/TestAndSrcDefinitions.c \
 		core/testMainWriting/TestMainWriter.c \
-		core/commandLineCalls/ExternalProgramExecution.c \
+		core/externalProgramExecution/ExternalProgramExecution.c \
 		-o $(DIST_EXE)
 	
 	cp $(DIST_EXE) $(USR_BIN_EXE)

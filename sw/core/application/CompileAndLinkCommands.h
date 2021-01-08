@@ -1,7 +1,7 @@
 #ifndef COMPILE_AND_LINK_COMMANDS_H
 #define COMPILE_AND_LINK_COMMANDS_H 
 
-#include "../commandLineCalls/ArgListDefs.h"
+#include "../externalProgramExecution/ArgListDefs.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/TestStructureDefs.h"

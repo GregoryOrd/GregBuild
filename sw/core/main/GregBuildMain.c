@@ -5,7 +5,7 @@
 #include "../application/FileSystemOperations.h"
 #include "../application/GregBuildConstants.h"
 #include "../application/RunTests.h"
-#include "../application/Sequence.h"
+#include "../application/BuildSequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 
@@ -23,14 +23,14 @@ int main(int argc, char *argv[])
     }
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    int error = executeSequence(options, testFiles, sourceFiles, tempObjectFiles);
+    int error = executeBuildSequence(options, testFiles, sourceFiles, tempObjectFiles);
 
     free(options);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;
 }
 
-int executeSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+int executeBuildSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
     int error = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
@@ -43,12 +43,12 @@ int executeSequence(CommandLineOptions* options, TestFileList* testFiles, Source
             {
                 if(options->runTests)
                 {
-                    error = (sequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+                    error = (buildSequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
                 }
             }
             else
             {
-                error = (sequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+                error = (buildSequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
             }
         }
     }

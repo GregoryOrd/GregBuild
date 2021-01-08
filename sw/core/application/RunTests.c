@@ -3,7 +3,7 @@
 #include "CompileAndLinkCommands.h"
 #include "FileSystemOperations.h"
 #include "GregBuildConstants.h"
-#include "../commandLineCalls/ExternalProgramExecution.h"
+#include "../externalProgramExecution/ExternalProgramExecution.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 #include "../main/GregBuildMain.h"
 

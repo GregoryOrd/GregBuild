@@ -1,5 +1,5 @@
-#ifndef SEQUENCE_H
-#define SEQUENCE_H
+#ifndef BUILD_SEQUENCE_H
+#define BUILD_SEQUENCE_H
 
 #include "CompileAndLinkCommands.h"
 #include "RunTests.h"
@@ -16,7 +16,7 @@ int (*createTestMainExecutableFromProjectDllAndGregTestDll_func_ptr)(TestFileLis
 int (*runTestsWithExitStatusCheck_func_ptr)(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath) = &runTestsWithExitStatusCheck;
 int (*compileObjectFilesIntoProjectExecutable_func_ptr)(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath) = &compileObjectFilesIntoProjectExecutable;
 
-int (*sequence[NUM_FUNCTIONS_IN_SEQUENCE])(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath) = {
+int (*buildSequence[NUM_FUNCTIONS_IN_SEQUENCE])(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath) = {
     loadTestsAndSourceFiles,
     compileIntoTempObjectFiles,
     linkObjectFilesWithGregTestDllToMakeProjectTestDll,

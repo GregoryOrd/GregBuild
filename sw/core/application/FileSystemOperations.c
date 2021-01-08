@@ -1,8 +1,8 @@
 #include "FileSystemOperations.h"
 
 #include "GregBuildConstants.h"
-#include "../commandLineCalls/CommandLineExecutables.h"
-#include "../commandLineCalls/ExternalProgramExecution.h"
+#include "../externalProgramExecution/CommandLineExecutables.h"
+#include "../externalProgramExecution/ExternalProgramExecution.h"
 
 #include <stdlib.h>
 

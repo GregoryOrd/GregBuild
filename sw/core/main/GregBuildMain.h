@@ -6,7 +6,7 @@
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 
-int executeSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+int executeBuildSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void exitIfPreviousStepFailed(int previousStepFailed);
 void initAndProcessCommandLineOptions(CommandLineOptions* options, int argc, char* argv[]);
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);

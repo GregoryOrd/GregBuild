@@ -28,6 +28,6 @@ The definitions for what differentiates a test file from a source file, and what
 
 This module writes the TestMain.c and TestMain.h files that are eventually compiled into the TestMain executable to run the tests.
 
-## commandLineCalls
+## externalProgramExecution
 
 To accomplish the compiling and linking tasks that it needs, GregTest uses the gcc compiler. Some other common command line programs such as cp, mv, and mkdir are also used by GregTest. This module handles forking processes and making these calls.

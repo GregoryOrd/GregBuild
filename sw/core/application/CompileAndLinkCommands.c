@@ -1,8 +1,8 @@
 #include "CompileAndLinkCommands.h"
 
 #include "GregBuildConstants.h"
-#include "../commandLineCalls/ExternalProgramExecution.h"
-#include "../commandLineCalls/CommandLineExecutables.h"
+#include "../externalProgramExecution/ExternalProgramExecution.h"
+#include "../externalProgramExecution/CommandLineExecutables.h"
 #include "../main/GregBuildMain.h"
 #include "../utils/StringUtils.h"
 
