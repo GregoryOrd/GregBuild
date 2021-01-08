@@ -10,6 +10,7 @@ GregBuild: $(DIST_DIR) GregTestDll
 	# Compile 
 	gcc core/main/GregBuildMain.c \
 		core/utils/StringUtils.c \
+		core/application/BuildSequence.c \
 		core/application/FileSystemOperations.c \
 		core/application/CompileAndLinkCommands.c \
 		core/application/CommandLineOptions.c \

@@ -11,47 +11,42 @@
 
 int main(int argc, char *argv[])
 {
-    CommandLineOptions* options = (CommandLineOptions*)malloc(sizeof(CommandLineOptions));
+    CommandLineOptionList* optionList = (CommandLineOptionList*)malloc(sizeof(CommandLineOptionList));
     TestFileList* testFiles =  NULL;
     SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
 
-    initAndProcessCommandLineOptions(options, argc, argv);
-    if(options->runTests)
+    initAndProcessCommandLineOptions(optionList, argc, argv);
+    if(flagValueForOption(optionList, NO_TEST_OPTION_TEXT))
     {
         testFiles = (TestFileList*)malloc(sizeof(TestFileList));
     }
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    int error = executeBuildSequence(options, testFiles, sourceFiles, tempObjectFiles);
+    int error = executeBuildSequence(optionList, testFiles, sourceFiles, tempObjectFiles);
 
-    free(options);
+    freeCommandLineOptions(optionList);
     removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;
 }
 
-int executeBuildSequence(CommandLineOptions* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+int executeBuildSequence(CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
     int error = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 
-    for(int i = 0; i < NUM_FUNCTIONS_IN_SEQUENCE; i++)
+    BuildSequence* buildSequence = (BuildSequence*)malloc(sizeof(BuildSequence));
+    initBuildSequence(buildSequence);
+
+    for(int i = 0; i < buildSequence->size; i++)
     {
-        if(!error)
+        bool flagVal = flagValueForOption(options, buildSequence->steps[i].option->optionText);
+        if(!error && flagVal)
         {
-            if(i >= 3 && i <= 5)
-            {
-                if(options->runTests)
-                {
-                    error = (buildSequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
-                }
-            }
-            else
-            {
-                error = (buildSequence[i])(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
-            }
+            error = (buildSequence->steps[i].function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
         }
     }
+    free(buildSequence);
     return error;
 }
 
@@ -63,10 +58,11 @@ void exitIfPreviousStepFailed(int previousStepFailed)
     }
 }
 
-void initAndProcessCommandLineOptions(CommandLineOptions* options, int argc, char* argv[])
+void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, char* argv[])
 {
     initCommandLineOptions(options);
     processCommandLineArgs(argc, argv, options);
+    bool flag = *options->options[0].flagValue;
 }
 
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)

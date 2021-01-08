@@ -5,48 +5,85 @@
 #include <stdlib.h>
 #include <string.h>
 
-/********************************************************************/
-// IMPORTANT NOTE: The optionsList and descriptionsList elements     /
-// must be ordered such that corresponding the option has the same   /
-// index in its list as its corresponding description                /
-/********************************************************************/
-const char* optionsList[] = {
-    NO_TEST_OPTION_TEXT
-};
-
-const char* descriptionsList[] = {
-    NO_TEST_DESCRIPTION
-};
-
-void initCommandLineOptions(CommandLineOptions* options)
+void initCommandLineOptions(CommandLineOptionList* list)
 {
-    options->runTests = true;
+    list->size = 1;
+    list->options = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    
+    list->options[0].description = (char*)malloc(sizeof(char*));
+    list->options[0].optionText = (char*)malloc(sizeof(char*));
+    list->options[0].flagValue = (bool*)malloc(sizeof(bool*));
+
+    strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
+    strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
+    *list->options[0].flagValue = NO_TEST_FLAG_VALUE;
+    
 }
 
-void processCommandLineArgs(int arc, char* argv[], CommandLineOptions* options)
+void freeCommandLineOptions(CommandLineOptionList* list)
 {
-    for(int i = 1; i < arc; i++)
+    for(int i = 0; i < list->size; i++)
     {
-        bool optionFound = false;
-        if(strcmp(argv[i], NO_TEST_OPTION_TEXT) == 0)
+        free(&list->options[i].description);
+        free(&list->options[i].optionText);
+        free(&list->options[i].flagValue);
+    }
+    free(list);
+}
+
+void processCommandLineArgs(int argc, char* argv[], CommandLineOptionList* optionsList)
+{
+    for(int i = 1; i < argc; i++)
+    {
+        if(checkForOption(optionsList, argv[i]))
         {
-            options->runTests = false;
-            optionFound = true;
+            *optionsList->options[i-1].flagValue = !(*optionsList->options[i-1].flagValue);
         }
-        if(!optionFound)
+        else
         {
-            printf("Unrecognized command line option provided: %s\n\n", argv[1]);
-            printf("Supported Options:\n");
-            for(int optionNum = 0; optionNum < sizeof(optionsList) / sizeof(char*); optionNum++)
-            {
-                printf("%s    %s\n", optionsList[optionNum], descriptionsList[optionNum]);
-            }
+            printf("Unrecognized command line option provided: %s\n\n", argv[i]);
+            printSupportedOptions(optionsList);
             exit(1);
         }
     }
 
-    if(!options->runTests)
+    bool flag = flagValueForOption(optionsList, NO_TEST_OPTION_TEXT);
+    if(!flag)
     {
-        printf("No Test Build");
+        printf("No Test Build\n");
+    }
+}
+
+bool checkForOption(const CommandLineOptionList* optionsList, char* optionToFind)
+{
+    bool optionFound = false;
+    for(int i = 0; i < optionsList->size; i++)
+    {
+        if(strcmp(optionToFind, optionsList->options[i].optionText) == 0)
+        {
+            optionFound = true;
+        }
+    }
+    return optionFound;
+}
+
+bool flagValueForOption(const CommandLineOptionList* optionsList, char* optionToFind)
+{
+    for(int i = 0; i < optionsList->size; i++)
+    {
+        if(strcmp(optionToFind, optionsList->options[i].optionText) == 0)
+        {
+            return *optionsList->options[i].flagValue;
+        }
+    }
+    return true;
+}
+
+void printSupportedOptions(const CommandLineOptionList* supportedOptions)
+{
+    printf("Supported Options:\n");
+    for(int optionNum = 0; optionNum < supportedOptions->size; optionNum++)
+    {
+        printf("%s    %s\n", supportedOptions->options[optionNum].optionText, supportedOptions->options[optionNum].description);
     }
 }
