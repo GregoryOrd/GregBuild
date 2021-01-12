@@ -7,5 +7,7 @@
 
 int runTests();
 int runTestsWithExitStatusCheck(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
+void copyDllsToCurrentDirectory();
+void removeDllsFromCurrentDirectory();
 
 #endif

@@ -1,10 +1,10 @@
 #ifndef COMPILE_AND_LINK_COMMANDS_H
 #define COMPILE_AND_LINK_COMMANDS_H 
 
-#include "../externalProgramExecution/ArgListDefs.h"
 #include "../fileSystemRecursion/ObjectFileStructureDefs.h"
 #include "../fileSystemRecursion/SourceFileStructureDefs.h"
 #include "../fileSystemRecursion/TestStructureDefs.h"
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, TestFileList* testCases, SourceFileList* sourceFiles);

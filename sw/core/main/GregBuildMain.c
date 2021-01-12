@@ -2,12 +2,12 @@
 
 #include "../application/CommandLineOptions.h"
 #include "../application/CompileAndLinkCommands.h"
-#include "../application/FileSystemOperations.h"
 #include "../application/GregBuildConstants.h"
 #include "../application/RunTests.h"
 #include "../application/BuildSequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
+#include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 
 int main(int argc, char *argv[])
 {

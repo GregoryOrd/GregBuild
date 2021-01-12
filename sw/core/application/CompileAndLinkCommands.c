@@ -1,10 +1,10 @@
 #include "CompileAndLinkCommands.h"
 
 #include "GregBuildConstants.h"
-#include "../externalProgramExecution/ExternalProgramExecution.h"
-#include "../externalProgramExecution/CommandLineExecutables.h"
 #include "../main/GregBuildMain.h"
-#include "../../external/GregCToolkit/sw/StringUtils.h"
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
+#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
