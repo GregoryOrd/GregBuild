@@ -2,3 +2,6 @@
 [submodule "sw/external/GregTest"]
 	path = sw/external/GregTest
 	url = git@github.com:GregoryOrd/GregTest.git
+[submodule "sw/external/GregCToolkit"]
+	path = sw/external/GregCToolkit
+	url = git@github.com:GregoryOrd/GregCToolkit.git

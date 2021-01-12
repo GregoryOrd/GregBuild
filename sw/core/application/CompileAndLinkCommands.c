@@ -4,7 +4,7 @@
 #include "../externalProgramExecution/ExternalProgramExecution.h"
 #include "../externalProgramExecution/CommandLineExecutables.h"
 #include "../main/GregBuildMain.h"
-#include "../utils/StringUtils.h"
+#include "../../external/GregCToolkit/sw/StringUtils.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -9,7 +9,7 @@ GREG_TEST_DLL = external/GregTest/dist/GregTest.dll
 GregBuild: $(DIST_DIR) GregTestDll
 	# Compile 
 	gcc core/main/GregBuildMain.c \
-		core/utils/StringUtils.c \
+		external/GregCToolkit/sw/StringUtils.c \
 		core/application/BuildSequence.c \
 		core/application/FileSystemOperations.c \
 		core/application/CompileAndLinkCommands.c \
