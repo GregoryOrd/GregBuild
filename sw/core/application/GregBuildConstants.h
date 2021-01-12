@@ -18,4 +18,8 @@
 
 #define SRC_DIR "src"
 
+#define NO_TEST_OPTION_TEXT "--no-test-build"
+#define NO_TEST_DESCRIPTION "Builds the Project Without Running Any Tests"
+#define NO_TEST_FLAG_VALUE 1 //The value 1 here means run the tests
+
 #endif

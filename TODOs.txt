@@ -1,14 +1,6 @@
 1) Implement Linked List for BuildSequence list that supports inserting elements
     - This will later be exposed to allow plugins to insert build steps
-2) Create GregCToolkit Repo and make it a submodule.
-    - Move the contents of the sw/core/utils directory into this repo.
-    - Might be able to move some other stuff into the toolkit as well.
-        - makeDir and removeDir from FileSystemOperations.h
-        - ExternalProgramExecution.h & ExternalProgramExecution.c
-        - ArgListDefs.h
-        - CommandLineOptions might also be able to be placed in the toolkit if
-          some of the specifics can be pulled out and injected back in
-        - Add in tests for the toolkit
+2) Add in tests for the toolkit
 3) Implement plugin-loader and plugin-api
 4) Use wildcards inside Makefile
 5) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 

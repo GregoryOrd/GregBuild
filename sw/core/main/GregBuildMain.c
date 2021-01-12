@@ -1,6 +1,5 @@
 #include "GregBuildMain.h"
 
-#include "../application/CommandLineOptions.h"
 #include "../application/CompileAndLinkCommands.h"
 #include "../application/GregBuildConstants.h"
 #include "../application/RunTests.h"
@@ -61,8 +60,25 @@ void exitIfPreviousStepFailed(int previousStepFailed)
 void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, char* argv[])
 {
     initCommandLineOptions(options);
+    setCoreCommandLineOptions(options);
     processCommandLineArgs(argc, argv, options);
-    bool flag = *options->options[0].flagValue;
+    coreCommandLineAcknowldegmentPrintouts(options);
+}
+
+void setCoreCommandLineOptions(CommandLineOptionList* list)
+{
+    strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
+    strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
+    *list->options[0].flagValue = NO_TEST_FLAG_VALUE;
+}
+
+void coreCommandLineAcknowldegmentPrintouts(CommandLineOptionList* list)
+{
+    bool flag = flagValueForOption(list, NO_TEST_OPTION_TEXT);
+    if(!flag)
+    {
+        printf("No Test Build\n");
+    }
 }
 
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)

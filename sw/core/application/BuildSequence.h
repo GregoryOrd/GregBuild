@@ -2,10 +2,10 @@
 #define BUILD_SEQUENCE_H
 
 #include "CompileAndLinkCommands.h"
-#include "CommandLineOptions.h"
 #include "RunTests.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../testMainWriting/TestMainWriter.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 
 typedef struct BuildSequenceStep
 {

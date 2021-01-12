@@ -2,9 +2,9 @@
 
 #include "ObjectFileStructureDefs.h"
 #include "TestAndSrcDefinitions.h"
-#include "../application/CommandLineOptions.h"
 #include "../main/GregBuildMain.h"
 #include "../testMainWriting/TestMainWriter.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 
 #include <ctype.h>
 

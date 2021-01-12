@@ -1,5 +1,7 @@
 #include "BuildSequence.h"
 
+#include "GregBuildConstants.h"
+
 const int NUM_CORE_SEQUENCE_STEPS = 7;
 
 void initBuildSequence(BuildSequence* sequence)
