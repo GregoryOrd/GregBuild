@@ -8,17 +8,14 @@ GREG_TEST_DLL = external/GregTest/dist/GregTest.dll
 
 GregBuild: $(DIST_DIR) GregTestDll
 	# Compile 
-	gcc core/application/BuildSequence.c \
-		core/application/CompileAndLinkCommands.c \
-		core/application/RunTests.c \
-		core/fileSystemRecursion/FileAndTestCaseGatherer.c \
-		core/fileSystemRecursion/TestAndSrcDefinitions.c \
-		core/main/GregBuildMain.c \
-		core/testMainWriting/TestMainWriter.c \
-		external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.c \
-		external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.c \
-		external/GregCToolkit/sw/FileSystem/ManageDirectories.c \
-		external/GregCToolkit/sw/String/StringUtils.c \
+	gcc	$(wildcard core/application/*.c) \
+		$(wildcard core/fileSystemRecursion/*.c) \
+		$(wildcard core/main/*.c) \
+		$(wildcard core/testMainWriting/*.c) \
+		$(wildcard external/GregCToolkit/sw/CommandLineOptions/*.c) \
+		$(wildcard external/GregCToolkit/sw/ExternalProgramExecution/*.c) \
+		$(wildcard external/GregCToolkit/sw/FileSystem/*.c) \
+		$(wildcard external/GregCToolkit/sw/String/*.c) \
 		-o $(DIST_EXE)
 	
 	cp $(DIST_EXE) $(USR_BIN_EXE)
