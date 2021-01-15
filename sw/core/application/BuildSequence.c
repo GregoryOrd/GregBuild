@@ -1,65 +1,109 @@
 #include "BuildSequence.h"
 
-#include "GregBuildConstants.h"
+#include "../application/GregBuildConstants.h"
 
 const int NUM_CORE_SEQUENCE_STEPS = 7;
 
-void initBuildSequence(BuildSequence* sequence)
+void initBuildSequence(LinkedList* sequence)
 {
-    sequence->size = NUM_CORE_SEQUENCE_STEPS;
-    sequence->steps = (BuildSequenceStep*)malloc(NUM_CORE_SEQUENCE_STEPS * sizeof(BuildSequenceStep));
-    for(int i = 0; i < NUM_CORE_SEQUENCE_STEPS; i++)
-    {
-        sequence->steps[i].option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-        sequence->steps[i].option->optionText = (char*)malloc(sizeof(char));
-        sequence->steps[i].option->description = (char*)malloc(sizeof(char));
-        sequence->steps[i].option->flagValue = (bool*)malloc(sizeof(bool));
-    }
+    initEmptyLinkedList(sequence, BUILD_SEQUENCE_STEP_TYPE);
 
-    sequence->steps[0].function_ptr = loadTestsAndSourceFiles;
-    strcpy(sequence->steps[0].option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-    strcpy(sequence->steps[0].option->description, NULL_COMMAND_LINE_DESCRIPTION);
-    *sequence->steps[0].option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
+    BuildSequenceStep* loadTestsAndSourceFilesStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    loadTestsAndSourceFilesStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    loadTestsAndSourceFilesStep->option->optionText = (char*)malloc(sizeof(char));
+    loadTestsAndSourceFilesStep->option->description = (char*)malloc(sizeof(char));
+    loadTestsAndSourceFilesStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    loadTestsAndSourceFilesStep->function_ptr = loadTestsAndSourceFiles;
+    strcpy(loadTestsAndSourceFilesStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
+    strcpy(loadTestsAndSourceFilesStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
+    loadTestsAndSourceFilesStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+    append_ll(sequence, loadTestsAndSourceFilesStep, BUILD_SEQUENCE_STEP_TYPE);
 
-    sequence->steps[1].function_ptr = compileIntoTempObjectFiles;
-    strcpy(sequence->steps[1].option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-    strcpy(sequence->steps[1].option->description, NULL_COMMAND_LINE_DESCRIPTION);
-    *sequence->steps[1].option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
 
-    sequence->steps[2].function_ptr = linkObjectFilesWithGregTestDllToMakeProjectTestDll;
-    strcpy(sequence->steps[2].option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-    strcpy(sequence->steps[2].option->description, NULL_COMMAND_LINE_DESCRIPTION);
-    *sequence->steps[2].option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
+    BuildSequenceStep* compileIntoTempObjectFilesStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    compileIntoTempObjectFilesStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    compileIntoTempObjectFilesStep->option->optionText = (char*)malloc(sizeof(char));
+    compileIntoTempObjectFilesStep->option->description = (char*)malloc(sizeof(char));
+    compileIntoTempObjectFilesStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    compileIntoTempObjectFilesStep->function_ptr = compileIntoTempObjectFiles;
+    strcpy(compileIntoTempObjectFilesStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
+    strcpy(compileIntoTempObjectFilesStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
+    compileIntoTempObjectFilesStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+    append_ll(sequence, compileIntoTempObjectFilesStep, BUILD_SEQUENCE_STEP_TYPE);
 
-    sequence->steps[3].function_ptr = writeTestsToTestMain;
-    strcpy(sequence->steps[3].option->optionText, NO_TEST_OPTION_TEXT);
-    strcpy(sequence->steps[3].option->description, NO_TEST_DESCRIPTION);
-    *sequence->steps[3].option->flagValue = NO_TEST_FLAG_VALUE;
 
-    sequence->steps[4].function_ptr = createTestMainExecutableFromProjectDllAndGregTestDll;
-    strcpy(sequence->steps[4].option->optionText, NO_TEST_OPTION_TEXT);
-    strcpy(sequence->steps[4].option->description, NO_TEST_DESCRIPTION);
-    *sequence->steps[4].option->flagValue = NO_TEST_FLAG_VALUE;
+    BuildSequenceStep* linkObjectFilesWithGregTestDllToMakeProjectTestDllStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->optionText = (char*)malloc(sizeof(char));
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description = (char*)malloc(sizeof(char));
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->function_ptr = linkObjectFilesWithGregTestDllToMakeProjectTestDll;
+    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
+    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+    append_ll(sequence, linkObjectFilesWithGregTestDllToMakeProjectTestDllStep, BUILD_SEQUENCE_STEP_TYPE);
 
-    sequence->steps[5].function_ptr = runTestsWithExitStatusCheck;
-    strcpy(sequence->steps[5].option->optionText, NO_TEST_OPTION_TEXT);
-    strcpy(sequence->steps[5].option->description, NO_TEST_DESCRIPTION);
-    *sequence->steps[5].option->flagValue = NO_TEST_FLAG_VALUE;
 
-    sequence->steps[6].function_ptr = compileObjectFilesIntoProjectExecutable;
-    strcpy(sequence->steps[6].option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-    strcpy(sequence->steps[6].option->description, NULL_COMMAND_LINE_DESCRIPTION);
-    *sequence->steps[6].option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
+    BuildSequenceStep* writeTestsToTestMainStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    writeTestsToTestMainStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    writeTestsToTestMainStep->option->optionText = (char*)malloc(sizeof(char));
+    writeTestsToTestMainStep->option->description = (char*)malloc(sizeof(char));
+    writeTestsToTestMainStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    writeTestsToTestMainStep->function_ptr = writeTestsToTestMain;
+    strcpy(writeTestsToTestMainStep->option->optionText, NO_TEST_OPTION_TEXT);
+    strcpy(writeTestsToTestMainStep->option->description, NO_TEST_DESCRIPTION);
+    writeTestsToTestMainStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
+    append_ll(sequence, writeTestsToTestMainStep, BUILD_SEQUENCE_STEP_TYPE);
+
+
+    BuildSequenceStep* createTestMainExecutableFromProjectDllAndGregTestDllStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->optionText = (char*)malloc(sizeof(char));
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->description = (char*)malloc(sizeof(char));
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->function_ptr = createTestMainExecutableFromProjectDllAndGregTestDll;
+    strcpy(createTestMainExecutableFromProjectDllAndGregTestDllStep->option->optionText, NO_TEST_OPTION_TEXT);
+    strcpy(createTestMainExecutableFromProjectDllAndGregTestDllStep->option->description, NO_TEST_DESCRIPTION);
+    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
+    append_ll(sequence, createTestMainExecutableFromProjectDllAndGregTestDllStep, BUILD_SEQUENCE_STEP_TYPE);
+
+ 
+    BuildSequenceStep* runTestsWithExitStatusCheckStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    runTestsWithExitStatusCheckStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    runTestsWithExitStatusCheckStep->option->optionText = (char*)malloc(sizeof(char));
+    runTestsWithExitStatusCheckStep->option->description = (char*)malloc(sizeof(char));
+    runTestsWithExitStatusCheckStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    runTestsWithExitStatusCheckStep->function_ptr = runTestsWithExitStatusCheck;
+    strcpy(runTestsWithExitStatusCheckStep->option->optionText, NO_TEST_OPTION_TEXT);
+    strcpy(runTestsWithExitStatusCheckStep->option->description, NO_TEST_DESCRIPTION);
+    runTestsWithExitStatusCheckStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
+    append_ll(sequence, runTestsWithExitStatusCheckStep, BUILD_SEQUENCE_STEP_TYPE);
+
+
+    BuildSequenceStep* compileObjectFilesIntoProjectExecutableStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    compileObjectFilesIntoProjectExecutableStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    compileObjectFilesIntoProjectExecutableStep->option->optionText = (char*)malloc(sizeof(char));
+    compileObjectFilesIntoProjectExecutableStep->option->description = (char*)malloc(sizeof(char));
+    compileObjectFilesIntoProjectExecutableStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    compileObjectFilesIntoProjectExecutableStep->function_ptr = compileObjectFilesIntoProjectExecutable;
+    strcpy(compileObjectFilesIntoProjectExecutableStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
+    strcpy(compileObjectFilesIntoProjectExecutableStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
+    compileObjectFilesIntoProjectExecutableStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+    append_ll(sequence, compileObjectFilesIntoProjectExecutableStep, BUILD_SEQUENCE_STEP_TYPE);
 }
 
-void freeBuildSequence(BuildSequence* sequence)
+void freeBuildSequence(LinkedList* sequence)
 {
-    for(int i = 0; i < sequence->size; i++)
-    {
-        free(sequence->steps[i].option);
-        free(sequence->steps[i].option->optionText);
-        free(sequence->steps[i].option->description);
-        free(sequence->steps[i].option->flagValue);
-    }
-    free(sequence->steps);
+    freeLinkedList(sequence, &freeBuildSequenceStep);
+}
+
+void freeBuildSequenceStep(void* data)
+{
+    BuildSequenceStep* step = (BuildSequenceStep*)data;
+    free(step->function_ptr);
+    free(step->option->description);
+    free(step->option->flagValue);
+    free(step->option->optionText);
+    free(step->option);
+    free(step);
 }

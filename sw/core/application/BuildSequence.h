@@ -5,6 +5,7 @@
 #include "RunTests.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../testMainWriting/TestMainWriter.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 
 typedef struct BuildSequenceStep
@@ -13,13 +14,8 @@ typedef struct BuildSequenceStep
     int (*function_ptr)(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 } BuildSequenceStep;
 
-typedef struct BuildSequence
-{
-    int size;
-    BuildSequenceStep* steps;
-} BuildSequence;
-
-void initBuildSequence(BuildSequence* sequence);
-void freeBuildSequence(BuildSequence* sequence);
+void initBuildSequence(LinkedList* sequence);
+void freeBuildSequence(LinkedList* sequence);
+void freeBuildSequenceStep(void* data);
 
 #endif

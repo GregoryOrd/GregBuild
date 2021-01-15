@@ -6,6 +6,7 @@
 #include "../application/BuildSequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 
 int main(int argc, char *argv[])
@@ -34,15 +35,16 @@ int executeBuildSequence(CommandLineOptionList* options, TestFileList* testFiles
     int error = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
 
-    BuildSequence* buildSequence = (BuildSequence*)malloc(sizeof(BuildSequence));
+    LinkedList* buildSequence = (LinkedList*)malloc(sizeof(LinkedList));
     initBuildSequence(buildSequence);
 
     for(int i = 0; i < buildSequence->size; i++)
     {
-        bool flagVal = flagValueForOption(options, buildSequence->steps[i].option->optionText);
+        BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
+        bool flagVal = flagValueForOption(options,  step->option->optionText);
         if(!error && flagVal)
         {
-            error = (buildSequence->steps[i].function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+            error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
         }
     }
     free(buildSequence);

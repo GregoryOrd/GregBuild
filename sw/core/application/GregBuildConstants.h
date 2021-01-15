@@ -22,4 +22,6 @@
 #define NO_TEST_DESCRIPTION "Builds the Project Without Running Any Tests"
 #define NO_TEST_FLAG_VALUE 1 //The value 1 here means run the tests
 
+#define BUILD_SEQUENCE_STEP_TYPE 1
+
 #endif
