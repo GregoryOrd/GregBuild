@@ -64,10 +64,6 @@ void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, 
     initCommandLineOptions(options, NUM_SUPPORTED_COMMAND_LINE_OPTIONS);
     setCoreCommandLineOptions(options);
     processCommandLineArgs(argc, argv, options);
-    for(int optionNum = 0; optionNum < options->size; optionNum++)
-    {
-        printf("%s    %d\n", options->options[optionNum].optionText, *options->options[optionNum].flagValue);
-    }
     coreCommandLineAcknowldegmentPrintouts(options);
 }
 
