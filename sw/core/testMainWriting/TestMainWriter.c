@@ -145,7 +145,7 @@ void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles)
         numTotalTestCases = numTotalTestCases + file->numTestCases;
         writeTestMainHTestCaseDllImportsForSpecificFile(contents, file->numTestCases, file->cases);
     }
-    if(numTotalTestCases == 0)
+    if(numTotalTestCases == 0 && testFiles->size != 0)
     {
        strcat(contents, "//No Test Cases Found\n"); 
     }
@@ -170,15 +170,21 @@ void writeTestMainHEnd(char* contents)
 
 int sizeOfTestMainC(int numTests)
 {
+    int maxTestCaseNameLength = WINDOWS_MAX_PATH_LENGTH;
+    int perTestIncrement = (3*maxTestCaseNameLength) + 47;
+
     int size = TEST_MAIN_C_BASE_SIZE;
-    size += (numTests * (TEST_MAIN_C_SIZE_INCREMENT_PER_TESTCASE + WINDOWS_MAX_PATH_LENGTH * sizeof(char*)));
+    size += (numTests * perTestIncrement);
     return size;
 }
 
 int sizeOfTestMainH(int numTests)
 {
+    int maxTestCaseNameLength = WINDOWS_MAX_PATH_LENGTH;
+    int perTestIncrement = maxTestCaseNameLength + 18;
+
     int size = TEST_MAIN_H_BASE_SIZE;
-    size += (numTests * (TEST_MAIN_H_SIZE_INCREMENT_PER_TESTCASE + WINDOWS_MAX_PATH_LENGTH * sizeof(char*)));
+    size += (numTests * perTestIncrement);
     return size;
 }
 
