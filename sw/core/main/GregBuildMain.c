@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     int error = executeBuildSequence(optionList, testFiles, sourceFiles, tempObjectFiles);
 
     freeCommandLineOptions(optionList);
-    removeTempDirAndFreeFileLists(testFiles, sourceFiles, tempObjectFiles);
+    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;
 }
 
@@ -61,9 +61,13 @@ void exitIfPreviousStepFailed(int previousStepFailed)
 
 void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, char* argv[])
 {
-    initCommandLineOptions(options);
+    initCommandLineOptions(options, NUM_SUPPORTED_COMMAND_LINE_OPTIONS);
     setCoreCommandLineOptions(options);
     processCommandLineArgs(argc, argv, options);
+    for(int optionNum = 0; optionNum < options->size; optionNum++)
+    {
+        printf("%s    %d\n", options->options[optionNum].optionText, *options->options[optionNum].flagValue);
+    }
     coreCommandLineAcknowldegmentPrintouts(options);
 }
 
@@ -72,6 +76,10 @@ void setCoreCommandLineOptions(CommandLineOptionList* list)
     strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
     strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
     *list->options[0].flagValue = NO_TEST_FLAG_VALUE;
+
+    strcpy(list->options[1].description, DELETE_TEMP_DIR_DESCRIPTION);
+    strcpy(list->options[1].optionText, DELETE_TEMP_DIR_OPTION_TEXT);
+    *list->options[1].flagValue = DELETE_TEMP_DIR_FLAG_VALUE;
 }
 
 void coreCommandLineAcknowldegmentPrintouts(CommandLineOptionList* list)
@@ -107,13 +115,17 @@ void freeObjectFileList(ObjectFileList* list)
     free(list);
 }
 
-void removeTempDirAndFreeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
-    //removeDir(TEMP_DIR);
     if(testFiles != NULL)
     {
         freeTestFileList(testFiles);
     }
     freeSourceFileList(sourceFiles);
     freeObjectFileList(tempObjectFiles);
+}
+
+int removeTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+{
+    return removeDir(TEMP_DIR);
 }

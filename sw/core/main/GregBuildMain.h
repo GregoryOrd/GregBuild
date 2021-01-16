@@ -14,6 +14,7 @@ void coreCommandLineAcknowldegmentPrintouts(CommandLineOptionList* list);
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeObjectFileList(ObjectFileList* list);
 void initObjectFileList(ObjectFileList* objectFiles);
-void removeTempDirAndFreeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+int removeTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 
 #endif

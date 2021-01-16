@@ -38,9 +38,9 @@ void initBuildSequence(LinkedList* sequence)
     linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description = (char*)malloc(sizeof(char));
     linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
     linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->function_ptr = linkObjectFilesWithGregTestDllToMakeProjectTestDll;
-    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
-    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->optionText, NO_TEST_OPTION_TEXT);
+    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description, NO_TEST_DESCRIPTION);
+    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
     append_ll(sequence, linkObjectFilesWithGregTestDllToMakeProjectTestDllStep, BUILD_SEQUENCE_STEP_TYPE);
 
 
@@ -90,6 +90,17 @@ void initBuildSequence(LinkedList* sequence)
     strcpy(compileObjectFilesIntoProjectExecutableStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
     compileObjectFilesIntoProjectExecutableStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
     append_ll(sequence, compileObjectFilesIntoProjectExecutableStep, BUILD_SEQUENCE_STEP_TYPE);
+
+    BuildSequenceStep* removeTempDirStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+    removeTempDirStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+    removeTempDirStep->option->optionText = (char*)malloc(sizeof(char));
+    removeTempDirStep->option->description = (char*)malloc(sizeof(char));
+    removeTempDirStep->option->flagValue = (bool*)malloc(sizeof(bool)); 
+    removeTempDirStep->function_ptr = removeTempDir;
+    strcpy(removeTempDirStep->option->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
+    strcpy(removeTempDirStep->option->description, DELETE_TEMP_DIR_DESCRIPTION);
+    removeTempDirStep->option->flagValue = (bool*)DELETE_TEMP_DIR_FLAG_VALUE;
+    append_ll(sequence, removeTempDirStep, BUILD_SEQUENCE_STEP_TYPE);
 }
 
 void freeBuildSequence(LinkedList* sequence)
