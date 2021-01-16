@@ -1,13 +1,11 @@
 #ifndef BUILD_SEQUENCE_H
 #define BUILD_SEQUENCE_H
 
-#include "CompileAndLinkCommands.h"
-#include "RunTests.h"
-#include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
-#include "../main/GregBuildMain.h"
-#include "../testMainWriting/TestMainWriter.h"
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../fileSystemRecursion/ObjectFileStructureDefs.h"
+#include "../fileSystemRecursion/SourceFileStructureDefs.h"
+#include "../fileSystemRecursion/TestStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
 typedef struct BuildSequenceStep
 {

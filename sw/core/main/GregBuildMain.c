@@ -69,12 +69,12 @@ void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, 
 
 void setCoreCommandLineOptions(CommandLineOptionList* list)
 {
-    strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
     strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
+    strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
     *list->options[0].flagValue = NO_TEST_FLAG_VALUE;
 
-    strcpy(list->options[1].description, DELETE_TEMP_DIR_DESCRIPTION);
     strcpy(list->options[1].optionText, DELETE_TEMP_DIR_OPTION_TEXT);
+    strcpy(list->options[1].description, DELETE_TEMP_DIR_DESCRIPTION);
     *list->options[1].flagValue = DELETE_TEMP_DIR_FLAG_VALUE;
 }
 
