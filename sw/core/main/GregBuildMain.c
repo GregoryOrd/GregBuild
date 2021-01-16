@@ -109,7 +109,7 @@ void freeObjectFileList(ObjectFileList* list)
 
 void removeTempDirAndFreeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
-    removeDir(TEMP_DIR);
+    //removeDir(TEMP_DIR);
     if(testFiles != NULL)
     {
         freeTestFileList(testFiles);

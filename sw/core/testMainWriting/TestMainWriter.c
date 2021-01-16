@@ -127,22 +127,32 @@ void writeTestMainHGuardsAndDllDefine(char* contents)
 
 void writeTestMainHGregTestDllImports(char* contents)
 {
-    strcat(contents, "//For GregTest\n");
+    strcat(contents, "//From GregTest\n");
     strcat(contents, "DllImport bool result();\n\n");
 }
 
 void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles)
 {
+    strcat(contents, "//Test Cases Found Throughout the Repo\n");
+    if(testFiles->size == 0)
+    {
+       strcat(contents, "//No Test Files Found\n"); 
+    }
+    int numTotalTestCases = 0;
     for(int fileIndex = 0; fileIndex < testFiles->size; fileIndex++)
     {
         TestFile* file = &testFiles->files[fileIndex];
+        numTotalTestCases = numTotalTestCases + file->numTestCases;
         writeTestMainHTestCaseDllImportsForSpecificFile(contents, file->numTestCases, file->cases);
+    }
+    if(numTotalTestCases == 0)
+    {
+       strcat(contents, "//No Test Cases Found\n"); 
     }
 }
 
 void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, TestCase* cases)
 {
-    strcat(contents, "//From Tests Written Throughout the Repo\n");
     for(int i = 0; i < numTests; i++)
     {
         char* testName = cases[i].testName;
@@ -167,7 +177,7 @@ int sizeOfTestMainC(int numTests)
 
 int sizeOfTestMainH(int numTests)
 {
-    int size = TEST_MAIN_C_BASE_SIZE;
+    int size = TEST_MAIN_H_BASE_SIZE;
     size += (numTests * (TEST_MAIN_H_SIZE_INCREMENT_PER_TESTCASE + WINDOWS_MAX_PATH_LENGTH * sizeof(char*)));
     return size;
 }
