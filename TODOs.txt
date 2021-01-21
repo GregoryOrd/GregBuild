@@ -29,11 +29,12 @@ inside of it.
         - LOL :)
     - Or actually might be better to avoid this and just use a make file with 
     GregTest that follows the same steps as GregBuild
-10) Investigate multithreaded approach for execution of test cases
+10) Make GregBuild smart enough to not build files that have not been modified
+11) Investigate multithreaded approach for execution of test cases
     a) Figure out when the dataset is large enough that multithreading is worth it
     b) Implement logic to swtich between single and multithreaded approach based on this information
-11) Can we also use a multithreaded solution for gathering the test and source files?
+12) Can we also use a multithreaded solution for gathering the test and source files?
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
-12) Add logic to check if a module has been changed since it was last build. Only build modules that have been modified.
-13) Verify support for different platforms
+13) Add logic to check if a module has been changed since it was last build. Only build modules that have been modified.
+14) Verify support for different platforms
