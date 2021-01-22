@@ -1,9 +1,7 @@
 #ifndef BUILD_SEQUENCE_H
 #define BUILD_SEQUENCE_H
 
-#include "../fileSystemRecursion/ObjectFileStructureDefs.h"
-#include "../fileSystemRecursion/SourceFileStructureDefs.h"
-#include "../fileSystemRecursion/TestStructureDefs.h"
+#include "../fileSystemRecursion/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
@@ -14,6 +12,8 @@ typedef struct BuildSequenceStep
 } BuildSequenceStep;
 
 void initBuildSequence(LinkedList* sequence);
+void setCoreBuildSequenceSteps(LinkedList* sequence);
+int executeBuildSequence(LinkedList* buildSequence, CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeBuildSequence(LinkedList* sequence);
 void freeBuildSequenceStep(void* data);
 

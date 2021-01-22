@@ -4,7 +4,6 @@
 #include "CompileAndLinkCommands.h"
 #include "RunTests.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
-#include "../main/GregBuildMain.h"
 #include "../testMainWriting/TestMainWriter.h"
 
 const int NUM_CORE_SEQUENCE_STEPS = 7;
@@ -12,7 +11,11 @@ const int NUM_CORE_SEQUENCE_STEPS = 7;
 void initBuildSequence(LinkedList* sequence)
 {
     initEmptyLinkedList(sequence, BUILD_SEQUENCE_STEP_TYPE);
+    setCoreBuildSequenceSteps(sequence);
+}
 
+void setCoreBuildSequenceSteps(LinkedList* sequence)
+{
     BuildSequenceStep* loadTestsAndSourceFilesStep = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
     loadTestsAndSourceFilesStep->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
     loadTestsAndSourceFilesStep->option->optionText = (char*)malloc(sizeof(char));
@@ -106,6 +109,24 @@ void initBuildSequence(LinkedList* sequence)
     strcpy(removeTempDirStep->option->description, DELETE_TEMP_DIR_DESCRIPTION);
     removeTempDirStep->option->flagValue = (bool*)DELETE_TEMP_DIR_FLAG_VALUE;
     append_ll(sequence, removeTempDirStep, BUILD_SEQUENCE_STEP_TYPE);
+}
+
+int executeBuildSequence(LinkedList* buildSequence, CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+{
+    int error = 0;
+    char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
+
+    for(int i = 0; i < buildSequence->size; i++)
+    {
+        BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
+        bool flagVal = flagValueForOption(options,  step->option->optionText);
+        if(!error && flagVal)
+        {
+            error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+        }
+    }
+
+    return error;
 }
 
 void freeBuildSequence(LinkedList* sequence)

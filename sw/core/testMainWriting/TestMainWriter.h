@@ -7,9 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../fileSystemRecursion/ObjectFileStructureDefs.h"
-#include "../fileSystemRecursion/SourceFileStructureDefs.h"
-#include "../fileSystemRecursion/TestStructureDefs.h"
+#include "../fileSystemRecursion/FileStructureDefs.h"
 
 int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 void writeToTestMainC(TestFileList* testFiles);

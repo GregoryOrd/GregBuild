@@ -2,10 +2,10 @@
 
 #include "CompileAndLinkCommands.h"
 #include "GregBuildConstants.h"
-#include "../fileSystemRecursion/ObjectFileStructureDefs.h"
-#include "../main/GregBuildMain.h"
+#include "../fileSystemRecursion/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
+#include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 
 #include <stdio.h>
 #include <stdlib.h>

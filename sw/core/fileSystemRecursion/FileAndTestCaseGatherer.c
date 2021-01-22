@@ -1,31 +1,14 @@
 #include "FileAndTestCaseGatherer.h"
 
-#include "ObjectFileStructureDefs.h"
+#include "FileStructureDefs.h"
 #include "TestAndSrcDefinitions.h"
-#include "../main/GregBuildMain.h"
-#include "../testMainWriting/TestMainWriter.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
+#include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 
 #include <ctype.h>
-
-void initTestFiles(TestFileList* testFiles)
-{
-    if(testFiles != NULL)
-    {
-        testFiles->size = 0;
-        testFiles->files = (TestFile*)malloc(sizeof(TestFile));
-        testFiles->files[0].name = NULL;
-        testFiles->files[0].numTestCases = 0;
-        testFiles->files[0].cases = (TestCase*)malloc(sizeof(TestCase));
-    }
-}
-
-void initSourceFiles(SourceFileList* sourceFiles)
-{
-    sourceFiles->size = 0;
-    sourceFiles->files = (SourceFile*)malloc(sizeof(SourceFile));
-    sourceFiles->files[0].name = NULL;
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 {
@@ -81,33 +64,6 @@ void copyFileOrSubDirectoryNameIntoPath(char* path, char* basePath, char* fileOr
     strcat(path, "/");
     strcat(path, fileOrSubDirectoryName);  
 }
-
-void freeTestFileList(TestFileList* testFileList)
-{
-    for(int fileIndex = 0; fileIndex < testFileList->size; fileIndex++)
-    {
-        TestFile* testFile = &testFileList->files[fileIndex];
-        free(testFile->name);
-        for(int testCaseIndex = 0; testCaseIndex < testFile->numTestCases; testCaseIndex++)
-        {
-            TestCase* testCase = &testFile->cases[testCaseIndex];
-            free(testCase->testName);
-        }
-        free(testFile->cases);
-    }
-    free(testFileList->files);
-    free(testFileList);
-}
-
-void freeSourceFileList(SourceFileList* list)
-{
-    for(int i = 0; i < list->size; i++)
-    {
-        free(list->files[i].name);
-    }
-    free(list);
-}
-
 
 void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
 {

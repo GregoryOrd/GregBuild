@@ -1,12 +1,13 @@
-#include "GregBuildMain.h"
-
+#include "../application/BuildSequence.h"
 #include "../application/CompileAndLinkCommands.h"
+#include "../application/CoreCommandLineOptions.h"
 #include "../application/GregBuildConstants.h"
 #include "../application/RunTests.h"
-#include "../application/BuildSequence.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
+#include "../fileSystemRecursion/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 
 int main(int argc, char *argv[])
@@ -23,105 +24,12 @@ int main(int argc, char *argv[])
     }
     initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-    int error = executeBuildSequence(optionList, testFiles, sourceFiles, tempObjectFiles);
-
-    freeCommandLineOptions(optionList);
-    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
-    return error;
-}
-
-int executeBuildSequence(CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
-{
-    int error = 0;
-    char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
-
     LinkedList* buildSequence = (LinkedList*)malloc(sizeof(LinkedList));
     initBuildSequence(buildSequence);
+    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-    for(int i = 0; i < buildSequence->size; i++)
-    {
-        BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-        bool flagVal = flagValueForOption(options,  step->option->optionText);
-        if(!error && flagVal)
-        {
-            error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
-        }
-    }
-    free(buildSequence);
+    freeCommandLineOptions(optionList);
+    freeBuildSequence(buildSequence);
+    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;
-}
-
-void exitIfPreviousStepFailed(int previousStepFailed)
-{
-    if(previousStepFailed)
-    {
-        exit(1);
-    }
-}
-
-void initAndProcessCommandLineOptions(CommandLineOptionList* options, int argc, char* argv[])
-{
-    initCommandLineOptions(options, NUM_SUPPORTED_COMMAND_LINE_OPTIONS);
-    setCoreCommandLineOptions(options);
-    processCommandLineArgs(argc, argv, options);
-    coreCommandLineAcknowldegmentPrintouts(options);
-}
-
-void setCoreCommandLineOptions(CommandLineOptionList* list)
-{
-    strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
-    strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
-    *list->options[0].flagValue = NO_TEST_FLAG_VALUE;
-
-    strcpy(list->options[1].optionText, DELETE_TEMP_DIR_OPTION_TEXT);
-    strcpy(list->options[1].description, DELETE_TEMP_DIR_DESCRIPTION);
-    *list->options[1].flagValue = DELETE_TEMP_DIR_FLAG_VALUE;
-}
-
-void coreCommandLineAcknowldegmentPrintouts(CommandLineOptionList* list)
-{
-    bool flag = flagValueForOption(list, NO_TEST_OPTION_TEXT);
-    if(!flag)
-    {
-        printf("No Test Build\n");
-    }
-}
-
-void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
-{
-    initTestFiles(testFiles);
-    initSourceFiles(sourceFiles);
-    initObjectFileList(tempObjectFiles);
-    makeDir(TEMP_DIR);
-}
-
-void initObjectFileList(ObjectFileList* objectFiles)
-{
-    objectFiles->size = 0;
-    objectFiles->files = (ObjectFile*)malloc(sizeof(ObjectFile));
-    objectFiles->files[0].name = NULL;
-}
-
-void freeObjectFileList(ObjectFileList* list)
-{
-    for(int i = 0; i < list->size; i++)
-    {
-        free(list->files[i].name);
-    }
-    free(list);
-}
-
-void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
-{
-    if(testFiles != NULL)
-    {
-        freeTestFileList(testFiles);
-    }
-    freeSourceFileList(sourceFiles);
-    freeObjectFileList(tempObjectFiles);
-}
-
-int removeTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
-{
-    return removeDir(TEMP_DIR);
 }
