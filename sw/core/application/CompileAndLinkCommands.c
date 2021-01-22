@@ -4,6 +4,7 @@
 #include "../main/GregBuildMain.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
+#include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 
 #include <stdio.h>
@@ -111,6 +112,7 @@ int compileObjectFilesIntoProjectExecutable(TestFileList* testFiles, SourceFileL
     gccArgs->args[gccArgs->size-2] = PROJECT_EXE;
     gccArgs->args[gccArgs->size-1] = NULL;
 
+    makeDir(DIST);
     int retval = forkAndRunChildProcess(gcc, gccArgs->args);   
     freeArgList(gccArgs);
     if(retval == 0)

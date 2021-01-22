@@ -14,6 +14,7 @@
 #define TEMP_TEST_MAIN_H "temp/TestMain.h"
 #define TEMP_TEST_MAIN_EXE "temp/TestMain.exe"
 
+#define DIST "dist"
 #define PROJECT_EXE "dist/HelloWorld.exe"
 
 #define SRC_DIR "src"

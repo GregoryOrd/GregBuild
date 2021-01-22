@@ -1,12 +1,10 @@
 IGNORING FOR NOW - Make sure GregBuild only uses the .o files that it 
 needs from the toolkit lib directory.
     - Tried but having trouble with the complexity of this file structure tree
-1) Check for dist directory in the ExampleSrcRepo. If it does not exist, create it before trying to put the final executable 
-inside of it.
-2) Use linked list implementation of CommandLineOptionList to support
+1) Use linked list implementation of CommandLineOptionList to support
     plugins adding command line options
-3) Implement plugin-loader and plugin-api
-4) Give ability to swap out compilers
+2) Implement plugin-loader and plugin-api
+3) Give ability to swap out compilers
     - Improved idea/understanding:
         - To run the tests, we need to compile the TestProject.cll and TestMain executable
         for the host system. Thus we will still use the "host" compiler (currently gcc)
@@ -16,25 +14,25 @@ inside of it.
         or a "non-host target" hardware
         - Then, we want to capability to swap out both the "host" compiler and the "target"
         compiler.
-5) Add ability to use certain compiler flags during both the host and target
+4) Add ability to use certain compiler flags during both the host and target
     compliter build sequence steps
-6) Get a code formatter for this repo
-7) Correct Test Finder so the comments in the test line can still be recognized 
+5) Get a code formatter for this repo
+6) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
-8) Add in tests for the toolkit
-9) Add tests to this repo.
+7) Add in tests for the toolkit
+8) Add tests to this repo.
     - Use an earlier version of GregBuild and GregTest to write tests for
       future development of GregBuild and GregTest
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
         - LOL :)
     - Or actually might be better to avoid this and just use a make file with 
     GregTest that follows the same steps as GregBuild
-10) Make GregBuild smart enough to not build files that have not been modified
-11) Investigate multithreaded approach for execution of test cases
+9) Make GregBuild smart enough to not build files that have not been modified
+10) Investigate multithreaded approach for execution of test cases
     a) Figure out when the dataset is large enough that multithreading is worth it
     b) Implement logic to swtich between single and multithreaded approach based on this information
-12) Can we also use a multithreaded solution for gathering the test and source files?
+11) Can we also use a multithreaded solution for gathering the test and source files?
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
-13) Add logic to check if a module has been changed since it was last build. Only build modules that have been modified.
-14) Verify support for different platforms
+12) Add logic to check if a module has been changed since it was last build. Only build modules that have been modified.
+13) Verify support for different platforms
