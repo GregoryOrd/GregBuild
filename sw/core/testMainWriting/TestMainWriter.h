@@ -4,10 +4,11 @@
 #define TEST_MAIN_C_BASE_SIZE 228
 #define TEST_MAIN_H_BASE_SIZE 193
 
+#include "../common/FileStructureDefs.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../fileSystemRecursion/FileStructureDefs.h"
 
 int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
 void writeToTestMainC(TestFileList* testFiles);

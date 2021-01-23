@@ -1,7 +1,7 @@
 #ifndef BUILD_SEQUENCE_H
 #define BUILD_SEQUENCE_H
 
-#include "../fileSystemRecursion/FileStructureDefs.h"
+#include "../common/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 

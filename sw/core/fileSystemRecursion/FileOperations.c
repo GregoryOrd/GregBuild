@@ -1,7 +1,8 @@
-#include "FileStructureDefs.h"
+#include "FileOperations.h"
 
-#include "../application/GregBuildConstants.h"
+#include "../common/GregBuildConstants.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
+
 #include <stdlib.h>
 
 void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)

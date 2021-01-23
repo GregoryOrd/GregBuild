@@ -1,6 +1,6 @@
 #include "FileAndTestCaseGatherer.h"
 
-#include "FileStructureDefs.h"
+#include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"

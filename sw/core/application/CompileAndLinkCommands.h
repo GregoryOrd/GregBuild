@@ -1,7 +1,7 @@
 #ifndef COMPILE_AND_LINK_COMMANDS_H
 #define COMPILE_AND_LINK_COMMANDS_H 
 
-#include "../fileSystemRecursion/FileStructureDefs.h"
+#include "../common/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);

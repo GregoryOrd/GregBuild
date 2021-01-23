@@ -1,7 +1,6 @@
 #include "TestMainWriter.h"
 
-#include "../application/GregBuildConstants.h"
-#include "../fileSystemRecursion/FileStructureDefs.h"
+#include "../common/GregBuildConstants.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 
 int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)

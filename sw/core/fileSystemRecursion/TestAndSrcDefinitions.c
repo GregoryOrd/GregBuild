@@ -1,6 +1,6 @@
 #include "TestAndSrcDefinitions.h"
 
-#include "FileStructureDefs.h"
+#include "../common/FileStructureDefs.h"
 
 #include <ctype.h>
 #include <stdio.h>

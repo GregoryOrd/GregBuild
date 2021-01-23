@@ -1,8 +1,7 @@
 IGNORING FOR NOW - Make sure GregBuild only uses the .o files that it 
 needs from the toolkit lib directory.
     - Tried but having trouble with the complexity of this file structure tree
-0a) Fix "Aborted (core dumped)" on exit
-0b) Adjust Documentation to match refactoring
+0) Adjust Documentation to match refactoring
 1) Continued refactoring to improve dependencies and modularity
     - The goal is to arrange the modules (application, fileSystemRecursion, 
     and testMainWriting) and the files in those modules in a way that each can

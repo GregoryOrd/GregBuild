@@ -1,9 +1,10 @@
 #include "BuildSequence.h"
 
-#include "../application/GregBuildConstants.h"
-#include "CompileAndLinkCommands.h"
-#include "RunTests.h"
+#include "../application/CompileAndLinkCommands.h"
+#include "../application/RunTests.h"
+#include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
+#include "../fileSystemRecursion/FileOperations.h"
 #include "../testMainWriting/TestMainWriter.h"
 
 const int NUM_CORE_SEQUENCE_STEPS = 7;

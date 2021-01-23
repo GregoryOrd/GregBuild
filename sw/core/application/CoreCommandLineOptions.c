@@ -1,6 +1,6 @@
 #include "CoreCommandLineOptions.h"
 
-#include "GregBuildConstants.h"
+#include "../common/GregBuildConstants.h"
 
 #include <stdio.h>
 #include <string.h>

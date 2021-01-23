@@ -1,7 +1,7 @@
 #ifndef FILE_AND_TEST_CASE_GATHERER_H
 #define FILE_AND_TEST_CASE_GATHERER_H
 
-#include "FileStructureDefs.h"
+#include "../common/FileStructureDefs.h"
 
 #include <dirent.h>
 #include <stdbool.h>

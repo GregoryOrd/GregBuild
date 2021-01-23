@@ -1,6 +1,6 @@
 #include "CompileAndLinkCommands.h"
 
-#include "GregBuildConstants.h"
+#include "../common/GregBuildConstants.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
