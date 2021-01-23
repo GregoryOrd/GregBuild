@@ -137,7 +137,6 @@ void freeBuildSequence(LinkedList* sequence)
 void freeBuildSequenceStep(void* data)
 {
     BuildSequenceStep* step = (BuildSequenceStep*)data;
-    free(step->function_ptr);
     free(step->option->description);
     free(step->option->flagValue);
     free(step->option->optionText);
