@@ -16,4 +16,4 @@ For example, the "--no-test-build" option is tied to the build sequence steps th
 Adding a core supported command line option is simple and is accomplished with the following steps:
 - Increment NUM_SUPPORTED_COMMAND_LINE_OPTIONS in GregBuildConstants.h
 - #define the option text, description, and flag default value in GregBuildConstants.h
-- Add an element to the last with the option text, description, and flag default value in in the setCoreCommandLineOptions() function in GregBuildMain.c
+- Add an element to the last with the option text, description, and flag default value in in the setCoreCommandLineOptions() function in CoreCommandLineOptions.c

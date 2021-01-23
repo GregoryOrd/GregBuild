@@ -15,19 +15,11 @@ GregBuild operates one level of abstraction higher than the actual compiler prog
 
 Finally, some command line flags such a "--no-test-build" or something similar could be valuable feature to be had in the future for configuaring the behaviour of the build.
 
-## fileSystemRecursion Module
+## sw/core
+This directory holds the core module that make up GregBuild. Underneath this we have the "main" module, "common" module, and variout other modules. One of the goals of the architecture here is to setup the dependencies correctly so that each module only depends on the toolkit and some shared headers in the common directory. The "main" module can then depend on the other modules. This way each module can be compiled independtly before the "main" module is compiled with all of the other modules.
 
-This module contains the domain models for source files, object (.o) files, test files, and test cases. These are found in the following header files:
-	- SourceFileStructureDefs.h
-	- ObjectFileStructureDefs.h
-	- TestStructureDefs.h
-	
-The definitions for what differentiates a test file from a source file, and what format a test case function must have are found in TestAndSrcDefintions.
+## external
+This directory holds to git submodules, GregTest and GregCToolkit.
 
-## testMainWriting Module
-
-This module writes the TestMain.c and TestMain.h files that are eventually compiled into the TestMain executable to run the tests.
-
-## externalProgramExecution
-
-To accomplish the compiling and linking tasks that it needs, GregTest uses the gcc compiler. Some other common command line programs such as cp, mv, and mkdir are also used by GregTest. This module handles forking processes and making these calls.
+## plugins
+This directory will hold plugins.
