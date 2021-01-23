@@ -1,49 +1,135 @@
-EXE_NAME = GregBuild.exe
-DIST_DIR = ../dist
-USR_BIN_DIR = /usr/bin
-TOOLKIT_LIB = external/GregCToolkit/lib
-DIST_EXE = $(DIST_DIR)/$(EXE_NAME)
-USR_BIN_EXE = $(USR_BIN_DIR)/GB.exe
-EXAMPLE_LIB = ../ExampleSrcRepo/lib
-GREG_TEST_DLL = GregTest.dll
-EXTERNAL_GREG_TEST_DLL = external/GregTest/dist/$(GREG_TEST_DLL)
-EXAMPLE_LIB_GREG_TEST_DLL = $(EXAMPLE_LIB)/$(GREG_TEST_DLL)
-SOURCES := $(shell find . -name "*.c" ! -path */external/*)
-TOOLKIT_SOURCES := $(shell find external/GregCToolkit -name "*.c")
-PLUGINS_DIR = $(DIST_DIR)/Plugins
-TIME_TRACKING_PLUGIN_SOURCES := $(shell find plugins/TimeTrackingPlugin -name "*.c")
+############################################################################
+######						General Variables						  ######
+############################################################################
 
-GregBuild: $(DIST_DIR) $(EXAMPLE_LIB_GREG_TEST_DLL) GregCToolkit
-	# Compile GregBuild 
-	gcc	$(SOURCES) $(wildcard $(TOOLKIT_LIB)/*.o) -o $(DIST_EXE)
+CORE=core
+BUILD=../build
+EXE=GB.exe
+DIST=../dist
+DIST_EXE=$(DIST)/$(EXE)
+USR_BIN_EXE=/usr/bin/$(EXE)
+TOOLKIT=GregCToolkit
+TOOLKIT_SW = external/$(TOOLKIT)/sw
+
+############################################################################
+######						 GregBuild OBJS 						  ######
+############################################################################
+
+APPLICATION=application
+FILE_SYSTEM_RECURSION=fileSystemRecursion
+MAIN=main
+TEST_MAIN_WRITING=testMainWriting
+
+APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
+FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
+MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
+TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
+
+GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
+				  $(FILE_SYSTEM_RECURSION_OBJS) \
+				  $(MAIN_OBJS) \
+				  $(TEST_MAIN_WRITING_OBJS)
+
+############################################################################
+######						  Toolkit OBJS 	    					  ######
+############################################################################
+
+COLLECTIONS=Collections
+COMMAND_LINE_OPTIONS=CommandLineOptions
+EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
+FAILURE_HANDLING=FailureHandling
+FILE_SYSTEM=FileSystem
+STRING=String
+
+COLLECTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS) -name "*.c")))
+COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
+EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
+FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
+FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
+STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
+
+TOOLKIT_OBJS =  $(COLLECTIONS_OBJS) \
+				$(COMMAND_LINE_OPTIONS_OBJS) \
+				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
+				$(FAILURE_HANDLING_OBJS) \
+				$(FILE_SYSTEM_OBJS) \
+				$(STRING_OBJS)
+
+############################################################################
+######						 Final Exe Rules						  ######
+############################################################################
+
+$(USR_BIN_EXE): $(DIST_EXE)
 	cp $(DIST_EXE) $(USR_BIN_EXE)
 
-GregCToolkit: $(TOOLKIT_LIB)
-	# Compile GregCToolkit
-	gcc -c $(TOOLKIT_SOURCES)
-	mv *.o $(TOOLKIT_LIB)
+$(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
+	mkdir -p $(DIST)
+	gcc -o $@ $^
 
-$(EXAMPLE_LIB_GREG_TEST_DLL): $(EXAMPLE_LIB)
-	#Copying GregTest.dll to ../ExampleSrcRepo/lib
-	cp $(EXTERNAL_GREG_TEST_DLL) $(EXAMPLE_LIB_GREG_TEST_DLL)
 
-Plugins: $(PLUGINS_DIR)
-	gcc -shared $(TIME_TRACKING_PLUGIN_SOURCES) -o $(PLUGINS_DIR)/TimeTrackingPlugin.dll
+############################################################################
+######						GregBuild OBJ Rules						  ######
+############################################################################
 
-$(DIST_DIR):
-	mkdir  -p $(DIST_DIR)
+$(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c
+	mkdir -p $(BUILD)/$(APPLICATION)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-$(EXAMPLE_LIB):
-	mkdir -p $(EXAMPLE_LIB)
+$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o: $(CORE)/$(FILE_SYSTEM_RECURSION)/%.c
+	mkdir -p $(BUILD)/$(FILE_SYSTEM_RECURSION)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-$(TOOLKIT_LIB):
-	mkdir -p $(TOOLKIT_LIB)
+$(BUILD)/$(MAIN)/%.o: $(CORE)/$(MAIN)/%.c
+	mkdir -p $(BUILD)/$(MAIN)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-$(PLUGINS_DIR):
-	mkdir -p $(PLUGINS_DIR)
+$(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c
+	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+############################################################################
+######						Toolkit OBJ Rules						  ######
+############################################################################
+
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o: $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o: $(TOOLKIT_SW)/$(FAILURE_HANDLING)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(STRING)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+############################################################################
+######						Clean Rules								  ######
+############################################################################
 
 clean:
-	rm $(TOOLKIT_LIB) -r
-	rm $(EXAMPLE_LIB) -r
+	rm $(BUILD) -r
+	rm $(DIST) -r
 	rm $(USR_BIN_EXE)
-	rm $(DIST_EXE)

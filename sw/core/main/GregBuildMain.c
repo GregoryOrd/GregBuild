@@ -13,6 +13,7 @@
 
 int main(int argc, char *argv[])
 {
+    printf("Starting GregBuild\n");
     CommandLineOptionList* optionList = (CommandLineOptionList*)malloc(sizeof(CommandLineOptionList));
     TestFileList* testFiles =  NULL;
     SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
