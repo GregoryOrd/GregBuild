@@ -2,7 +2,7 @@
 #define BUILD_SEQUENCE_H
 
 #include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
 typedef struct BuildSequenceStep
@@ -13,7 +13,7 @@ typedef struct BuildSequenceStep
 
 void initBuildSequence(LinkedList* sequence);
 void setCoreBuildSequenceSteps(LinkedList* sequence);
-int executeBuildSequence(LinkedList* buildSequence, CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+int executeBuildSequence(LinkedList* buildSequence, LinkedList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeBuildSequence(LinkedList* sequence);
 void freeBuildSequenceStep(void* data);
 

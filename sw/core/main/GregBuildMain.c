@@ -8,19 +8,19 @@
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 
 int main(int argc, char *argv[])
 {
     printf("Starting GregBuild\n");
-    CommandLineOptionList* optionList = (CommandLineOptionList*)malloc(sizeof(CommandLineOptionList));
+    LinkedList* optionList = (LinkedList*)malloc(sizeof(LinkedList));
     TestFileList* testFiles =  NULL;
     SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
     ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
 
     initAndProcessCommandLineOptions(optionList, argc, argv);
-    if(flagValueForOption(optionList, NO_TEST_OPTION_TEXT))
+    if(flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE))
     {
         testFiles = (TestFileList*)malloc(sizeof(TestFileList));
     }
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     initBuildSequence(buildSequence);
     int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-    freeCommandLineOptions(optionList);
+    freeCommandLineOptions_ll(optionList);
     freeBuildSequence(buildSequence);
     freeFileLists(testFiles, sourceFiles, tempObjectFiles);
     return error;

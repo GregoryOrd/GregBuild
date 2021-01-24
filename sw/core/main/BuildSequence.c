@@ -6,8 +6,7 @@
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../testMainWriting/TestMainWriter.h"
-
-const int NUM_CORE_SEQUENCE_STEPS = 7;
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 
 void initBuildSequence(LinkedList* sequence)
 {
@@ -112,7 +111,7 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
     append_ll(sequence, removeTempDirStep, BUILD_SEQUENCE_STEP_TYPE);
 }
 
-int executeBuildSequence(LinkedList* buildSequence, CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+int executeBuildSequence(LinkedList* buildSequence, LinkedList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
     int error = 0;
     char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
@@ -120,7 +119,7 @@ int executeBuildSequence(LinkedList* buildSequence, CommandLineOptionList* optio
     for(int i = 0; i < buildSequence->size; i++)
     {
         BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-        bool flagVal = flagValueForOption(options,  step->option->optionText);
+        bool flagVal = flagValueForOption_ll(options,  step->option->optionText, COMMAND_LINE_OPTION_TYPE);
         if(!error && flagVal)
         {
             error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
