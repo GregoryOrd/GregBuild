@@ -1,3 +1,7 @@
+0a) add extern "C" section to all headers with functions
+0b) Look through repo for arguments that should be const
+    - One know place where const is missing is on the base path of the 
+    build sequence function pointers
 1) Implement plugin-loader and plugin-api
 2) Give ability to swap out compilers
     - Improved idea/understanding:

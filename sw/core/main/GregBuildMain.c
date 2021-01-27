@@ -8,30 +8,38 @@
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
+#include "../pluginLoader/PluginLoader.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "BuildSequence.h"
 
-int main(int argc, char* argv[])
-{
-   printf("Starting GregBuild\n");
-   LinkedList* optionList = (LinkedList*)malloc(sizeof(LinkedList));
-   TestFileList* testFiles = NULL;
-   SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
-   ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
+int main(int argc, char *argv[]) {
+  printf("Starting GregBuild\n");
+  LinkedList *optionList = (LinkedList *)malloc(sizeof(LinkedList));
+  TestFileList *testFiles = NULL;
+  SourceFileList *sourceFiles =
+      (SourceFileList *)malloc(sizeof(SourceFileList));
+  ObjectFileList *tempObjectFiles =
+      (ObjectFileList *)malloc(sizeof(ObjectFileList));
+  PluginList *plugins = (PluginList *)malloc(sizeof(PluginList));
 
-   initAndProcessCommandLineOptions(optionList, argc, argv);
-   if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE))
-   {
-      testFiles = (TestFileList*)malloc(sizeof(TestFileList));
-   }
-   initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
+  initAndProcessCommandLineOptions(optionList, argc, argv);
+  if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT,
+                            COMMAND_LINE_OPTION_TYPE)) {
+    testFiles = (TestFileList *)malloc(sizeof(TestFileList));
+  }
+  initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
+  initPluginList(plugins);
+  loadPlugins(plugins, "./lib/plugins");
+  printPluginInList(plugins);
 
-   LinkedList* buildSequence = (LinkedList*)malloc(sizeof(LinkedList));
-   initBuildSequence(buildSequence);
-   int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
+  LinkedList *buildSequence = (LinkedList *)malloc(sizeof(LinkedList));
+  initBuildSequence(buildSequence);
+  int error = executeBuildSequence(buildSequence, optionList, testFiles,
+                                   sourceFiles, tempObjectFiles);
 
-   freeCommandLineOptions_ll(optionList);
-   freeBuildSequence(buildSequence);
-   freeFileLists(testFiles, sourceFiles, tempObjectFiles);
-   return error;
+  freeCommandLineOptions_ll(optionList);
+  freeBuildSequence(buildSequence);
+  freeFileLists(testFiles, sourceFiles, tempObjectFiles);
+  freePluginList(plugins);
+  return error;
 }
