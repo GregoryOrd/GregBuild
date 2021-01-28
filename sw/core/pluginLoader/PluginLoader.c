@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
+
+typedef void (*PLUGIN_HELLO_WORLD)();
 
 void initPluginList(PluginList *list) {
   list->size = 0;
@@ -85,5 +88,12 @@ void printPluginInList(const PluginList *list) {
   }
   for (int i = 0; i < list->size; i++) {
     printf("Plugins[%d]: %s\n", i, list->plugins[i].name);
+    HMODULE hLib = LoadLibrary(list->plugins[i].name);
+    PLUGIN_HELLO_WORLD print_hello_world_func_ptr =
+        (PLUGIN_HELLO_WORLD)GetProcAddress(hLib, "printHelloWorld");
+    printf("===============================================\n");
+    print_hello_world_func_ptr();
+    printf("===============================================\n");
+    FreeLibrary(hLib);
   }
 }

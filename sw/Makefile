@@ -1,219 +1,152 @@
-##################################################################################General
-    Variables##################################################################################
+############################################################################
+######						General Variables						  ######
+############################################################################
 
-    CORE = core BUILD =
-        ../ build EXE = GB.exe DIST =
-        ../ dist DIST_EXE =
-            $(DIST) / $(EXE) USR_BIN_EXE =
-                / usr / bin /
-                $(EXE) TOOLKIT = GregCToolkit TOOLKIT_SW =
-                    external / $(TOOLKIT) /
-                    sw
+CORE=core
+BUILD=../build
+EXE=GB.exe
+DIST=../dist
+DIST_EXE=$(DIST)/$(EXE)
+USR_BIN_EXE=/usr/bin/$(EXE)
+TOOLKIT=GregCToolkit
+TOOLKIT_SW = external/$(TOOLKIT)/sw
 
-                    ##################################################################################GregBuild
-                        OBJS##################################################################################
+############################################################################
+######						 GregBuild OBJS 						  ######
+############################################################################
 
-                    APPLICATION = application FILE_SYSTEM_RECURSION = fileSystemRecursion MAIN =
-                        main TEST_MAIN_WRITING = testMainWriting PLUGIN_LOADER = pluginLoader
+APPLICATION=application
+FILE_SYSTEM_RECURSION=fileSystemRecursion
+MAIN=main
+TEST_MAIN_WRITING=testMainWriting
+PLUGIN_LOADER=pluginLoader
 
-                            APPLICATION_OBJS = $(
-                                patsubst %.c,
-                                $(BUILD) / $(APPLICATION) /
-                                    %.o,
-                                $(notdir $(
-                                    shell find $(CORE) /
-                                        $(APPLICATION) -
-                                    name "*.c"))) FILE_SYSTEM_RECURSION_OBJS =
-                                $(patsubst %.c,
-                                  $(BUILD) / $(FILE_SYSTEM_RECURSION) /
-                                      %.o,
-                                  $(notdir $(shell find $(CORE) /
-                                                 $(FILE_SYSTEM_RECURSION) -
-                                             name
-                                             "*.c"))) MAIN_OBJS =
-                                    $(patsubst %.c, $(BUILD) / $(MAIN) / %.o,
-                                      $(notdir $(
-                                          shell find $(CORE) /
-                                              $(MAIN) -
-                                          name "*.c"))) TEST_MAIN_WRITING_OBJS =
-                                        $(patsubst %.c,
-                                          $(BUILD) / $(TEST_MAIN_WRITING) /
-                                              %.o,
-                                          $(notdir $(
-                                              shell find $(CORE) /
-                                                  $(TEST_MAIN_WRITING) -
-                                              name "*.c"))) PLUGIN_LOADER_OBJS =
-                                            $(patsubst %.c,
-                                              $(BUILD) / $(PLUGIN_LOADER) /
-                                                  %.o,
-                                              $(notdir $(shell find $(CORE) /
-                                                             $(PLUGIN_LOADER) -
-                                                         name
-                                                         "*.c")))
+APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
+FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
+MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
+TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
+PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -name "*.c")))
 
-                                                GREG_BUILD_OBJS = $(APPLICATION_OBJS) $(FILE_SYSTEM_RECURSION_OBJS) $(
-                                                    MAIN_OBJS) $(TEST_MAIN_WRITING_OBJS) $(PLUGIN_LOADER_OBJS)
+GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
+				  $(FILE_SYSTEM_RECURSION_OBJS) \
+				  $(MAIN_OBJS) \
+				  $(TEST_MAIN_WRITING_OBJS) \
+                  $(PLUGIN_LOADER_OBJS)
 
-                                                    ##################################################################################Toolkit
-                                                        OBJS##################################################################################
+############################################################################
+######						  Toolkit OBJS 	    					  ######
+############################################################################
 
-    COLLECTIONS = Collections COMMAND_LINE_OPTIONS = CommandLineOptions
-        EXTERNAL_PROGRAM_EXECUTION = ExternalProgramExecution FAILURE_HANDLING =
-            FailureHandling FILE_SYSTEM = FileSystem STRING = String
+COLLECTIONS=Collections
+COMMAND_LINE_OPTIONS=CommandLineOptions
+EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
+FAILURE_HANDLING=FailureHandling
+FILE_SYSTEM=FileSystem
+STRING=String
 
-                COLLECTIONS_OBJS = $(
-                    patsubst %.c,
-                    $(BUILD) / $(TOOLKIT) /
-                        $(COLLECTIONS) / %.o,
-                    $(notdir $(shell find $(TOOLKIT_SW) / $(COLLECTIONS) - name
-                               "*.c"))) COMMAND_LINE_OPTIONS_OBJS =
-                    $(patsubst %.c, $(BUILD) / $(TOOLKIT) / $(COMMAND_LINE_OPTIONS) / %.o, $(notdir
-                                                                                                 $(shell find $(TOOLKIT_SW) / $(COMMAND_LINE_OPTIONS) - name "*.c"))) EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %
-                                                                                                                                                                                                                  .c,
-                                                                                                                                                                                                          $(BUILD) /
-                                                                                                                                                                                                              $(TOOLKIT) /
-                                                                                                                                                                                                              $(EXTERNAL_PROGRAM_EXECUTION) /
-                                                                                                                                                                                                              %.o,
-                                                                                                                                                                                                          $(
-                                                                                                                                                                                                              notdir $(shell
-                                                                                                                                                                                                                               find $(
-                                                                                                                                                                                                                                   TOOLKIT_SW) /
-                                                                                                                                                                                                                           $(EXTERNAL_PROGRAM_EXECUTION) -
-                                                                                                                                                                                                                       name "*.c"))) FAILURE_HANDLING_OBJS = $(patsubst %
-                                                                                                                                                                                                                                                                       .c,
-                                                                                                                                                                                                                                                               $(BUILD) /
-                                                                                                                                                                                                                                                                   $(TOOLKIT) /
-                                                                                                                                                                                                                                                                   $(FAILURE_HANDLING) /
-                                                                                                                                                                                                                                                                   %.o,
-                                                                                                                                                                                                                                                               $(
-                                                                                                                                                                                                                                                                   notdir
-                                                                                                                                                                                                                                                                       $(shell find $(
-                                                                                                                                                                                                                                                                             TOOLKIT_SW) /
-                                                                                                                                                                                                                                                                             $(FAILURE_HANDLING) -
-                                                                                                                                                                                                                                                                         name
-                                                                                                                                                                                                                                                                         "*.c"))) FILE_SYSTEM_OBJS = $(patsubst %.c, $(BUILD) /
-                                                                                                                                                                                                                                                                                                                         $(TOOLKIT) /
-                                                                                                                                                                                                                                                                                                                         $(FILE_SYSTEM) / %.o,
-                                                                                                                                                                                                                                                                                                       $(notdir
-                                                                                                                                                                                                                                                                                                             $(shell find $(TOOLKIT_SW) / $(FILE_SYSTEM) - name "*.c"))) STRING_OBJS = $(patsubst %
-                                                                                                                                                                                                                                                                                                                                                                                                 .c,
-                                                                                                                                                                                                                                                                                                                                                                                         $(BUILD) /
-                                                                                                                                                                                                                                                                                                                                                                                             $(TOOLKIT) /
-                                                                                                                                                                                                                                                                                                                                                                                             $(STRING) /
-                                                                                                                                                                                                                                                                                                                                                                                             %.o,
-                                                                                                                                                                                                                                                                                                                                                                                         $(notdir
-                                                                                                                                                                                                                                                                                                                                                                                               $(shell find $(TOOLKIT_SW) / $(STRING) - name "*.c")))
+COLLECTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS) -name "*.c")))
+COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
+EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
+FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
+FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
+STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
-                        TOOLKIT_OBJS =
-                            $(COLLECTIONS_OBJS)
-                                    $(COMMAND_LINE_OPTIONS_OBJS) $(EXTERNAL_PROGRAM_EXECUTION_OBJS) $(
-                                        FAILURE_HANDLING_OBJS) $(FILE_SYSTEM_OBJS) $(STRING_OBJS)
+TOOLKIT_OBJS =  $(COLLECTIONS_OBJS) \
+				$(COMMAND_LINE_OPTIONS_OBJS) \
+				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
+				$(FAILURE_HANDLING_OBJS) \
+				$(FILE_SYSTEM_OBJS) \
+				$(STRING_OBJS)
 
-                                        ##################################################################################Final Exe
-                                            Rules##################################################################################
+############################################################################
+######						 Final Exe Rules						  ######
+############################################################################
 
-                                $(USR_BIN_EXE)
-    : $(DIST_EXE) cp $(DIST_EXE) $(USR_BIN_EXE)
+$(USR_BIN_EXE): $(DIST_EXE)
+	cp $(DIST_EXE) $(USR_BIN_EXE)
 
-          $(DIST_EXE)
-    : $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS) mkdir - p $(DIST) gcc - o $ @$ ^
+$(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
+	mkdir -p $(DIST)
+	gcc -o $@ $^
 
-                            ##################################################################################GregBuild OBJ
-                                            Rules##################################################################################
 
-                                        $(BUILD) /
-                                        $(APPLICATION) / %.o : $(CORE) /
-                                        $(APPLICATION) / %.c mkdir -
-                                    p $(BUILD) / $(APPLICATION) gcc - c $ <
-                                mv $(notdir $ @) $ @
+############################################################################
+######						GregBuild OBJ Rules						  ######
+############################################################################
 
-                                        $(BUILD) /
-                                        $(FILE_SYSTEM_RECURSION) /
-                                        %.o : $(CORE) /
-                                        $(FILE_SYSTEM_RECURSION) / %.c mkdir -
-                                    p $(BUILD) / $(FILE_SYSTEM_RECURSION) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c
+	mkdir -p $(BUILD)/$(APPLICATION)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(MAIN) / %.o : $(CORE) / $(MAIN) /
-                                        %.c mkdir -
-                                    p $(BUILD) / $(MAIN) gcc - c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o: $(CORE)/$(FILE_SYSTEM_RECURSION)/%.c
+	mkdir -p $(BUILD)/$(FILE_SYSTEM_RECURSION)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TEST_MAIN_WRITING) / %.o : $(CORE) /
-                                        $(TEST_MAIN_WRITING) / %.c mkdir -
-                                    p $(BUILD) / $(TEST_MAIN_WRITING) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(MAIN)/%.o: $(CORE)/$(MAIN)/%.c
+	mkdir -p $(BUILD)/$(MAIN)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(PLUGIN_LOADER) / %.o : $(CORE) /
-                                        $(PLUGIN_LOADER) / %.c mkdir -
-                                    p $(BUILD) / $(PLUGIN_LOADER) gcc - c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c
+	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        ##################################################################################Toolkit OBJ
-                                            Rules##################################################################################
+$(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c
+	mkdir -p $(BUILD)/$(PLUGIN_LOADER)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) / $(COLLECTIONS) /
-                                        %.o : $(TOOLKIT_SW) / $(COLLECTIONS) /
-                                        %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) / $(COLLECTIONS)
-                                                                  gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+############################################################################
+######						Toolkit OBJ Rules						  ######
+############################################################################
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) / $(COMMAND_LINE_OPTIONS) /
-                                        %.o : $(TOOLKIT_SW) /
-                                        $(COMMAND_LINE_OPTIONS) / %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) /
-                                        $(COMMAND_LINE_OPTIONS) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) /
-                                        $(EXTERNAL_PROGRAM_EXECUTION) /
-                                        %.o : $(TOOLKIT_SW) /
-                                        $(EXTERNAL_PROGRAM_EXECUTION) /
-                                        %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) /
-                                        $(EXTERNAL_PROGRAM_EXECUTION) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) / $(FAILURE_HANDLING) /
-                                        %.o : $(TOOLKIT_SW) /
-                                        $(FAILURE_HANDLING) / %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) /
-                                        $(FAILURE_HANDLING) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o: $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) / $(FILE_SYSTEM) /
-                                        %.o : $(TOOLKIT_SW) / $(FILE_SYSTEM) /
-                                        %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) / $(FILE_SYSTEM)
-                                                                  gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o: $(TOOLKIT_SW)/$(FAILURE_HANDLING)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                        $(BUILD) /
-                                        $(TOOLKIT) / $(STRING) /
-                                        %.o : $(TOOLKIT_SW) / $(STRING) /
-                                        %.c mkdir -
-                                    p $(BUILD) / $(TOOLKIT) / $(STRING) gcc -
-                                    c $ <
-                                mv $(notdir $ @) $ @
+$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                    ##################################################################################Clean
-                                        Rules##################################################################################
+$(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(STRING)
+	gcc -c $<
+	mv $(notdir $@) $@
 
-                                    clean : rm $(BUILD) -
-                                            r rm $(DIST) - r rm $(USR_BIN_EXE)
+############################################################################
+######						Plugin Rules	     					  ######
+############################################################################
+
+../lib/plugins/TimeTrackingPlugin.dll: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c
+	mkdir -p ../lib/plugins
+	gcc -fPIC -shared -o $@ $^
+	cp $@ ../ExampleSrcRepo/lib/plugins
+
+############################################################################
+######						Clean Rules								  ######
+############################################################################
+
+clean:
+	rm $(BUILD) -r
+	rm $(DIST) -r
+	rm $(USR_BIN_EXE)
