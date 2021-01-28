@@ -137,7 +137,14 @@ $(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c
 ######						Plugin Rules	     					  ######
 ############################################################################
 
+Plugins: ../lib/plugins/TimeTrackingPlugin.dll ../lib/plugins/TheBestPlugin.dll
+
 ../lib/plugins/TimeTrackingPlugin.dll: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c
+	mkdir -p ../lib/plugins
+	gcc -fPIC -shared -o $@ $^
+	cp $@ ../ExampleSrcRepo/lib/plugins
+
+../lib/plugins/TheBestPlugin.dll: plugins/TheBestPlugin/TheBestPlugin.c
 	mkdir -p ../lib/plugins
 	gcc -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
@@ -150,3 +157,7 @@ clean:
 	rm $(BUILD) -r
 	rm $(DIST) -r
 	rm $(USR_BIN_EXE)
+
+cleanPlugins:
+	rm ../lib/plugins/TimeTrackingPlugin.dll
+	rm ../lib/plugins/TheBestPlugin.dll

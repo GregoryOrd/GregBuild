@@ -1,4 +1,4 @@
-#include "TimeTrackingPlugin.h"
+#include "TheBestPlugin.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +12,8 @@ BuildSequenceStep *beforeLoadingTestAndSourceFiles() {
   step->option->description = (char *)malloc(sizeof(char));
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
-  strcpy(step->option->optionText, "TimeTrackingPlugin_TEXT");
-  strcpy(step->option->description, "TimeTrackingPlugin_DESCRIPTION");
+  strcpy(step->option->optionText, "TheBestPlugin_TEXT");
+  strcpy(step->option->description, "TheBestPlugin_DESCRIPTION");
   step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
   return step;
 }
@@ -26,7 +26,7 @@ BuildSequenceStep *afterLoadingTestAndSourceFiles() {
   step->option->description = (char *)malloc(sizeof(char));
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
-  strcpy(step->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
+  strcpy(step->option->optionText, "--best");
   strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
   step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
   return step;
@@ -35,6 +35,6 @@ BuildSequenceStep *afterLoadingTestAndSourceFiles() {
 int printHelloWorld(TestFileList *testFiles, SourceFileList *sourceFiles,
                     ObjectFileList *tempObjectFiles, int previousStepFailed,
                     char *basePath) {
-  printf("Hello World From The Time Tracking Plugin\n");
+  printf("Hello World From The Best Plugin\n");
   return 0;
 }

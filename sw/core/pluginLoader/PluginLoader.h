@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <stdbool.h>
 
+#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+
 typedef struct Plugin { char *name; } Plugin;
 
 typedef struct PluginList {
@@ -14,6 +16,7 @@ typedef struct PluginList {
 void initPluginList(PluginList *list);
 void freePluginList(PluginList *list);
 void loadPlugins(PluginList *plugins, const char *basePath);
+void processPlugins(LinkedList *buildSequence, PluginList *list);
 void copyNameIntoPath(char *path, const char *basePath,
                       const char *fileOrSubDirectoryName);
 void addPluginToListOrContinueRecursion(PluginList *plugins,

@@ -1,5 +1,5 @@
-#ifndef TIME_TRACKING_PLUGIN_H
-#define TIME_TRACKING_PLUGIN_H
+#ifndef THE_BEST_PLUGIN_H
+#define THE_BEST_PLUGIN_H
 
 #include "../PluginAPI/PluginFunctions.h"
 

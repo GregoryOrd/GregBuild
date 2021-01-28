@@ -7,9 +7,11 @@
 
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
-#include "../common/FileStructureDefs.h"
+#include "../common/BuildSequenceStep.h"
+#include "../common/FileStructureDefs.h" //Do we need this include?
+#include "../common/GregBuildConstants.h"
 
-typedef void (*PLUGIN_HELLO_WORLD)();
+typedef BuildSequenceStep *(*PluginFunction)();
 
 void initPluginList(PluginList *list) {
   list->size = 0;
@@ -43,6 +45,25 @@ void loadPlugins(PluginList *plugins, const char *basePath) {
 
   closedir(basePathDirectory);
   free(fileOrSubDirectoryFullPath);
+}
+
+void processPlugins(LinkedList *buildSequence, PluginList *list) {
+  for (int i = 0; i < list->size; i++) {
+    // Need to maintain a list of open libraries in GregBuildMain
+    // so that we can free those libraries at the end of the program.
+    // If we open and close the libraries in here, then we can't
+    // run the appropriate functions as part of the build sequence.
+    HMODULE hLib = LoadLibrary(list->plugins[i].name);
+    PluginFunction beforeLoadingTestAndSourceFiles =
+        (PluginFunction)GetProcAddress(hLib, "beforeLoadingTestAndSourceFiles");
+    BuildSequenceStep *beforeLoadingTestAndSourceFilesStep =
+        beforeLoadingTestAndSourceFiles();
+    insert_ll(buildSequence, beforeLoadingTestAndSourceFilesStep,
+              BUILD_SEQUENCE_STEP_TYPE, 0);
+    // also need to insert the command line option into the command line options
+    // list
+    // FreeLibrary(hLib);
+  }
 }
 
 void copyNameIntoPath(char *path, const char *basePath,
@@ -88,12 +109,5 @@ void printPluginInList(const PluginList *list) {
   }
   for (int i = 0; i < list->size; i++) {
     printf("Plugins[%d]: %s\n", i, list->plugins[i].name);
-    HMODULE hLib = LoadLibrary(list->plugins[i].name);
-    PLUGIN_HELLO_WORLD print_hello_world_func_ptr =
-        (PLUGIN_HELLO_WORLD)GetProcAddress(hLib, "printHelloWorld");
-    printf("===============================================\n");
-    print_hello_world_func_ptr();
-    printf("===============================================\n");
-    FreeLibrary(hLib);
   }
 }

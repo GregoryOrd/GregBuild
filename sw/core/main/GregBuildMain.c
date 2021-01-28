@@ -28,12 +28,14 @@ int main(int argc, char *argv[]) {
     testFiles = (TestFileList *)malloc(sizeof(TestFileList));
   }
   initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
-  initPluginList(plugins);
-  loadPlugins(plugins, "./lib/plugins");
-  printPluginInList(plugins);
 
   LinkedList *buildSequence = (LinkedList *)malloc(sizeof(LinkedList));
   initBuildSequence(buildSequence);
+
+  initPluginList(plugins);
+  loadPlugins(plugins, "./lib/plugins");
+  processPlugins(buildSequence, plugins);
+
   int error = executeBuildSequence(buildSequence, optionList, testFiles,
                                    sourceFiles, tempObjectFiles);
 
