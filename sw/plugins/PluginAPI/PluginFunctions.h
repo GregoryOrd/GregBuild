@@ -130,28 +130,28 @@ ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 }
 */
 
-BuildSequenceStep *beforeLoadTestsAndSourceFiles();
-BuildSequenceStep *afterLoadTestsAndSourceFiles();
+BuildSequenceStep *before_loadTestsAndSourceFiles();
+BuildSequenceStep *after_loadTestsAndSourceFiles();
 
-BuildSequenceStep *beforeCompileIntoTempObjectFiles();
-BuildSequenceStep *afterCompileIntoTempObjectFiles();
+BuildSequenceStep *before_compileIntoTempObjectFiles();
+BuildSequenceStep *after_compileIntoTempObjectFiles();
 
-BuildSequenceStep *beforeLinkObjectFilesWithGregTestDllToMakeProjectTestDll();
-BuildSequenceStep *afterLinkObjectFilesWithGregTestDllToMakeProjectTestDll();
+BuildSequenceStep *before_linkObjectFilesWithGregTestDllToMakeProjectTestDll();
+BuildSequenceStep *after_linkObjectFilesWithGregTestDllToMakeProjectTestDll();
 
-BuildSequenceStep *beforeWriteTestsToTestMain();
-BuildSequenceStep *afterWriteTestsToTestMain();
+BuildSequenceStep *before_writeTestsToTestMain();
+BuildSequenceStep *after_writeTestsToTestMain();
 
-BuildSequenceStep *beforeCreateTestMainExecutableFromProjectDllAndGregTestDll();
-BuildSequenceStep *afterCreateTestMainExecutableFromProjectDllAndGregTestDll();
+BuildSequenceStep *before_createTestMainExecutableFromProjectDllAndGregTestDll();
+BuildSequenceStep *after_createTestMainExecutableFromProjectDllAndGregTestDll();
 
-BuildSequenceStep *beforeRunTestsWithExitStatusCheck();
-BuildSequenceStep *afterRunTestsWithExitStatusCheck();
+BuildSequenceStep *before_runTestsWithExitStatusCheck();
+BuildSequenceStep *after_runTestsWithExitStatusCheck();
 
-BuildSequenceStep *beforeCompileObjectFilesIntoProjectExecutable();
-BuildSequenceStep *afterCompileObjectFilesIntoProjectExecutable();
+BuildSequenceStep *before_compileObjectFilesIntoProjectExecutable();
+BuildSequenceStep *after_compileObjectFilesIntoProjectExecutable();
 
-BuildSequenceStep *beforeRemoveTempDir();
-BuildSequenceStep *afterRemoveTempDir();
+BuildSequenceStep *before_removeTempDir();
+BuildSequenceStep *after_removeTempDir();
 
 #endif
