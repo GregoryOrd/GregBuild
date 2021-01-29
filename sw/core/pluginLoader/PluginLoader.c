@@ -60,7 +60,8 @@ void loadPlugins(PluginList *plugins, LinkedList *pluginHModules,
 }
 
 void processPlugins(LinkedList *buildSequence, PluginList *list,
-                    LinkedList *pluginHModules) {
+                    LinkedList *pluginHModules,
+                    LinkedList *commandLineOptions) {
   for (int i = 0; i < list->size; i++) {
     const HMODULE *hLib =
         (const HMODULE *)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
@@ -71,6 +72,8 @@ void processPlugins(LinkedList *buildSequence, PluginList *list,
         beforeLoadingTestAndSourceFiles();
     insert_ll(buildSequence, beforeLoadingTestAndSourceFilesStep,
               BUILD_SEQUENCE_STEP_TYPE, 0);
+    insert_ll(commandLineOptions, beforeLoadingTestAndSourceFilesStep->option,
+              COMMAND_LINE_OPTION_TYPE, 0);
     // need to insert the command line option into the command line options list
   }
 }

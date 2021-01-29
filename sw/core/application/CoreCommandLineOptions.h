@@ -3,8 +3,9 @@
 
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
-void initAndProcessCommandLineOptions(LinkedList* options, int argc, char* argv[]);
-void setCoreCommandLineOptions(LinkedList* list);
-void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list);
+void initCoreCommandLineOptions(LinkedList *options);
+void processCommandLineOptions(LinkedList *options, int argc, char *argv[]);
+void setCoreCommandLineOptions(LinkedList *list);
+void coreCommandLineAcknowldegmentPrintouts(const LinkedList *list);
 
 #endif

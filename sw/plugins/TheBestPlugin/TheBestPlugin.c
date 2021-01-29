@@ -12,9 +12,9 @@ BuildSequenceStep *beforeLoadingTestAndSourceFiles() {
   step->option->description = (char *)malloc(sizeof(char));
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
-  strcpy(step->option->optionText, "TheBestPlugin_TEXT");
-  strcpy(step->option->description, "TheBestPlugin_DESCRIPTION");
-  step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
+  strcpy(step->option->optionText, "--best");
+  strcpy(step->option->description, "TheBestPlugin");
+  step->option->flagValue = (bool *)0;
   return step;
 }
 
@@ -27,8 +27,8 @@ BuildSequenceStep *afterLoadingTestAndSourceFiles() {
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
   strcpy(step->option->optionText, "--best");
-  strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
-  step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
+  strcpy(step->option->description, "TheBestPlugin");
+  step->option->flagValue = (bool *)0;
   return step;
 }
 

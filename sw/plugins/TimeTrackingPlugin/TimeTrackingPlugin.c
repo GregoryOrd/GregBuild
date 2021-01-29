@@ -12,9 +12,9 @@ BuildSequenceStep *beforeLoadingTestAndSourceFiles() {
   step->option->description = (char *)malloc(sizeof(char));
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
-  strcpy(step->option->optionText, "TimeTrackingPlugin_TEXT");
-  strcpy(step->option->description, "TimeTrackingPlugin_DESCRIPTION");
-  step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
+  strcpy(step->option->optionText, "--time");
+  strcpy(step->option->description, "TimeTrackingPlugin");
+  step->option->flagValue = (bool *)0;
   return step;
 }
 
@@ -26,9 +26,9 @@ BuildSequenceStep *afterLoadingTestAndSourceFiles() {
   step->option->description = (char *)malloc(sizeof(char));
   step->option->flagValue = (bool *)malloc(sizeof(bool));
   step->function_ptr = printHelloWorld;
-  strcpy(step->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-  strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
-  step->option->flagValue = (bool *)NULL_COMMAND_LINE_FLAG_VALUE;
+  strcpy(step->option->optionText, "time");
+  strcpy(step->option->description, "TimeTrackingPlugin");
+  step->option->flagValue = (bool *)0;
   return step;
 }
 

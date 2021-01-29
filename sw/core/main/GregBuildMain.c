@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
   PluginList *plugins = (PluginList *)malloc(sizeof(PluginList));
   LinkedList *pluginHModules = (LinkedList *)malloc(sizeof(LinkedList));
 
-  initAndProcessCommandLineOptions(optionList, argc, argv);
+  initCoreCommandLineOptions(optionList);
   if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT,
                             COMMAND_LINE_OPTION_TYPE)) {
     testFiles = (TestFileList *)malloc(sizeof(TestFileList));
@@ -36,7 +36,8 @@ int main(int argc, char *argv[]) {
   initEmptyLinkedList(pluginHModules, HMODULE_LL_TYPE);
   initPluginList(plugins);
   loadPlugins(plugins, pluginHModules, "./lib/plugins");
-  processPlugins(buildSequence, plugins, pluginHModules);
+  processPlugins(buildSequence, plugins, pluginHModules, optionList);
+  processCommandLineOptions(optionList, argc, argv);
 
   int error = executeBuildSequence(buildSequence, optionList, testFiles,
                                    sourceFiles, tempObjectFiles);

@@ -20,7 +20,7 @@ void freeHModuleNode(void *data);
 void loadPlugins(PluginList *plugins, LinkedList *pluginHModules,
                  const char *basePath);
 void processPlugins(LinkedList *buildSequence, PluginList *list,
-                    LinkedList *pluginHModules);
+                    LinkedList *pluginHModules, LinkedList *commandLineOptions);
 void copyNameIntoPath(char *path, const char *basePath,
                       const char *fileOrSubDirectoryName);
 void addPluginToListOrContinueRecursion(PluginList *plugins,
