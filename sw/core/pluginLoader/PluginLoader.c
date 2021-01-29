@@ -8,7 +8,6 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/BuildSequenceStep.h"
-#include "../common/FileStructureDefs.h" //Do we need this include?
 #include "../common/GregBuildConstants.h"
 
 typedef BuildSequenceStep *(*PluginFunction)();
@@ -26,7 +25,19 @@ void freePluginList(PluginList *list) {
   free(list);
 }
 
-void loadPlugins(PluginList *plugins, const char *basePath) {
+void freePluginHModules(LinkedList *pluginHModules) {
+  for (int i = 0; i < pluginHModules->size; i++) {
+    const HMODULE *hLib =
+        (const HMODULE *)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
+    FreeLibrary(*hLib);
+  }
+  freeLinkedList(pluginHModules, &freeHModuleNode);
+}
+
+void freeHModuleNode(void *data) {}
+
+void loadPlugins(PluginList *plugins, LinkedList *pluginHModules,
+                 const char *basePath) {
   char *fileOrSubDirectoryFullPath =
       (char *)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char *));
   struct dirent *fileOrSubDirectory;
@@ -39,7 +50,8 @@ void loadPlugins(PluginList *plugins, const char *basePath) {
   while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL) {
     copyNameIntoPath(fileOrSubDirectoryFullPath, basePath,
                      fileOrSubDirectory->d_name);
-    addPluginToListOrContinueRecursion(plugins, basePath, fileOrSubDirectory,
+    addPluginToListOrContinueRecursion(plugins, pluginHModules, basePath,
+                                       fileOrSubDirectory,
                                        fileOrSubDirectoryFullPath);
   }
 
@@ -47,22 +59,19 @@ void loadPlugins(PluginList *plugins, const char *basePath) {
   free(fileOrSubDirectoryFullPath);
 }
 
-void processPlugins(LinkedList *buildSequence, PluginList *list) {
+void processPlugins(LinkedList *buildSequence, PluginList *list,
+                    LinkedList *pluginHModules) {
   for (int i = 0; i < list->size; i++) {
-    // Need to maintain a list of open libraries in GregBuildMain
-    // so that we can free those libraries at the end of the program.
-    // If we open and close the libraries in here, then we can't
-    // run the appropriate functions as part of the build sequence.
-    HMODULE hLib = LoadLibrary(list->plugins[i].name);
+    const HMODULE *hLib =
+        (const HMODULE *)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
     PluginFunction beforeLoadingTestAndSourceFiles =
-        (PluginFunction)GetProcAddress(hLib, "beforeLoadingTestAndSourceFiles");
+        (PluginFunction)GetProcAddress(*hLib,
+                                       "beforeLoadingTestAndSourceFiles");
     BuildSequenceStep *beforeLoadingTestAndSourceFilesStep =
         beforeLoadingTestAndSourceFiles();
     insert_ll(buildSequence, beforeLoadingTestAndSourceFilesStep,
               BUILD_SEQUENCE_STEP_TYPE, 0);
-    // also need to insert the command line option into the command line options
-    // list
-    // FreeLibrary(hLib);
+    // need to insert the command line option into the command line options list
   }
 }
 
@@ -74,13 +83,13 @@ void copyNameIntoPath(char *path, const char *basePath,
 }
 
 void addPluginToListOrContinueRecursion(
-    PluginList *plugins, const char *basePath,
+    PluginList *plugins, LinkedList *pluginHModules, const char *basePath,
     const struct dirent *fileOrSubDirectory,
     const char *fileOrSubDirectoryFullPath) {
   if (isPlugin(fileOrSubDirectory)) {
-    addPluginToList(plugins, fileOrSubDirectoryFullPath);
+    addPluginToList(plugins, pluginHModules, fileOrSubDirectoryFullPath);
   } else if (isVisibleDirectory(fileOrSubDirectory)) {
-    loadPlugins(plugins, fileOrSubDirectoryFullPath);
+    loadPlugins(plugins, pluginHModules, fileOrSubDirectoryFullPath);
   }
 }
 
@@ -92,14 +101,19 @@ bool isPlugin(const struct dirent *fileOrSubDirectory) {
   return result;
 }
 
-void addPluginToList(PluginList *list, const char *pluginPath) {
-  if (list != NULL) {
+void addPluginToList(PluginList *list, LinkedList *pluginHModules,
+                     const char *pluginPath) {
+  if (list != NULL && pluginHModules != NULL) {
     list->plugins =
         (Plugin *)realloc(list->plugins, ((list->size + 1) * sizeof(Plugin)));
     list->plugins[list->size].name =
         (char *)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char *));
     strcpy(list->plugins[list->size].name, pluginPath);
     list->size++;
+
+    HMODULE *hLib = (HMODULE *)malloc(sizeof(HMODULE));
+    *hLib = LoadLibrary(list->plugins[list->size - 1].name);
+    append_ll(pluginHModules, hLib, HMODULE_LL_TYPE);
   }
 }
 

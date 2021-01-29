@@ -15,16 +15,22 @@ typedef struct PluginList {
 
 void initPluginList(PluginList *list);
 void freePluginList(PluginList *list);
-void loadPlugins(PluginList *plugins, const char *basePath);
-void processPlugins(LinkedList *buildSequence, PluginList *list);
+void freePluginHModules(LinkedList *pluginHModules);
+void freeHModuleNode(void *data);
+void loadPlugins(PluginList *plugins, LinkedList *pluginHModules,
+                 const char *basePath);
+void processPlugins(LinkedList *buildSequence, PluginList *list,
+                    LinkedList *pluginHModules);
 void copyNameIntoPath(char *path, const char *basePath,
                       const char *fileOrSubDirectoryName);
 void addPluginToListOrContinueRecursion(PluginList *plugins,
+                                        LinkedList *pluginHModules,
                                         const char *basePath,
                                         const struct dirent *fileOrSubDirectory,
                                         const char *fileOrSubDirectoryFullPath);
 bool isPlugin(const struct dirent *fileOrSubDirectory);
-void addPluginToList(PluginList *list, const char *pluginPath);
+void addPluginToList(PluginList *list, LinkedList *pluginHModules,
+                     const char *pluginPath);
 void printPluginInList(const PluginList *list);
 
 #endif
