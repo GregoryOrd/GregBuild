@@ -108,10 +108,10 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    BuildSequenceStep* step =
 (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
    step->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   step->option->optionText = (char*)malloc(sizeof(char));
-   step->option->description = (char*)malloc(sizeof(char));
+   step->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
+   step->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
    step->option->flagValue = (bool*)malloc(sizeof(bool));
-   step->functionName = (bool*)malloc(sizeof(char));
+   step->functionName = (bool*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
 
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name
@@ -130,8 +130,8 @@ ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
 }
 */
 
-BuildSequenceStep *beforeLoadingTestAndSourceFiles();
-BuildSequenceStep *afterLoadingTestAndSourceFiles();
+BuildSequenceStep *beforeLoadTestsAndSourceFiles();
+BuildSequenceStep *afterLoadTestsAndSourceFiles();
 
 BuildSequenceStep *beforeCompileIntoTempObjectFiles();
 BuildSequenceStep *afterCompileIntoTempObjectFiles();

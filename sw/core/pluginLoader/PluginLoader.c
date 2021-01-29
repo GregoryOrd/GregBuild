@@ -1,16 +1,13 @@
 #include "PluginLoader.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <windows.h>
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
-#include "../common/BuildSequenceStep.h"
+#include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
-
-typedef BuildSequenceStep* (*PluginFunction)();
 
 void initPluginList(PluginList* list)
 {
@@ -59,67 +56,6 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginHModules, const char* ba
 
    closedir(basePathDirectory);
    free(fileOrSubDirectoryFullPath);
-}
-
-void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
-{
-   for (int i = 0; i < list->size; i++)
-   {
-      const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
-      processBeforeAndAfterLoadingTestAndSourceFiles(hLib, buildSequence, commandLineOptions);
-
-      // PluginFunction beforeCompileIntoTempObjectFiles = (PluginFunction)GetProcAddress(*hLib, "beforeCompileIntoTempObjectFiles");
-      // PluginFunction afterCompileIntoTempObjectFiles = (PluginFunction)GetProcAddress(*hLib, "afterCompileIntoTempObjectFiles");
-
-      // PluginFunction beforeLinkObjectFilesWithGregTestDllToMakeProjectTestDll =
-      //     (PluginFunction)GetProcAddress(*hLib, "beforeLinkObjectFilesWithGregTestDllToMakeProjectTestDll");
-      // PluginFunction beforeLoadingTestAndSourceFiles =
-      //     (afterLinkObjectFilesWithGregTestDllToMakeProjectTestDll)GetProcAddress(*hLib, "afterLinkObjectFilesWithGregTestDllToMakeProjectTestDll");
-
-      // PluginFunction beforeWriteTestsToTestMain = (PluginFunction)GetProcAddress(*hLib, "beforeWriteTestsToTestMain");
-      // PluginFunction afterWriteTestsToTestMain = (PluginFunction)GetProcAddress(*hLib, "afterWriteTestsToTestMain");
-
-      // PluginFunction beforeCreateTestMainExecutableFromProjectDllAndGregTestDll =
-      //     (PluginFunction)GetProcAddress(*hLib, "beforeCreateTestMainExecutableFromProjectDllAndGregTestDll");
-      // PluginFunction afterCreateTestMainExecutableFromProjectDllAndGregTestDll =
-      //     (PluginFunction)GetProcAddress(*hLib, "afterCreateTestMainExecutableFromProjectDllAndGregTestDll");
-
-      // PluginFunction beforeRunTestsWithExitStatusCheck = (PluginFunction)GetProcAddress(*hLib, "beforeRunTestsWithExitStatusCheck");
-      // PluginFunction afterRunTestsWithExitStatusCheck = (PluginFunction)GetProcAddress(*hLib, "afterRunTestsWithExitStatusCheck");
-
-      // PluginFunction beforeCompileObjectFilesIntoProjectExecutable = (PluginFunction)GetProcAddress(*hLib, "beforeCompileObjectFilesIntoProjectExecutable");
-      // PluginFunction afterCompileObjectFilesIntoProjectExecutable = (PluginFunction)GetProcAddress(*hLib, "afterCompileObjectFilesIntoProjectExecutable");
-
-      // PluginFunction beforeRemoveTempDir = (PluginFunction)GetProcAddress(*hLib, "beforeRemoveTempDir");
-      // PluginFunction afterRemoveTempDir = (PluginFunction)GetProcAddress(*hLib, "afterRemoveTempDir");
-   }
-}
-
-void processBeforeAndAfterLoadingTestAndSourceFiles(const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions)
-{
-   PluginFunction beforeLoadingTestAndSourceFiles = (PluginFunction)GetProcAddress(*hLib, "beforeLoadingTestAndSourceFiles");
-   int index = indexOf_loadingTestAndSourceFiles(buildSequence);
-   if (beforeLoadingTestAndSourceFiles != NULL && index != -1)
-   {
-      int beforeIndex = index - 1;
-      if (beforeIndex == -1)
-      {
-         beforeIndex = 0;
-      }
-      BuildSequenceStep* beforeLoadingTestAndSourceFilesStep = beforeLoadingTestAndSourceFiles();
-      insert_ll(buildSequence, beforeLoadingTestAndSourceFilesStep, BUILD_SEQUENCE_STEP_TYPE, beforeIndex);
-      addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeLoadingTestAndSourceFilesStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
-   }
-
-   PluginFunction afterLoadingTestAndSourceFiles = (PluginFunction)GetProcAddress(*hLib, "afterLoadingTestAndSourceFiles");
-   index = indexOf_loadingTestAndSourceFiles(buildSequence);
-   if (afterLoadingTestAndSourceFiles != NULL && index != -1)
-   {
-      int afterIndex = index + 1;
-      BuildSequenceStep* afterLoadingTestAndSourceFilesStep = afterLoadingTestAndSourceFiles();
-      insert_ll(buildSequence, afterLoadingTestAndSourceFilesStep, BUILD_SEQUENCE_STEP_TYPE, afterIndex);
-      addOptionIfItDoesntAlreadyExist(commandLineOptions, afterLoadingTestAndSourceFilesStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
-   }
 }
 
 void copyNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
@@ -175,32 +111,4 @@ void printPluginInList(const PluginList* list)
    {
       printf("Plugins[%d]: %s\n", i, list->plugins[i].name);
    }
-}
-
-int indexOf_loadingTestAndSourceFiles(LinkedList* buildSequence) { return indexOf(buildSequence, "loadingTestAndSourceFiles"); }
-int indexOf_compileIntoTempObjectFiles(LinkedList* buildSequence) { return indexOf(buildSequence, "compileIntoTempObjectFiles"); }
-int indexOf_linkObjectFilesWithGregTestDllToMakeProjectTestDll(LinkedList* buildSequence)
-{
-   return indexOf(buildSequence, "linkObjectFilesWithGregTestDllToMakeProjectTestDll");
-}
-int indexOf_writeTestsToTestMain(LinkedList* buildSequence) { return indexOf(buildSequence, "writeTestsToTestMain"); }
-int indexOf_createTestMainExecutableFromProjectDllAndGregTestDll(LinkedList* buildSequence)
-{
-   return indexOf(buildSequence, "createTestMainExecutableFromProjectDllAndGregTestDll");
-}
-int indexOf_runTestsWithExitStatusCheck(LinkedList* buildSequence) { return indexOf(buildSequence, "runTestsWithExitStatusCheck"); }
-int indexOf_compileObjectFilesIntoProjectExecutable(LinkedList* buildSequence) { return indexOf(buildSequence, "compileObjectFilesIntoProjectExecutable"); }
-int indexOf_removeTempDir(LinkedList* buildSequence) { return indexOf(buildSequence, "indexOf_removeTempDir"); }
-
-int indexOf(LinkedList* buildSequence, const char* functionName)
-{
-   for (int i = 0; i < buildSequence->size; i++)
-   {
-      BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-      if (step->functionName != NULL && strcmp(step->functionName, functionName))
-      {
-         return i;
-      }
-   }
-   return -1;
 }

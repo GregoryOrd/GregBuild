@@ -6,6 +6,7 @@
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
 
 void initCoreCommandLineOptions(LinkedList* options)
@@ -23,8 +24,8 @@ void processCommandLineOptions(LinkedList* options, int argc, char* argv[])
 void setCoreCommandLineOptions(LinkedList* list)
 {
    CommandLineOption* noTestOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   noTestOption->optionText = (char*)malloc(sizeof(char));
-   noTestOption->description = (char*)malloc(sizeof(char));
+   noTestOption->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   noTestOption->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    noTestOption->flagValue = (bool*)malloc(sizeof(bool));
    strcpy(noTestOption->optionText, NO_TEST_OPTION_TEXT);
    strcpy(noTestOption->description, NO_TEST_DESCRIPTION);
@@ -32,8 +33,8 @@ void setCoreCommandLineOptions(LinkedList* list)
    append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
 
    CommandLineOption* deleteTempOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   deleteTempOption->optionText = (char*)malloc(sizeof(char));
-   deleteTempOption->description = (char*)malloc(sizeof(char));
+   deleteTempOption->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   deleteTempOption->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    deleteTempOption->flagValue = (bool*)malloc(sizeof(bool));
    strcpy(deleteTempOption->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
    strcpy(deleteTempOption->description, DELETE_TEMP_DIR_DESCRIPTION);
