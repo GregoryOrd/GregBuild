@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
 
@@ -41,28 +42,35 @@ void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* plu
 
 void processBeforeAndAfterLoadingTestAndSourceFiles(const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions)
 {
-   PluginFunction beforeLoadTestsAndSourceFiles = (PluginFunction)GetProcAddress(*hLib, "beforeLoadTestsAndSourceFiles");
-   int index = indexOf_loadTestsAndSourceFiles(buildSequence);
-   if (beforeLoadTestsAndSourceFiles != NULL && index != -1)
+   processBeforeAndAfterSteps(hLib, buildSequence, commandLineOptions, indexOf_loadTestsAndSourceFiles, "beforeLoadTestsAndSourceFiles", "afterLoadTestsAndSourceFiles");
+}
+
+void processBeforeAndAfterSteps(
+    const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions, StepIndexSearchFunction searchFunction, const char* beforeFunctionName,
+    const char* afterFunctionName)
+{
+   PluginFunction beforeFunction = (PluginFunction)GetProcAddress(*hLib, beforeFunctionName);
+   int index = searchFunction(buildSequence);
+   if (beforeFunction != NULL && index != -1)
    {
       int beforeIndex = index - 1;
       if (beforeIndex == -1)
       {
          beforeIndex = 0;
       }
-      BuildSequenceStep* beforeLoadTestsAndSourceFilesStep = beforeLoadTestsAndSourceFiles();
-      insert_ll(buildSequence, beforeLoadTestsAndSourceFilesStep, BUILD_SEQUENCE_STEP_TYPE, beforeIndex);
-      addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeLoadTestsAndSourceFilesStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
+      BuildSequenceStep* beforeStep = beforeFunction();
+      insert_ll(buildSequence, beforeStep, BUILD_SEQUENCE_STEP_TYPE, beforeIndex);
+      addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
    }
 
-   PluginFunction afterLoadTestsAndSourceFiles = (PluginFunction)GetProcAddress(*hLib, "afterLoadTestsAndSourceFiles");
-   index = indexOf_loadTestsAndSourceFiles(buildSequence);
-   if (afterLoadTestsAndSourceFiles != NULL && index != -1)
+   PluginFunction afterFunction = (PluginFunction)GetProcAddress(*hLib, afterFunctionName);
+   index = searchFunction(buildSequence);
+   if (afterFunction != NULL && index != -1)
    {
       int afterIndex = index + 1;
-      BuildSequenceStep* afterLoadTestsAndSourceFilesStep = afterLoadTestsAndSourceFiles();
-      insert_ll(buildSequence, afterLoadTestsAndSourceFilesStep, BUILD_SEQUENCE_STEP_TYPE, afterIndex);
-      addOptionIfItDoesntAlreadyExist(commandLineOptions, afterLoadTestsAndSourceFilesStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
+      BuildSequenceStep* afterStep = afterFunction();
+      insert_ll(buildSequence, afterStep, BUILD_SEQUENCE_STEP_TYPE, afterIndex);
+      addOptionIfItDoesntAlreadyExist(commandLineOptions, afterStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
    }
 }
 
