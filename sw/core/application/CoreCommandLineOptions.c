@@ -8,42 +8,44 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../common/GregBuildConstants.h"
 
-void initCoreCommandLineOptions(LinkedList *options) {
-  initEmptyLinkedList(options, COMMAND_LINE_OPTION_TYPE);
-  setCoreCommandLineOptions(options);
+void initCoreCommandLineOptions(LinkedList* options)
+{
+   initEmptyLinkedList(options, COMMAND_LINE_OPTION_TYPE);
+   setCoreCommandLineOptions(options);
 }
 
-void processCommandLineOptions(LinkedList *options, int argc, char *argv[]) {
-  processCommandLineArgs_ll(argc, argv, options, COMMAND_LINE_OPTION_TYPE);
-  coreCommandLineAcknowldegmentPrintouts(options);
+void processCommandLineOptions(LinkedList* options, int argc, char* argv[])
+{
+   processCommandLineArgs_ll(argc, argv, options, COMMAND_LINE_OPTION_TYPE);
+   coreCommandLineAcknowldegmentPrintouts(options);
 }
 
-void setCoreCommandLineOptions(LinkedList *list) {
-  CommandLineOption *noTestOption =
-      (CommandLineOption *)malloc(sizeof(CommandLineOption));
-  noTestOption->optionText = (char *)malloc(sizeof(char));
-  noTestOption->description = (char *)malloc(sizeof(char));
-  noTestOption->flagValue = (bool *)malloc(sizeof(bool));
-  strcpy(noTestOption->optionText, NO_TEST_OPTION_TEXT);
-  strcpy(noTestOption->description, NO_TEST_DESCRIPTION);
-  noTestOption->flagValue = (bool *)NO_TEST_FLAG_VALUE;
-  append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
+void setCoreCommandLineOptions(LinkedList* list)
+{
+   CommandLineOption* noTestOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+   noTestOption->optionText = (char*)malloc(sizeof(char));
+   noTestOption->description = (char*)malloc(sizeof(char));
+   noTestOption->flagValue = (bool*)malloc(sizeof(bool));
+   strcpy(noTestOption->optionText, NO_TEST_OPTION_TEXT);
+   strcpy(noTestOption->description, NO_TEST_DESCRIPTION);
+   noTestOption->flagValue = (bool*)NO_TEST_FLAG_VALUE;
+   append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
 
-  CommandLineOption *deleteTempOption =
-      (CommandLineOption *)malloc(sizeof(CommandLineOption));
-  deleteTempOption->optionText = (char *)malloc(sizeof(char));
-  deleteTempOption->description = (char *)malloc(sizeof(char));
-  deleteTempOption->flagValue = (bool *)malloc(sizeof(bool));
-  strcpy(deleteTempOption->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
-  strcpy(deleteTempOption->description, DELETE_TEMP_DIR_DESCRIPTION);
-  deleteTempOption->flagValue = (bool *)DELETE_TEMP_DIR_FLAG_VALUE;
-  append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
+   CommandLineOption* deleteTempOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+   deleteTempOption->optionText = (char*)malloc(sizeof(char));
+   deleteTempOption->description = (char*)malloc(sizeof(char));
+   deleteTempOption->flagValue = (bool*)malloc(sizeof(bool));
+   strcpy(deleteTempOption->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
+   strcpy(deleteTempOption->description, DELETE_TEMP_DIR_DESCRIPTION);
+   deleteTempOption->flagValue = (bool*)DELETE_TEMP_DIR_FLAG_VALUE;
+   append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
 }
 
-void coreCommandLineAcknowldegmentPrintouts(const LinkedList *list) {
-  bool flag = flagValueForOption_ll(list, NO_TEST_OPTION_TEXT,
-                                    COMMAND_LINE_OPTION_TYPE);
-  if (!flag) {
-    printf("No Test Build\n");
-  }
+void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list)
+{
+   bool flag = flagValueForOption_ll(list, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE);
+   if (!flag)
+   {
+      printf("No Test Build\n");
+   }
 }

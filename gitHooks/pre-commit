@@ -1,8 +1,0 @@
-#!/bin/sh
-
-for FILE in $(git diff --cached --name-only '*.c' '*.h')
-do
-        clang-format -i $FILE
-done
-
-git add -A
