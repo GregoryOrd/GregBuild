@@ -23,6 +23,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    loadTestsAndSourceFilesStep->option->description = (char*)malloc(sizeof(char));
    loadTestsAndSourceFilesStep->option->flagValue = (bool*)malloc(sizeof(bool));
    loadTestsAndSourceFilesStep->function_ptr = loadTestsAndSourceFiles;
+   loadTestsAndSourceFilesStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(loadTestsAndSourceFilesStep->functionName, "loadTestsAndSourceFiles");
    strcpy(loadTestsAndSourceFilesStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
    strcpy(loadTestsAndSourceFilesStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
    loadTestsAndSourceFilesStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
@@ -34,6 +36,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    compileIntoTempObjectFilesStep->option->description = (char*)malloc(sizeof(char));
    compileIntoTempObjectFilesStep->option->flagValue = (bool*)malloc(sizeof(bool));
    compileIntoTempObjectFilesStep->function_ptr = compileIntoTempObjectFiles;
+   compileIntoTempObjectFilesStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(compileIntoTempObjectFilesStep->functionName, "compileIntoTempObjectFiles");
    strcpy(compileIntoTempObjectFilesStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
    strcpy(compileIntoTempObjectFilesStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
    compileIntoTempObjectFilesStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
@@ -45,6 +49,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description = (char*)malloc(sizeof(char));
    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)malloc(sizeof(bool));
    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->function_ptr = linkObjectFilesWithGregTestDllToMakeProjectTestDll;
+   linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->functionName, "linkObjectFilesWithGregTestDllToMakeProjectTestDll");
    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->optionText, NO_TEST_OPTION_TEXT);
    strcpy(linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->description, NO_TEST_DESCRIPTION);
    linkObjectFilesWithGregTestDllToMakeProjectTestDllStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
@@ -56,6 +62,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    writeTestsToTestMainStep->option->description = (char*)malloc(sizeof(char));
    writeTestsToTestMainStep->option->flagValue = (bool*)malloc(sizeof(bool));
    writeTestsToTestMainStep->function_ptr = writeTestsToTestMain;
+   writeTestsToTestMainStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(writeTestsToTestMainStep->functionName, "writeTestsToTestMain");
    strcpy(writeTestsToTestMainStep->option->optionText, NO_TEST_OPTION_TEXT);
    strcpy(writeTestsToTestMainStep->option->description, NO_TEST_DESCRIPTION);
    writeTestsToTestMainStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
@@ -67,6 +75,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->description = (char*)malloc(sizeof(char));
    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->flagValue = (bool*)malloc(sizeof(bool));
    createTestMainExecutableFromProjectDllAndGregTestDllStep->function_ptr = createTestMainExecutableFromProjectDllAndGregTestDll;
+   createTestMainExecutableFromProjectDllAndGregTestDllStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(createTestMainExecutableFromProjectDllAndGregTestDllStep->functionName, "createTestMainExecutableFromProjectDllAndGregTestDll");
    strcpy(createTestMainExecutableFromProjectDllAndGregTestDllStep->option->optionText, NO_TEST_OPTION_TEXT);
    strcpy(createTestMainExecutableFromProjectDllAndGregTestDllStep->option->description, NO_TEST_DESCRIPTION);
    createTestMainExecutableFromProjectDllAndGregTestDllStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
@@ -78,6 +88,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    runTestsWithExitStatusCheckStep->option->description = (char*)malloc(sizeof(char));
    runTestsWithExitStatusCheckStep->option->flagValue = (bool*)malloc(sizeof(bool));
    runTestsWithExitStatusCheckStep->function_ptr = runTestsWithExitStatusCheck;
+   runTestsWithExitStatusCheckStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(runTestsWithExitStatusCheckStep->functionName, "runTestsWithExitStatusCheck");
    strcpy(runTestsWithExitStatusCheckStep->option->optionText, NO_TEST_OPTION_TEXT);
    strcpy(runTestsWithExitStatusCheckStep->option->description, NO_TEST_DESCRIPTION);
    runTestsWithExitStatusCheckStep->option->flagValue = (bool*)NO_TEST_FLAG_VALUE;
@@ -89,6 +101,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    compileObjectFilesIntoProjectExecutableStep->option->description = (char*)malloc(sizeof(char));
    compileObjectFilesIntoProjectExecutableStep->option->flagValue = (bool*)malloc(sizeof(bool));
    compileObjectFilesIntoProjectExecutableStep->function_ptr = compileObjectFilesIntoProjectExecutable;
+   compileObjectFilesIntoProjectExecutableStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(compileObjectFilesIntoProjectExecutableStep->functionName, "compileObjectFilesIntoProjectExecutable");
    strcpy(compileObjectFilesIntoProjectExecutableStep->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
    strcpy(compileObjectFilesIntoProjectExecutableStep->option->description, NULL_COMMAND_LINE_DESCRIPTION);
    compileObjectFilesIntoProjectExecutableStep->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
@@ -100,6 +114,8 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    removeTempDirStep->option->description = (char*)malloc(sizeof(char));
    removeTempDirStep->option->flagValue = (bool*)malloc(sizeof(bool));
    removeTempDirStep->function_ptr = removeTempDir;
+   removeTempDirStep->functionName = (char*)malloc(sizeof(char));
+   strcpy(removeTempDirStep->functionName, "removeTempDir");
    strcpy(removeTempDirStep->option->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
    strcpy(removeTempDirStep->option->description, DELETE_TEMP_DIR_DESCRIPTION);
    removeTempDirStep->option->flagValue = (bool*)DELETE_TEMP_DIR_FLAG_VALUE;
@@ -133,5 +149,6 @@ void freeBuildSequenceStep(void* data)
    free(step->option->flagValue);
    free(step->option->optionText);
    free(step->option);
+   free(step->functionName);
    free(step);
 }

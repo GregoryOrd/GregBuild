@@ -53,11 +53,11 @@ struct CommandLineOption {
 } typedef CommandLineOption;
 
 typedef struct BuildSequenceStep {
-  CommandLineOption
-      *option; // To run the function, the flagValue in here needs to be true
+  CommandLineOption *option; // To run the function, the flagValue in here needs to be true
   int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
                       ObjectFileList *tempObjectFiles, int previousStepFailed,
                       char *basePath);
+  char * functionName;
 } BuildSequenceStep;
 
 // The core GregBuild BuildSequence is as follows
@@ -111,8 +111,10 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    step->option->optionText = (char*)malloc(sizeof(char));
    step->option->description = (char*)malloc(sizeof(char));
    step->option->flagValue = (bool*)malloc(sizeof(bool));
+   step->functionName = (bool*)malloc(sizeof(char));
 
    step->function_ptr = printHelloWorld;
+   strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name
    strcpy(step->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
    strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
    step->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
