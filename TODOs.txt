@@ -3,8 +3,6 @@
     - One know place where const is missing is on the base path of the 
     build sequence function pointers
 1) Implement plugin-loader and plugin-api
-    - Move opening and closing of plugin libraries from processPlugins() to main()
-    - Inside of processPlugins() add the command line option for the BuildSequenceStep
     - Add more plugin functions inside of processPlugins()
         - currently only loading beforeLoadingTestAndSourceFiles()
     - Add configuration file to specify what order to load/process the plugins
