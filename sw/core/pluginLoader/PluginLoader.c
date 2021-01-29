@@ -74,7 +74,6 @@ void processPlugins(LinkedList *buildSequence, PluginList *list,
               BUILD_SEQUENCE_STEP_TYPE, 0);
     insert_ll(commandLineOptions, beforeLoadingTestAndSourceFilesStep->option,
               COMMAND_LINE_OPTION_TYPE, 0);
-    // need to insert the command line option into the command line options list
   }
 }
 
