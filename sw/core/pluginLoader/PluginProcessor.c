@@ -1,17 +1,12 @@
 #include "PluginProcessor.h"
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
-#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
-
-// Remove when done debugging
-#include <stdio.h>
 
 typedef BuildSequenceStep* (*PluginFunction)();
 
 void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
 {
-   // Will need to free this at the end of the process plugins function
    int numCoreBuildSequenceSteps = buildSequence->size;
    BuildSequenceStep* coreBuildSequence = (BuildSequenceStep*)malloc(buildSequence->size * sizeof(BuildSequenceStep));
    for (int i = 0; i < numCoreBuildSequenceSteps; i++)
@@ -33,18 +28,12 @@ void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* plu
    for (int i = 0; i < list->size; i++)
    {
       const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
-      printf("Looking at plugin: %d\n", i);
       for (int j = 0; j < numCoreBuildSequenceSteps; j++)
       {
-         char beforeFunctionName[WINDOWS_MAX_PATH_LENGTH];
-         clearString(beforeFunctionName);
-         char afterFunctionName[WINDOWS_MAX_PATH_LENGTH];
-         clearString(afterFunctionName);
-         strcat(beforeFunctionName, "before_");
+         char beforeFunctionName[WINDOWS_MAX_PATH_LENGTH] = "before_";
+         char afterFunctionName[WINDOWS_MAX_PATH_LENGTH] = "after_";
          strcat(beforeFunctionName, coreBuildSequence[j].functionName);
-         strcat(afterFunctionName, "after_");
          strcat(afterFunctionName, coreBuildSequence[j].functionName);
-         printf("%s || %s || %s\n", coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
          processBeforeAndAfterSteps(hLib, buildSequence, commandLineOptions, coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
       }
    }
@@ -66,11 +55,7 @@ void processBeforeAndAfterSteps(
    int index = indexOf(buildSequence, functionName);
    if (beforeFunction != NULL && index != -1)
    {
-      int beforeIndex = index - 1;
-      if (beforeIndex == -1)
-      {
-         beforeIndex = 0;
-      }
+      int beforeIndex = index;
       BuildSequenceStep* beforeStep = beforeFunction();
       insert_ll(buildSequence, beforeStep, BUILD_SEQUENCE_STEP_TYPE, beforeIndex);
       addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
@@ -84,10 +69,6 @@ void processBeforeAndAfterSteps(
       BuildSequenceStep* afterStep = afterFunction();
       insert_ll(buildSequence, afterStep, BUILD_SEQUENCE_STEP_TYPE, afterIndex);
       addOptionIfItDoesntAlreadyExist(commandLineOptions, afterStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
-   }
-   else if (afterFunction == NULL)
-   {
-      printf("Couldn't find afterFunction\n");
    }
 }
 
@@ -103,5 +84,3 @@ int indexOf(LinkedList* buildSequence, const char* functionName)
    }
    return -1;
 }
-
-void copyBuildSequence(BuildSequenceStep dest[], LinkedList* src) {}
