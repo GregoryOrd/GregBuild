@@ -11,6 +11,6 @@ void initObjectFileList(ObjectFileList* objectFiles);
 void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeTestFileList(TestFileList* list);
 void freeSourceFileList(SourceFileList* list);
-int removeTempDir(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
+int removeTempDir(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
 
 #endif

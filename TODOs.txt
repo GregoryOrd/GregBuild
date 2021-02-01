@@ -2,6 +2,7 @@
 0b) Look through repo for arguments that should be const
     - One know place where const is missing is on the base path of the 
     build sequence function pointers
+    - Leaving off at main directory
 1) Implement plugin-loader and plugin-api
     - Add configuration file to specify what order to load/process the plugins
     - When finally done, remove the printouts from executeBuildSequence()

@@ -4,7 +4,7 @@
 #include "../common/FileStructureDefs.h"
 
 int runTests();
-int runTestsWithExitStatusCheck(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
+int runTestsWithExitStatusCheck(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
 void copyDllsToCurrentDirectory();
 void removeDllsFromCurrentDirectory();
 

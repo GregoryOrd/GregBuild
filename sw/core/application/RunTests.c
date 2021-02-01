@@ -19,7 +19,8 @@ int runTests()
    return testResult;
 }
 
-int runTestsWithExitStatusCheck(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+int runTestsWithExitStatusCheck(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
    int retval = 1;

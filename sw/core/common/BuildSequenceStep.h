@@ -6,7 +6,7 @@
 
 typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileList *sourceFiles,
                       const ObjectFileList *tempObjectFiles, int previousStepFailed,
-                      char *basePath);
+                      const char *basePath);
 
 typedef struct BuildSequenceStep {
   CommandLineOption *option; // To run the function, the flagValue in here needs to be true
@@ -14,8 +14,8 @@ typedef struct BuildSequenceStep {
   char* functionName;
 } BuildSequenceStep;
 
-void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, BuildSequenceStep* src);
+void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src);
 void allocateAndSetBuildSequenceStep(
-    BuildSequenceStep* dest, const char* description, const char* optionText, const bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
+    BuildSequenceStep* dest, const char* description, const char* optionText, bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
 
 #endif

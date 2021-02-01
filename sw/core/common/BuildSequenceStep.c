@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, BuildSequenceStep* src)
+void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src)
 {
    dest->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    dest->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
@@ -19,7 +19,7 @@ void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, BuildSequenceStep
 }
 
 void allocateAndSetBuildSequenceStep(
-    BuildSequenceStep* dest, const char* description, const char* optionText, const bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
+    BuildSequenceStep* dest, const char* description, const char* optionText, bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
 {
    dest->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    dest->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));

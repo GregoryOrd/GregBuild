@@ -32,17 +32,17 @@ typedef struct LineAnalysisResults {
 bool isTestDir(const char *dirName);
 bool isTestFile(const struct dirent *fileOrSubDirectory);
 bool isSourceFile(const struct dirent *fileOrSubDirectory);
-void gatherLineMetrics(LineMetrics *metrics, char *line);
-void analyzeLineMetrics(LineMetrics *metrics, char *line);
-void determineResults(LineAnalysisResults *results, LineMetrics *metrics,
-                      char *line);
-bool lineHasSpecialCharacters(LineMetrics *metrics, char *line);
+void gatherLineMetrics(LineMetrics *metrics, const char *line);
+void analyzeLineMetrics(LineMetrics *metrics, const char *line);
+void determineResults(LineAnalysisResults *results, const LineMetrics *metrics,
+                      const char *line);
+bool lineHasSpecialCharacters(const LineMetrics *metrics, const char *line);
 void initLineMetrics(LineMetrics *metrics);
 void initLineAnalysisResults(LineAnalysisResults *results);
-bool isTestCaseDefinition(char *line);
-int testNameEndOffset(char *testName);
-bool theCurlyBraceIsOnTheSameLineAsTheTestName(char *testName,
+bool isTestCaseDefinition(const char *line);
+int testNameEndOffset(const char *testName);
+bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
                                                int initialLength);
-bool isSpecialCharacter(char c);
+bool isSpecialCharacter(const char c);
 
 #endif

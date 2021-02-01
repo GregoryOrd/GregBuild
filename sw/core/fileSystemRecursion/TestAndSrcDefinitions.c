@@ -31,7 +31,7 @@ bool isSourceFile(const struct dirent* fileOrSubDirectory)
    return result;
 }
 
-bool isTestCaseDefinition(char* line)
+bool isTestCaseDefinition(const char* line)
 {
    LineMetrics* metrics = (LineMetrics*)malloc(sizeof(LineMetrics));
    LineAnalysisResults* results = (LineAnalysisResults*)malloc(sizeof(LineAnalysisResults));
@@ -49,9 +49,9 @@ bool isTestCaseDefinition(char* line)
    return isTestCase;
 }
 
-void gatherLineMetrics(LineMetrics* metrics, char* line)
+void gatherLineMetrics(LineMetrics* metrics, const char* line)
 {
-   char* currentPtr = line;
+   const char* currentPtr = line;
    while (*currentPtr != '\0' && *currentPtr != '\n')
    {
       if (*currentPtr == ' ')
@@ -73,7 +73,7 @@ void gatherLineMetrics(LineMetrics* metrics, char* line)
    }
 }
 
-void analyzeLineMetrics(LineMetrics* metrics, char* line)
+void analyzeLineMetrics(LineMetrics* metrics, const char* line)
 {
    // Line will have form:
    // testSomething() or testSomthing(){
@@ -85,7 +85,7 @@ void analyzeLineMetrics(LineMetrics* metrics, char* line)
    metrics->expectedRightBracketIndex = metrics->expectedLeftBracketIndex + 1;
 }
 
-void determineResults(LineAnalysisResults* results, LineMetrics* metrics, char* line)
+void determineResults(LineAnalysisResults* results, const LineMetrics* metrics, const char* line)
 {
    results->correctStartOfLine = strncmp(line, "void test", 9) == 0;
    results->singleSpaceBetweenBoolAndTestName = (strstr(line, " ") == &line[4]);
@@ -101,7 +101,7 @@ void determineResults(LineAnalysisResults* results, LineMetrics* metrics, char* 
    }
 }
 
-bool lineHasSpecialCharacters(LineMetrics* metrics, char* line)
+bool lineHasSpecialCharacters(const LineMetrics* metrics, const char* line)
 {
    for (int i = 0; i < metrics->length; i++)
    {
@@ -158,7 +158,7 @@ void trimTestName(char* testName)
    }
 }
 
-int testNameEndOffset(char* testName)
+int testNameEndOffset(const char* testName)
 {
    if (theCurlyBraceIsOnTheSameLineAsTheTestName(testName, strlen(testName) - 1))
    {
@@ -167,9 +167,9 @@ int testNameEndOffset(char* testName)
    return TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
 }
 
-bool theCurlyBraceIsOnTheSameLineAsTheTestName(char* testName, int initialLength) { return testName[initialLength - 2] == '{'; }
+bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char* testName, int initialLength) { return testName[initialLength - 2] == '{'; }
 
-bool isSpecialCharacter(char c)
+bool isSpecialCharacter(const char c)
 {
    bool isCarriageReturn = c == 13;
    bool isNewLine = c == '\n';
