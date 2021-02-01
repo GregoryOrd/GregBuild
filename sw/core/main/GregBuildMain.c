@@ -9,10 +9,11 @@
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../pluginLoader/PluginLoader.h"
+#include "../pluginLoader/PluginProcessor.h"
 #include "../testMainWriting/TestMainWriter.h"
 #include "BuildSequence.h"
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
    printf("Starting GregBuild\n");
    LinkedList* optionList = (LinkedList*)malloc(sizeof(LinkedList));

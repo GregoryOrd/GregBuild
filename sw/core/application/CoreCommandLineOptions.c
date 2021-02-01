@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
@@ -15,7 +14,7 @@ void initCoreCommandLineOptions(LinkedList* options)
    setCoreCommandLineOptions(options);
 }
 
-void processCommandLineOptions(LinkedList* options, int argc, char* argv[])
+void processCommandLineOptions(LinkedList* options, int argc, const char* argv[])
 {
    processCommandLineArgs_ll(argc, argv, options, COMMAND_LINE_OPTION_TYPE);
    coreCommandLineAcknowldegmentPrintouts(options);
@@ -24,22 +23,23 @@ void processCommandLineOptions(LinkedList* options, int argc, char* argv[])
 void setCoreCommandLineOptions(LinkedList* list)
 {
    CommandLineOption* noTestOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   noTestOption->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   noTestOption->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   noTestOption->flagValue = (bool*)malloc(sizeof(bool));
-   strcpy(noTestOption->optionText, NO_TEST_OPTION_TEXT);
-   strcpy(noTestOption->description, NO_TEST_DESCRIPTION);
-   noTestOption->flagValue = (bool*)NO_TEST_FLAG_VALUE;
+   allocateAndSetCommandLineOption(noTestOption, NO_TEST_DESCRIPTION, NO_TEST_OPTION_TEXT, NO_TEST_FLAG_VALUE);
    append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
 
    CommandLineOption* deleteTempOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   deleteTempOption->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   deleteTempOption->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   deleteTempOption->flagValue = (bool*)malloc(sizeof(bool));
-   strcpy(deleteTempOption->optionText, DELETE_TEMP_DIR_OPTION_TEXT);
-   strcpy(deleteTempOption->description, DELETE_TEMP_DIR_DESCRIPTION);
-   deleteTempOption->flagValue = (bool*)DELETE_TEMP_DIR_FLAG_VALUE;
+   allocateAndSetCommandLineOption(deleteTempOption, DELETE_TEMP_DIR_DESCRIPTION, DELETE_TEMP_DIR_OPTION_TEXT, DELETE_TEMP_DIR_FLAG_VALUE);
    append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
+}
+
+void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, int flagValue)
+{
+   option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   option->flagValue = (bool*)malloc(sizeof(bool));
+
+   strcpy(option->optionText, optionText);
+   strcpy(option->description, description);
+   option->flagValue = (bool*)&flagValue;
 }
 
 void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list)
