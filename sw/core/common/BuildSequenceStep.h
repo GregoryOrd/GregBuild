@@ -4,8 +4,8 @@
 #include "FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 
-typedef  int (*STEP_FUNCTION)(TestFileList *testFiles, SourceFileList *sourceFiles,
-                      ObjectFileList *tempObjectFiles, int previousStepFailed,
+typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileList *sourceFiles,
+                      const ObjectFileList *tempObjectFiles, int previousStepFailed,
                       char *basePath);
 
 typedef struct BuildSequenceStep {

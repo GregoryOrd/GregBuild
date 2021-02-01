@@ -11,7 +11,7 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
 
-int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+int compileIntoTempObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
 
@@ -38,7 +38,8 @@ int compileIntoTempObjectFiles(TestFileList* testFiles, SourceFileList* sourceFi
    return 0;
 }
 
-void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, TestFileList* testFiles, SourceFileList* sourceFiles)
+void populateArgsFor_compileIntoTempObjectFiles(
+    ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles)
 {
    gccArgs->args[0] = gcc;
    gccArgs->args[1] = "-c";
@@ -57,7 +58,7 @@ void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles,
 }
 
 int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
-    TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
 
@@ -84,14 +85,15 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
 }
 
 int createTestMainExecutableFromProjectDllAndGregTestDll(
-    TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
    char* const argv[] = {gcc, "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
    return forkAndRunChildProcess(gcc, argv);
 }
 
-int compileObjectFilesIntoProjectExecutable(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+int compileObjectFilesIntoProjectExecutable(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
 
@@ -128,7 +130,7 @@ int compileObjectFilesIntoProjectExecutable(TestFileList* testFiles, SourceFileL
    return retval;
 }
 
-void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)
+void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)
 {
    char* objectFileName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    int gccFileArgOffset = 2;
@@ -148,7 +150,7 @@ void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, TestFil
    free(objectFileName);
 }
 
-void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs)
+void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs)
 {
    char* objectFileName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    int gccFileArgOffset = 2;
@@ -216,7 +218,7 @@ void addTempObjectFileToList(ObjectFileList* list, char* filename, bool isFromSo
    free(tempObjectFile);
 }
 
-int numObjectFilesFromSource(ObjectFileList* tempObjectFiles)
+int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles)
 {
    int count = 0;
    for (int i = 0; i < tempObjectFiles->size; i++)
