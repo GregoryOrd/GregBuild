@@ -4,12 +4,18 @@
 #include "FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 
-typedef struct BuildSequenceStep {
-  CommandLineOption *option; // To run the function, the flagValue in here needs to be true
-  int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
+typedef  int (*STEP_FUNCTION)(TestFileList *testFiles, SourceFileList *sourceFiles,
                       ObjectFileList *tempObjectFiles, int previousStepFailed,
                       char *basePath);
+
+typedef struct BuildSequenceStep {
+  CommandLineOption *option; // To run the function, the flagValue in here needs to be true
+  STEP_FUNCTION function_ptr;
   char* functionName;
 } BuildSequenceStep;
+
+void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, BuildSequenceStep* src);
+void allocateAndSetBuildSequenceStep(
+    BuildSequenceStep* dest, const char* description, const char* optionText, const bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
 
 #endif

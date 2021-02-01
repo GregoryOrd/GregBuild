@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
 
 typedef BuildSequenceStep* (*PluginFunction)();
@@ -12,17 +13,7 @@ void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* plu
    for (int i = 0; i < numCoreBuildSequenceSteps; i++)
    {
       BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-      coreBuildSequence[i].option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-      coreBuildSequence[i].option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-      coreBuildSequence[i].option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-      coreBuildSequence[i].option->flagValue = (bool*)malloc(sizeof(bool));
-      coreBuildSequence[i].functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-
-      strcpy(coreBuildSequence[i].option->description, step->option->description);
-      strcpy(coreBuildSequence[i].option->optionText, step->option->optionText);
-      coreBuildSequence[i].option->flagValue = step->option->flagValue;
-      coreBuildSequence[i].function_ptr = step->function_ptr;
-      strcpy(coreBuildSequence[i].functionName, step->functionName);
+      allocateAndCopyBuildSequenceStep(&coreBuildSequence[i], step);
    }
 
    for (int i = 0; i < list->size; i++)

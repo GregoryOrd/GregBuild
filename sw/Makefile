@@ -20,14 +20,17 @@ FILE_SYSTEM_RECURSION=fileSystemRecursion
 MAIN=main
 TEST_MAIN_WRITING=testMainWriting
 PLUGIN_LOADER=pluginLoader
+COMMON=common
 
 APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
+COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
 FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
 MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
 TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
 PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -name "*.c")))
 
 GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
+				  $(COMMON_OBJS) \
 				  $(FILE_SYSTEM_RECURSION_OBJS) \
 				  $(MAIN_OBJS) \
 				  $(TEST_MAIN_WRITING_OBJS) \
@@ -76,6 +79,11 @@ $(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
 
 $(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c
 	mkdir -p $(BUILD)/$(APPLICATION)
+	gcc -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c
+	mkdir -p $(BUILD)/$(COMMON)
 	gcc -c $<
 	mv $(notdir $@) $@
 
