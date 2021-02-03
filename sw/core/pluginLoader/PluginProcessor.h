@@ -13,5 +13,8 @@ void processBeforeAndAfterSteps(const HMODULE* hLib, LinkedList* buildSequence, 
 int indexOf(const LinkedList* buildSequence, const char* functionName); 
 void storeCurrentBuildSequenceIntoCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, const LinkedList* buildSequence);
 void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps);
+void searchPluginsAndAddStepsToBuildSequence(
+    BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps, LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules,
+    LinkedList* commandLineOptions);
 
 #endif

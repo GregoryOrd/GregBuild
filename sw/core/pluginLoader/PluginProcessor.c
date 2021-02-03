@@ -8,23 +8,10 @@ typedef BuildSequenceStep* (*PluginFunction)();
 
 void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
 {
+   int numCoreBuildSequenceSteps = buildSequence->size;
    BuildSequenceStep* coreBuildSequence = (BuildSequenceStep*)malloc(buildSequence->size * sizeof(BuildSequenceStep));
    storeCurrentBuildSequenceIntoCoreBuildSequenceList(coreBuildSequence, buildSequence);
-
-   int numCoreBuildSequenceSteps = buildSequence->size;
-   for (int i = 0; i < list->size; i++)
-   {
-      const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
-      for (int j = 0; j < numCoreBuildSequenceSteps; j++)
-      {
-         char beforeFunctionName[WINDOWS_MAX_PATH_LENGTH] = "before_";
-         char afterFunctionName[WINDOWS_MAX_PATH_LENGTH] = "after_";
-         strcat(beforeFunctionName, coreBuildSequence[j].functionName);
-         strcat(afterFunctionName, coreBuildSequence[j].functionName);
-         processBeforeAndAfterSteps(hLib, buildSequence, commandLineOptions, coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
-      }
-   }
-
+   searchPluginsAndAddStepsToBuildSequence(coreBuildSequence, numCoreBuildSequenceSteps, buildSequence, list, pluginHModules, commandLineOptions);
    freeCoreBuildSequenceList(coreBuildSequence, numCoreBuildSequenceSteps);
 }
 
@@ -85,4 +72,22 @@ void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCore
       free(coreBuildSequence[i].functionName);
    }
    free(coreBuildSequence);
+}
+
+void searchPluginsAndAddStepsToBuildSequence(
+    BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps, LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules,
+    LinkedList* commandLineOptions)
+{
+   for (int i = 0; i < list->size; i++)
+   {
+      const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
+      for (int j = 0; j < numCoreBuildSequenceSteps; j++)
+      {
+         char beforeFunctionName[WINDOWS_MAX_PATH_LENGTH] = "before_";
+         char afterFunctionName[WINDOWS_MAX_PATH_LENGTH] = "after_";
+         strcat(beforeFunctionName, coreBuildSequence[j].functionName);
+         strcat(afterFunctionName, coreBuildSequence[j].functionName);
+         processBeforeAndAfterSteps(hLib, buildSequence, commandLineOptions, coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
+      }
+   }
 }
