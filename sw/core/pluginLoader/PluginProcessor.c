@@ -8,14 +8,10 @@ typedef BuildSequenceStep* (*PluginFunction)();
 
 void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
 {
-   int numCoreBuildSequenceSteps = buildSequence->size;
    BuildSequenceStep* coreBuildSequence = (BuildSequenceStep*)malloc(buildSequence->size * sizeof(BuildSequenceStep));
-   for (int i = 0; i < numCoreBuildSequenceSteps; i++)
-   {
-      BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-      allocateAndCopyBuildSequenceStep(&coreBuildSequence[i], step);
-   }
+   storeCurrentBuildSequenceIntoCoreBuildSequenceList(coreBuildSequence, buildSequence);
 
+   int numCoreBuildSequenceSteps = buildSequence->size;
    for (int i = 0; i < list->size; i++)
    {
       const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
@@ -74,4 +70,14 @@ int indexOf(const LinkedList* buildSequence, const char* functionName)
       }
    }
    return -1;
+}
+
+void storeCurrentBuildSequenceIntoCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, const LinkedList* buildSequence)
+{
+   int numCoreBuildSequenceSteps = buildSequence->size;
+   for (int i = 0; i < numCoreBuildSequenceSteps; i++)
+   {
+      const BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
+      allocateAndCopyBuildSequenceStep(&coreBuildSequence[i], step);
+   }
 }
