@@ -35,7 +35,8 @@ int main(int argc, const char* argv[])
 
    initEmptyLinkedList(pluginHModules, HMODULE_LL_TYPE);
    initPluginList(plugins);
-   loadPlugins(plugins, pluginHModules, "./lib/plugins");
+   loadPlugins(plugins, pluginHModules, PLUGINS_LIB_DIRECTORY);
+   orderPluginsToMatchConfigFile(plugins, pluginHModules);
    processPlugins(buildSequence, plugins, pluginHModules, optionList);
    processCommandLineOptions(optionList, argc, argv);
 

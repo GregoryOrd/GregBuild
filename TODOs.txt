@@ -1,6 +1,12 @@
 0a) add extern "C" section to all headers with functions
+0b) Create file reader in toolkit.
+    - Have it loop through a file, reading one line at a time
+    - Pass in a function_ptr to run on every iteration
+    - Use this to replace addTestCaseToList() in FileAndTestCaseGatherer and
+      orderPluginsToMatchConfigFile in PluginLoader()
 1) Implement plugin-loader and plugin-api
     - Add configuration file to specify what order to load/process the plugins
+        - This behaviour is now in place, but needs some refactoring and cleanup
     - When finally done, remove the printouts from executeBuildSequence()
 2) Give ability to swap out compilers
     - Improved idea/understanding:
@@ -17,6 +23,11 @@
 4) Make SRC_DIR constant configurable
 5) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
+6) Instead of using removeTrailingNewLine() in the plugin loader, create a new toolkit
+    function call removeTrailingWhitespace() and use that in it place.
+    - In general, make the reading in of input from the order file more robust
+    - Stick to our formatting rules, document those rules somewhere, then give a 
+    clean error message if we read something in that doesn't follow our formatting rules
 6) Add in tests for the toolkit
 7) Add tests to this repo.
     - Use an earlier version of GregBuild and GregTest to write tests for

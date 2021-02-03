@@ -24,6 +24,7 @@ void addPluginToListOrContinueRecursion(PluginList *plugins,
 bool isPlugin(const struct dirent *fileOrSubDirectory);
 void addPluginToList(PluginList *list, LinkedList *pluginHModules,
                      const char *pluginPath);
+void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules);
 void printPluginInList(const PluginList *list);
 
 #endif
