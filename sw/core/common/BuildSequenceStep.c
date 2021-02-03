@@ -19,7 +19,7 @@ void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequen
 }
 
 void allocateAndSetBuildSequenceStep(
-    BuildSequenceStep* dest, const char* description, const char* optionText, bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
+    BuildSequenceStep* dest, const char* description, const char* optionText, const bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
 {
    dest->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    dest->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));

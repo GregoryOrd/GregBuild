@@ -3,7 +3,7 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../common/GregBuildConstants.h"
 
-int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+int writeTestsToTestMain(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
 {
    exitIfPreviousStepFailed(previousStepFailed);
    writeToTestMainC(testFiles);
@@ -11,7 +11,7 @@ int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, O
    return 0;
 }
 
-void writeToTestMainC(TestFileList* testFiles)
+void writeToTestMainC(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainC(testFiles->totalNumTestCases);
    char contents[size];
@@ -22,7 +22,7 @@ void writeToTestMainC(TestFileList* testFiles)
    writeToFile(testMainC, contents);
 }
 
-void populateTestMainCContents(char* contents, TestFileList* testFiles)
+void populateTestMainCContents(char* contents, const TestFileList* testFiles)
 {
    addTestMainCIncludes(contents);
    strcat(contents, "int main()\n{\n");
@@ -44,29 +44,29 @@ void addTestMainCIncludes(char* main)
    strcat(main, "#include \"TestMain.h\"\n\n");
 }
 
-void addTestMainCFunctionPointerDefinitions(char* main, TestFileList* testFiles)
+void addTestMainCFunctionPointerDefinitions(char* main, const TestFileList* testFiles)
 {
    for (int fileIndex = 0; fileIndex < testFiles->size; fileIndex++)
    {
-      TestFile* file = &testFiles->files[fileIndex];
+      const TestFile* file = &testFiles->files[fileIndex];
       addTestMainCFunctionPointerDefinitionsForSpecificFile(main, file->numTestCases, file->cases);
    }
 }
 
-void addTestMainCFunctionPointerCalls(char* main, TestFileList* testFiles)
+void addTestMainCFunctionPointerCalls(char* main, const TestFileList* testFiles)
 {
    for (int fileIndex = 0; fileIndex < testFiles->size; fileIndex++)
    {
-      TestFile* file = &testFiles->files[fileIndex];
+      const TestFile* file = &testFiles->files[fileIndex];
       addTestMainCFunctionPointerCallsForSpecificFile(main, file->numTestCases, file->cases);
    }
 }
 
-void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTests, TestCase* cases)
+void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTests, const TestCase* cases)
 {
    for (int i = 0; i < numTests; i++)
    {
-      char* testName = cases[i].testName;
+      const char* testName = cases[i].testName;
       strcat(main, "\tvoid (*");
       strcat(main, testName);
       strcat(main, "_fun_ptr_)(void) = &");
@@ -76,11 +76,11 @@ void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTe
    strcat(main, "\n");
 }
 
-void addTestMainCFunctionPointerCallsForSpecificFile(char* main, int numTests, TestCase* cases)
+void addTestMainCFunctionPointerCallsForSpecificFile(char* main, int numTests, const TestCase* cases)
 {
    for (int i = 0; i < numTests; i++)
    {
-      char* testName = cases[i].testName;
+      const char* testName = cases[i].testName;
       strcat(main, "\t(*");
       strcat(main, testName);
       strcat(main, "_fun_ptr_)();\n");
@@ -103,7 +103,7 @@ void addTestMainCResultsCheckAndExits(char* main)
    strcat(main, "}\n");
 }
 
-void writeToTestMainH(TestFileList* testFiles)
+void writeToTestMainH(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainH(testFiles->totalNumTestCases);
    char contents[size];
@@ -130,7 +130,7 @@ void writeTestMainHGregTestDllImports(char* contents)
    strcat(contents, "DllImport bool result();\n\n");
 }
 
-void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles)
+void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFiles)
 {
    strcat(contents, "//Test Cases Found Throughout the Repo\n");
    if (testFiles->size == 0)
@@ -140,7 +140,7 @@ void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles)
    int numTotalTestCases = 0;
    for (int fileIndex = 0; fileIndex < testFiles->size; fileIndex++)
    {
-      TestFile* file = &testFiles->files[fileIndex];
+      const TestFile* file = &testFiles->files[fileIndex];
       numTotalTestCases = numTotalTestCases + file->numTestCases;
       writeTestMainHTestCaseDllImportsForSpecificFile(contents, file->numTestCases, file->cases);
    }
@@ -150,12 +150,11 @@ void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles)
    }
 }
 
-void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, TestCase* cases)
+void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, const TestCase* cases)
 {
    for (int i = 0; i < numTests; i++)
    {
-      char* testName = cases[i].testName;
-
+      const char* testName = cases[i].testName;
       strcat(contents, "DllImport void ");
       strcat(contents, testName);
       strcat(contents, "();\n");

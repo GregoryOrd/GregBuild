@@ -7,7 +7,7 @@
 
 void initBuildSequence(LinkedList *sequence);
 void setCoreBuildSequenceSteps(LinkedList *sequence);
-int executeBuildSequence(LinkedList *buildSequence, LinkedList *options,
+int executeBuildSequence(const LinkedList *buildSequence, LinkedList *options,
                          TestFileList *testFiles, SourceFileList *sourceFiles,
                          ObjectFileList *tempObjectFiles);
 void freeBuildSequence(LinkedList *sequence);

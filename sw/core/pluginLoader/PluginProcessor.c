@@ -6,7 +6,7 @@
 
 typedef BuildSequenceStep* (*PluginFunction)();
 
-void processPlugins(LinkedList* buildSequence, PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
+void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
 {
    int numCoreBuildSequenceSteps = buildSequence->size;
    BuildSequenceStep* coreBuildSequence = (BuildSequenceStep*)malloc(buildSequence->size * sizeof(BuildSequenceStep));
@@ -63,7 +63,7 @@ void processBeforeAndAfterSteps(
    }
 }
 
-int indexOf(LinkedList* buildSequence, const char* functionName)
+int indexOf(const LinkedList* buildSequence, const char* functionName)
 {
    for (int i = 0; i < buildSequence->size; i++)
    {

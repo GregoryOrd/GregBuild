@@ -10,22 +10,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-int writeTestsToTestMain(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath);
-void writeToTestMainC(TestFileList* testFiles);
-void populateTestMainCContents(char* contents, TestFileList* testFiles);
+int writeTestsToTestMain(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
+void writeToTestMainC(const TestFileList* testFiles);
+void populateTestMainCContents(char* contents, const TestFileList* testFiles);
 void addTestMainCIncludes(char* main);
-void addTestMainCFunctionPointerDefinitions(char* main, TestFileList* testFiles);
-void addTestMainCFunctionPointerCalls(char* main, TestFileList* testFiles);
-void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTests, TestCase* cases);
-void addTestMainCFunctionPointerCallsForSpecificFile(char* main, int numTests, TestCase* cases);
+void addTestMainCFunctionPointerDefinitions(char* main, const TestFileList* testFiles);
+void addTestMainCFunctionPointerCalls(char* main, const TestFileList* testFiles);
+void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTests, const TestCase* cases);
+void addTestMainCFunctionPointerCallsForSpecificFile(char* main, int numTests, const TestCase* cases);
 void addTestMainCResultsCheckAndExits(char* main);
 int sizeOfTestMainC(int numTests);
 
-void writeToTestMainH(TestFileList* testFiles);
+void writeToTestMainH(const TestFileList* testFiles);
 void writeTestMainHGuardsAndDllDefine(char* contents);
 void writeTestMainHGregTestDllImports(char* contents);
-void writeTestMainHTestCaseDllImports(char* contents, TestFileList* testFiles);
-void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, TestCase* cases);
+void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFiles);
+void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, const TestCase* cases);
 void writeTestMainHEnd(char* contents);
 int sizeOfTestMainH(int numTests);
 void writeToFile(const char* filename, const char* contents);
