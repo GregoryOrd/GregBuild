@@ -25,14 +25,7 @@ void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedLis
       }
    }
 
-   for (int i = 0; i < numCoreBuildSequenceSteps; i++)
-   {
-      free(coreBuildSequence[i].option->optionText);
-      free(coreBuildSequence[i].option->description);
-      free(coreBuildSequence[i].option);
-      free(coreBuildSequence[i].functionName);
-   }
-   free(coreBuildSequence);
+   freeCoreBuildSequenceList(coreBuildSequence, numCoreBuildSequenceSteps);
 }
 
 void processBeforeAndAfterSteps(
@@ -80,4 +73,16 @@ void storeCurrentBuildSequenceIntoCoreBuildSequenceList(BuildSequenceStep* coreB
       const BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
       allocateAndCopyBuildSequenceStep(&coreBuildSequence[i], step);
    }
+}
+
+void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps)
+{
+   for (int i = 0; i < numCoreBuildSequenceSteps; i++)
+   {
+      free(coreBuildSequence[i].option->optionText);
+      free(coreBuildSequence[i].option->description);
+      free(coreBuildSequence[i].option);
+      free(coreBuildSequence[i].functionName);
+   }
+   free(coreBuildSequence);
 }

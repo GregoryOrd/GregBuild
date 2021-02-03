@@ -12,5 +12,6 @@ void processPlugins(LinkedList *buildSequence, const PluginList *list,
 void processBeforeAndAfterSteps(const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions, const char* functionName, const char* beforeFunctionName, const char* afterFunctionName);
 int indexOf(const LinkedList* buildSequence, const char* functionName); 
 void storeCurrentBuildSequenceIntoCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, const LinkedList* buildSequence);
+void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps);
 
 #endif
