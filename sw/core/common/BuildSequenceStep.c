@@ -8,7 +8,6 @@ void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequen
    dest->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    dest->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    dest->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->option->flagValue = (bool*)malloc(sizeof(bool));
    dest->functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
 
    strcpy(dest->option->description, src->option->description);
@@ -19,12 +18,11 @@ void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequen
 }
 
 void allocateAndSetBuildSequenceStep(
-    BuildSequenceStep* dest, const char* description, const char* optionText, bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
+    BuildSequenceStep* dest, const char* description, const char* optionText, bool flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
 {
    dest->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    dest->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    dest->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->option->flagValue = (bool*)malloc(sizeof(bool));
    dest->functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
 
    strcpy(dest->option->description, description);

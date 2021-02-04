@@ -27,8 +27,7 @@
 
 #define DELETE_TEMP_DIR_OPTION_TEXT "--leave-temp"
 #define DELETE_TEMP_DIR_DESCRIPTION "Don't Delete the temp Directory"
-#define DELETE_TEMP_DIR_FLAG_VALUE                                             \
-  1 // The value 1 here means delete the temp directory
+#define DELETE_TEMP_DIR_FLAG_VALUE 1 // The value 1 here means delete the temp directory
 
 #define BUILD_SEQUENCE_STEP_TYPE 1
 #define COMMAND_LINE_OPTION_TYPE 2

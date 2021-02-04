@@ -8,7 +8,7 @@
 void initCoreCommandLineOptions(LinkedList *options);
 void processCommandLineOptions(LinkedList *options, int argc, const char *argv[]);
 void setCoreCommandLineOptions(LinkedList *list);
-void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, int flagValue);
+void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, bool flagValue);
 void coreCommandLineAcknowldegmentPrintouts(const LinkedList *list);
 
 #endif

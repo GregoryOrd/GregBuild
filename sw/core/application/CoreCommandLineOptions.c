@@ -31,15 +31,14 @@ void setCoreCommandLineOptions(LinkedList* list)
    append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
 }
 
-void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, int flagValue)
+void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, bool flagValue)
 {
    option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   option->flagValue = (bool*)malloc(sizeof(bool));
 
    strcpy(option->optionText, optionText);
    strcpy(option->description, description);
-   *option->flagValue = flagValue;
+   option->flagValue = flagValue;
 }
 
 void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list)

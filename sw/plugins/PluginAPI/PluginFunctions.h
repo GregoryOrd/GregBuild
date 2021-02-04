@@ -49,7 +49,7 @@ typedef struct TestFileList {
 struct CommandLineOption {
   char *optionText;
   char *description;
-  bool *flagValue;
+  bool flagValue;
 } typedef CommandLineOption;
 
 typedef struct BuildSequenceStep {
@@ -110,14 +110,13 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    step->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    step->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
    step->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
-   step->option->flagValue = (bool*)malloc(sizeof(bool));
-   step->functionName = (bool*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
+   step->functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
 
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name
    strcpy(step->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
    strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
-   step->option->flagValue = (bool*)NULL_COMMAND_LINE_FLAG_VALUE;
+   step->option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
 
    return step;
 }

@@ -46,7 +46,6 @@ void freeBuildSequenceStep(void* data)
 {
    BuildSequenceStep* step = (BuildSequenceStep*)data;
    free(step->option->description);
-   free(step->option->flagValue);
    free(step->option->optionText);
    free(step->option);
    free(step->function_ptr);

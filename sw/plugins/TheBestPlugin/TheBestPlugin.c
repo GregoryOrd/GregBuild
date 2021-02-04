@@ -10,13 +10,12 @@ BuildSequenceStep* before_loadTestsAndSourceFiles()
    step->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
    step->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    step->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   step->option->flagValue = (bool*)malloc(sizeof(bool));
    step->function_ptr = printHelloWorld;
    step->functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    strcpy(step->functionName, "printHelloWorld");
    strcpy(step->option->optionText, "--best");
    strcpy(step->option->description, "TheBestPlugin");
-   step->option->flagValue = (bool*)0;
+   step->option->flagValue = false;
    return step;
 }
 
