@@ -39,7 +39,7 @@ void allocateAndSetCommandLineOption(CommandLineOption* option, const char* desc
 
    strcpy(option->optionText, optionText);
    strcpy(option->description, description);
-   option->flagValue = (bool*)&flagValue;
+   *option->flagValue = flagValue;
 }
 
 void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list)
