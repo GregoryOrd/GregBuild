@@ -108,53 +108,71 @@ void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules)
    LinkedList* tempPluginHModules = (LinkedList*)malloc(sizeof(LinkedList));
    initEmptyLinkedList(tempPluginHModules, HMODULE_LL_TYPE);
 
-   FILE* testFilePtr;
-   char* buffer = (char*)malloc(255 * sizeof(char));
-   testFilePtr = fopen(PLUGINS_LOAD_ORDER_CONFIG_FILE, "r");
-
-   if (testFilePtr)
+   FILE* orderConfigFilePtr = fopen(PLUGINS_LOAD_ORDER_CONFIG_FILE, "r");
+   if (orderConfigFilePtr)
    {
-      while (fgets(buffer, 255, (FILE*)testFilePtr) != NULL)
-      {
-         removeTrailingNewLine(buffer);
-         for (int i = 0; i < list->size; i++)
-         {
-            if (strstr(list->plugins[i].name, buffer))
-            {
-               char pluginPath[WINDOWS_MAX_PATH_LENGTH] = PLUGINS_LIB_DIRECTORY;
-               strcat(pluginPath, "/");
-               strcat(pluginPath, buffer);
-               strcat(pluginPath, ".dll");
-               addPluginToList(tempPluginList, tempPluginHModules, pluginPath);
-            }
-         }
-      }
+      readPluginsFromOrderConfigFileIntoTempLists(orderConfigFilePtr, list, tempPluginList, tempPluginHModules);
+      addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(list, tempPluginList, pluginHModules, tempPluginHModules);
+      copyTempListsIntoActualLists(list, tempPluginList, pluginHModules, tempPluginHModules);
+   }
+   fclose(orderConfigFilePtr);
 
-      for (int i = 0; i < list->size; i++)
-      {
-         bool wasFoundInOrderConfigFile = false;
-         for (int j = 0; j < tempPluginList->size; j++)
-         {
-            if (strcmp(list->plugins[i].name, tempPluginList->plugins[j].name) == 0)
-            {
-               wasFoundInOrderConfigFile = true;
-            }
-         }
-         if (!wasFoundInOrderConfigFile)
-         {
-            addPluginToList(tempPluginList, tempPluginHModules, list->plugins[i].name);
-         }
-      }
+   freePluginList(tempPluginList);
+   freeHModuleNode(tempPluginHModules);
+}
 
-      for (int i = 0; i < tempPluginList->size; i++)
+void readPluginsFromOrderConfigFileIntoTempLists(FILE* orderConfigFilePtr, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
+{
+   char* buffer = (char*)malloc(255 * sizeof(char));
+   while (fgets(buffer, 255, (FILE*)orderConfigFilePtr) != NULL)
+   {
+      processOrderConfigEntry(buffer, list, tempPluginList, tempPluginHModules);
+   }
+   free(buffer);
+}
+
+void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
+{
+   removeTrailingNewLine(buffer);
+   for (int i = 0; i < list->size; i++)
+   {
+      if (strstr(list->plugins[i].name, buffer))
       {
-         strcpy(list->plugins[i].name, tempPluginList->plugins[i].name);
-         setAt_ll(pluginHModules, at_ll(tempPluginHModules, HMODULE_LL_TYPE, i), HMODULE_LL_TYPE, i);
+         char pluginPath[WINDOWS_MAX_PATH_LENGTH] = PLUGINS_LIB_DIRECTORY;
+         strcat(pluginPath, "/");
+         strcat(pluginPath, buffer);
+         strcat(pluginPath, ".dll");
+         addPluginToList(tempPluginList, tempPluginHModules, pluginPath);
       }
    }
+}
 
-   free(buffer);
-   fclose(testFilePtr);
+void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules)
+{
+   for (int i = 0; i < list->size; i++)
+   {
+      bool wasFoundInOrderConfigFile = false;
+      for (int j = 0; j < tempPluginList->size; j++)
+      {
+         if (strcmp(list->plugins[i].name, tempPluginList->plugins[j].name) == 0)
+         {
+            wasFoundInOrderConfigFile = true;
+         }
+      }
+      if (!wasFoundInOrderConfigFile)
+      {
+         addPluginToList(tempPluginList, tempPluginHModules, list->plugins[i].name);
+      }
+   }
+}
+
+void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules)
+{
+   for (int i = 0; i < tempPluginList->size; i++)
+   {
+      strcpy(list->plugins[i].name, tempPluginList->plugins[i].name);
+      setAt_ll(pluginHModules, (HMODULE*)at_ll(tempPluginHModules, HMODULE_LL_TYPE, i), HMODULE_LL_TYPE, i);
+   }
 }
 
 void printPluginInList(const PluginList* list)

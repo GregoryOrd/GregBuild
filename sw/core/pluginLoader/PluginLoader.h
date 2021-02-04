@@ -5,6 +5,7 @@
 
 #include <dirent.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
@@ -25,6 +26,10 @@ bool isPlugin(const struct dirent *fileOrSubDirectory);
 void addPluginToList(PluginList *list, LinkedList *pluginHModules,
                      const char *pluginPath);
 void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules);
+void readPluginsFromOrderConfigFileIntoTempLists(FILE* testFilePtr, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules);
+void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules);
+void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
+void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
 void printPluginInList(const PluginList *list);
 
 #endif

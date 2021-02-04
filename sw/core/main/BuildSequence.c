@@ -33,9 +33,6 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
       bool flagVal = flagValueForOption_ll(options, step->option->optionText, COMMAND_LINE_OPTION_TYPE);
       if (!error && flagVal)
       {
-         printf("\n\n===============================================================\n");
-         printf("Executing: %s\n", step->functionName);
-         printf("===============================================================\n");
          error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
       }
    }
@@ -48,10 +45,6 @@ void freeBuildSequence(LinkedList* sequence) { freeLinkedList(sequence, &freeBui
 void freeBuildSequenceStep(void* data)
 {
    BuildSequenceStep* step = (BuildSequenceStep*)data;
-   free(step->option->description);
-   free(step->option->flagValue);
-   free(step->option->optionText);
-   free(step->option);
    free(step->functionName);
    free(step);
 }

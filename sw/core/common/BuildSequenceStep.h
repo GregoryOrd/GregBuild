@@ -16,6 +16,6 @@ typedef struct BuildSequenceStep {
 
 void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src);
 void allocateAndSetBuildSequenceStep(
-    BuildSequenceStep* dest, const char* description, const char* optionText, const bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
+    BuildSequenceStep* dest, const char* description, const char* optionText, bool* flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
 
 #endif

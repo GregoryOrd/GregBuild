@@ -13,7 +13,7 @@ typedef struct BuildSequenceStepInfo
 {
     const char* description;
     const char* optionText;
-    const bool* flagValue;
+    bool* flagValue;
     void* function_ptr;
     const char* functionName;
 } BuildSequenceStepInfo;
