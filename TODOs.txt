@@ -56,4 +56,5 @@ Major Improvements
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
 8) Add ability to build from deeper withing the src file tree
-9) Verify support for different platforms
+9) Documentation Review and Improvements
+10) Verify support for different platforms
