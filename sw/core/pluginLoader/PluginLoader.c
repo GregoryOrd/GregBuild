@@ -35,7 +35,7 @@ void freePluginHModules(LinkedList* pluginHModules)
    freeLinkedList(pluginHModules, &freeHModuleNode);
 }
 
-void freeHModuleNode(void* data) {}
+void freeHModuleNode(void* data) { free(data); }
 
 void loadPlugins(PluginList* plugins, LinkedList* pluginHModules, const char* basePath)
 {
