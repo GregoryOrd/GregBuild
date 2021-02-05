@@ -44,11 +44,13 @@ void freeBuildSequence(LinkedList* sequence) { freeLinkedList(sequence, &freeBui
 
 void freeBuildSequenceStep(void* data)
 {
+   // Don't free step->option->flagValue because it is not a pointer
+   // Don't free step->function_ptr because it points to a code instruction
+   // not malloced memory
    BuildSequenceStep* step = (BuildSequenceStep*)data;
    free(step->option->description);
    free(step->option->optionText);
    free(step->option);
-   free(step->function_ptr);
    free(step->functionName);
    free(step);
 }

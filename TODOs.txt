@@ -18,7 +18,6 @@ Refactoring and Minor Improvements
     clean error message if we read something in that doesn't follow our formatting rules
 0f) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
     - Should these definitions/concepts belong to the build system of the test framework?
-0e) Don't need to cast all of our malloc calls
 
 Major Improvements
 ---------------------
@@ -62,3 +61,4 @@ Major Improvements
 10) Verify support for different platforms
 11) Add a code ananlyzer/profiler
     - Valgrind might be a solution in this area
+12) Add a debug build ability

@@ -10,6 +10,8 @@ DIST_EXE=$(DIST)/$(EXE)
 USR_BIN_EXE=/usr/bin/$(EXE)
 TOOLKIT=GregCToolkit
 TOOLKIT_SW = external/$(TOOLKIT)/sw
+CC=gcc
+CFLAGS=-g
 
 ############################################################################
 ######						 GregBuild OBJS 						  ######
@@ -70,7 +72,7 @@ $(USR_BIN_EXE): $(DIST_EXE)
 
 $(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
 	mkdir -p $(DIST)
-	gcc -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
 
 ############################################################################
@@ -79,32 +81,32 @@ $(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
 
 $(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c
 	mkdir -p $(BUILD)/$(APPLICATION)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c
 	mkdir -p $(BUILD)/$(COMMON)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o: $(CORE)/$(FILE_SYSTEM_RECURSION)/%.c
 	mkdir -p $(BUILD)/$(FILE_SYSTEM_RECURSION)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(MAIN)/%.o: $(CORE)/$(MAIN)/%.c
 	mkdir -p $(BUILD)/$(MAIN)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c
 	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c
 	mkdir -p $(BUILD)/$(PLUGIN_LOADER)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 ############################################################################
@@ -113,32 +115,32 @@ $(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c
 
 $(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o: $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o: $(TOOLKIT_SW)/$(FAILURE_HANDLING)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(STRING)
-	gcc -c $<
+	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
 ############################################################################
@@ -149,12 +151,12 @@ Plugins: ../lib/plugins/TimeTrackingPlugin.dll ../lib/plugins/TheBestPlugin.dll
 
 ../lib/plugins/TimeTrackingPlugin.dll: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c
 	mkdir -p ../lib/plugins
-	gcc -fPIC -shared -o $@ $^
+	$(CC) $(CFLAGS) -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
 
 ../lib/plugins/TheBestPlugin.dll: plugins/TheBestPlugin/TheBestPlugin.c
 	mkdir -p ../lib/plugins
-	gcc -fPIC -shared -o $@ $^
+	$(CC) $(CFLAGS) -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
 
 ############################################################################
