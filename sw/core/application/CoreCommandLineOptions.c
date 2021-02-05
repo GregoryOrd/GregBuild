@@ -22,19 +22,19 @@ void processCommandLineOptions(LinkedList* options, int argc, const char* argv[]
 
 void setCoreCommandLineOptions(LinkedList* list)
 {
-   CommandLineOption* noTestOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+   CommandLineOption* noTestOption = malloc(sizeof(CommandLineOption));
    allocateAndSetCommandLineOption(noTestOption, NO_TEST_DESCRIPTION, NO_TEST_OPTION_TEXT, NO_TEST_FLAG_VALUE);
    append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
 
-   CommandLineOption* deleteTempOption = (CommandLineOption*)malloc(sizeof(CommandLineOption));
+   CommandLineOption* deleteTempOption = malloc(sizeof(CommandLineOption));
    allocateAndSetCommandLineOption(deleteTempOption, DELETE_TEMP_DIR_DESCRIPTION, DELETE_TEMP_DIR_OPTION_TEXT, DELETE_TEMP_DIR_FLAG_VALUE);
    append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
 }
 
 void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, bool flagValue)
 {
-   option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   option->description = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
 
    strcpy(option->optionText, optionText);
    strcpy(option->description, description);

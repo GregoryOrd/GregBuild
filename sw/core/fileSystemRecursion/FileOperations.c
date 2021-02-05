@@ -18,24 +18,24 @@ void initTestFiles(TestFileList* testFiles)
    if (testFiles != NULL)
    {
       testFiles->size = 0;
-      testFiles->files = (TestFile*)malloc(sizeof(TestFile));
+      testFiles->files = malloc(sizeof(TestFile));
       testFiles->files[0].name = NULL;
       testFiles->files[0].numTestCases = 0;
-      testFiles->files[0].cases = (TestCase*)malloc(sizeof(TestCase));
+      testFiles->files[0].cases = malloc(sizeof(TestCase));
    }
 }
 
 void initSourceFiles(SourceFileList* sourceFiles)
 {
    sourceFiles->size = 0;
-   sourceFiles->files = (SourceFile*)malloc(sizeof(SourceFile));
+   sourceFiles->files = malloc(sizeof(SourceFile));
    sourceFiles->files[0].name = NULL;
 }
 
 void initObjectFileList(ObjectFileList* objectFiles)
 {
    objectFiles->size = 0;
-   objectFiles->files = (ObjectFile*)malloc(sizeof(ObjectFile));
+   objectFiles->files = malloc(sizeof(ObjectFile));
    objectFiles->files[0].name = NULL;
 }
 

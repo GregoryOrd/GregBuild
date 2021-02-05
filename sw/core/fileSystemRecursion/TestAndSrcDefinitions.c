@@ -33,8 +33,8 @@ bool isSourceFile(const struct dirent* fileOrSubDirectory)
 
 bool isTestCaseDefinition(const char* line)
 {
-   LineMetrics* metrics = (LineMetrics*)malloc(sizeof(LineMetrics));
-   LineAnalysisResults* results = (LineAnalysisResults*)malloc(sizeof(LineAnalysisResults));
+   LineMetrics* metrics = malloc(sizeof(LineMetrics));
+   LineAnalysisResults* results = malloc(sizeof(LineAnalysisResults));
    initLineMetrics(metrics);
    initLineAnalysisResults(results);
 

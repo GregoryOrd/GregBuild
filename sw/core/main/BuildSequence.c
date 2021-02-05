@@ -15,7 +15,7 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
 {
    for (int i = 0; i < (sizeof(coreBuildSequenceInfo) / sizeof(BuildSequenceStepInfo)); i++)
    {
-      BuildSequenceStep* step = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
+      BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
       BuildSequenceStepInfo info = coreBuildSequenceInfo[i];
       allocateAndSetBuildSequenceStep(step, info.description, info.optionText, info.flagValue, info.function_ptr, info.functionName);
       append_ll(sequence, step, BUILD_SEQUENCE_STEP_TYPE);

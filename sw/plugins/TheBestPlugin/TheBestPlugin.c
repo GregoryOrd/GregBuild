@@ -6,12 +6,12 @@
 
 BuildSequenceStep* before_loadTestsAndSourceFiles()
 {
-   BuildSequenceStep* step = (BuildSequenceStep*)malloc(sizeof(BuildSequenceStep));
-   step->option = (CommandLineOption*)malloc(sizeof(CommandLineOption));
-   step->option->optionText = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   step->option->description = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
+   step->option = malloc(sizeof(CommandLineOption));
+   step->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   step->option->description = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    step->function_ptr = printHelloWorld;
-   step->functionName = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   step->functionName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    strcpy(step->functionName, "printHelloWorld");
    strcpy(step->option->optionText, "--best");
    strcpy(step->option->description, "TheBestPlugin");

@@ -12,7 +12,7 @@
 void initPluginList(PluginList* list)
 {
    list->size = 0;
-   list->plugins = (Plugin*)malloc(sizeof(Plugin));
+   list->plugins = malloc(sizeof(Plugin));
    list->plugins[0].name = NULL;
 }
 
@@ -39,7 +39,7 @@ void freeHModuleNode(void* data) { free(data); }
 
 void loadPlugins(PluginList* plugins, LinkedList* pluginHModules, const char* basePath)
 {
-   char* fileOrSubDirectoryFullPath = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+   char* fileOrSubDirectoryFullPath = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
    struct dirent* fileOrSubDirectory;
 
    DIR* basePathDirectory = opendir(basePath);
@@ -91,11 +91,11 @@ void addPluginToList(PluginList* list, LinkedList* pluginHModules, const char* p
    if (list != NULL && pluginHModules != NULL)
    {
       list->plugins = (Plugin*)realloc(list->plugins, ((list->size + 1) * sizeof(Plugin)));
-      list->plugins[list->size].name = (char*)malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+      list->plugins[list->size].name = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
       strcpy(list->plugins[list->size].name, pluginPath);
       list->size++;
 
-      HMODULE* hLib = (HMODULE*)malloc(sizeof(HMODULE));
+      HMODULE* hLib = malloc(sizeof(HMODULE));
       *hLib = LoadLibrary(list->plugins[list->size - 1].name);
       append_ll(pluginHModules, hLib, HMODULE_LL_TYPE);
    }
@@ -103,9 +103,9 @@ void addPluginToList(PluginList* list, LinkedList* pluginHModules, const char* p
 
 void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules)
 {
-   PluginList* tempPluginList = (PluginList*)malloc(sizeof(PluginList));
+   PluginList* tempPluginList = malloc(sizeof(PluginList));
    initPluginList(tempPluginList);
-   LinkedList* tempPluginHModules = (LinkedList*)malloc(sizeof(LinkedList));
+   LinkedList* tempPluginHModules = malloc(sizeof(LinkedList));
    initEmptyLinkedList(tempPluginHModules, HMODULE_LL_TYPE);
 
    FILE* orderConfigFilePtr = fopen(PLUGINS_LOAD_ORDER_CONFIG_FILE, "r");
@@ -123,7 +123,7 @@ void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules)
 
 void readPluginsFromOrderConfigFileIntoTempLists(FILE* orderConfigFilePtr, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
 {
-   char* buffer = (char*)malloc(255 * sizeof(char));
+   char* buffer = malloc(255 * sizeof(char));
    while (fgets(buffer, 255, (FILE*)orderConfigFilePtr) != NULL)
    {
       processOrderConfigEntry(buffer, list, tempPluginList, tempPluginHModules);

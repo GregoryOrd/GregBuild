@@ -16,21 +16,21 @@
 int main(int argc, const char* argv[])
 {
    printf("Starting GregBuild\n");
-   LinkedList* optionList = (LinkedList*)malloc(sizeof(LinkedList));
+   LinkedList* optionList = malloc(sizeof(LinkedList));
    TestFileList* testFiles = NULL;
-   SourceFileList* sourceFiles = (SourceFileList*)malloc(sizeof(SourceFileList));
-   ObjectFileList* tempObjectFiles = (ObjectFileList*)malloc(sizeof(ObjectFileList));
-   PluginList* plugins = (PluginList*)malloc(sizeof(PluginList));
-   LinkedList* pluginHModules = (LinkedList*)malloc(sizeof(LinkedList));
+   SourceFileList* sourceFiles = malloc(sizeof(SourceFileList));
+   ObjectFileList* tempObjectFiles = malloc(sizeof(ObjectFileList));
+   PluginList* plugins = malloc(sizeof(PluginList));
+   LinkedList* pluginHModules = malloc(sizeof(LinkedList));
 
    initCoreCommandLineOptions(optionList);
    if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE))
    {
-      testFiles = (TestFileList*)malloc(sizeof(TestFileList));
+      testFiles = malloc(sizeof(TestFileList));
    }
    initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-   LinkedList* buildSequence = (LinkedList*)malloc(sizeof(LinkedList));
+   LinkedList* buildSequence = malloc(sizeof(LinkedList));
    initBuildSequence(buildSequence);
 
    initEmptyLinkedList(pluginHModules, HMODULE_LL_TYPE);
