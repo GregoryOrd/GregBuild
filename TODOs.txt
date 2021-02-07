@@ -1,6 +1,6 @@
 Refactoring and Minor Improvements
 -----------------------------------
-0) Rename exitIfPreviousStepFailed to exitIfError
+
 0a-0) Modify ArgList to use void** instead of char**
 0a-1) Create file reader in toolkit.
     - Have it loop through a file, reading one line at a time

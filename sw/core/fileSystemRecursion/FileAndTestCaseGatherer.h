@@ -13,10 +13,10 @@ extern "C" {
 int loadTestsAndSourceFiles(TestFileList *testFiles,
                             SourceFileList *sourceFiles,
                             ObjectFileList *tempObjectFiles,
-                            int previousStepFailed, const char *basePath);
+                            int errorOnPreviousStep, const char *basePath);
 void addToListOrEnterSubDirectoryForRecursion(
     TestFileList *testFiles, SourceFileList *sourceFiles,
-    ObjectFileList *tempObjectFiles, int previousStepFailed,
+    ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
     const char *basePath, const struct dirent *fileOrSubDirectory,
     const char *fileOrSubDirectoryFullPath);
 void copyFileOrSubDirectoryNameIntoPath(char *path, const char *basePath,

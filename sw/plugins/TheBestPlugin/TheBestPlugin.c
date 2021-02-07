@@ -19,7 +19,7 @@ BuildSequenceStep* before_loadTestsAndSourceFiles()
    return step;
 }
 
-int printHelloWorld(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+int printHelloWorld(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, char* basePath)
 {
    printf("Hello World From The Best Plugin\n");
    return 0;

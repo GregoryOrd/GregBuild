@@ -11,9 +11,10 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
 
-int compileIntoTempObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+int compileIntoTempObjectFiles(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
 
    int testFilesSize = 0;
    if (testFiles != NULL)
@@ -58,9 +59,9 @@ void populateArgsFor_compileIntoTempObjectFiles(
 }
 
 int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
 
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = tempObjectFiles->size + 7;
@@ -85,17 +86,17 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
 }
 
 int createTestMainExecutableFromProjectDllAndGregTestDll(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
    char* const argv[] = {gcc, "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
    return forkAndRunChildProcess(gcc, argv);
 }
 
 int compileObjectFilesIntoProjectExecutable(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
 
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;

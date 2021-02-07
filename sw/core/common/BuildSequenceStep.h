@@ -5,7 +5,7 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 
 typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileList *sourceFiles,
-                      const ObjectFileList *tempObjectFiles, int previousStepFailed,
+                      const ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
                       const char *basePath);
 
 typedef struct BuildSequenceStep {

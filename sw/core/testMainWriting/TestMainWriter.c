@@ -3,9 +3,10 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../common/GregBuildConstants.h"
 
-int writeTestsToTestMain(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+int writeTestsToTestMain(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
    writeToTestMainC(testFiles);
    writeToTestMainH(testFiles);
    return 0;

@@ -84,7 +84,7 @@ void freeTestFileList(TestFileList* testFileList)
    free(testFileList);
 }
 
-int removeTempDir(const TestFileList* const testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+int removeTempDir(const TestFileList* const testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    return removeDir(TEMP_DIR);
 }

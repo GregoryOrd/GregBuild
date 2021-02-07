@@ -4,7 +4,7 @@
 #include "../PluginAPI/PluginFunctions.h"
 
 int printHelloWorld(TestFileList *testFiles, SourceFileList *sourceFiles,
-                    ObjectFileList *tempObjectFiles, int previousStepFailed,
+                    ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
                     char *basePath);
 
 #endif

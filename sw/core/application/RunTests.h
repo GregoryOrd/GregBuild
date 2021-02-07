@@ -8,7 +8,7 @@ extern "C" {
 #endif  
 
 int runTests();
-int runTestsWithExitStatusCheck(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
+int runTestsWithExitStatusCheck(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 void copyDllsToCurrentDirectory();
 void removeDllsFromCurrentDirectory();
 

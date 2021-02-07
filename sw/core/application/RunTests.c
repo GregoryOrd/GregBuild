@@ -20,9 +20,9 @@ int runTests()
 }
 
 int runTestsWithExitStatusCheck(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
    int retval = 1;
    int testResults = runTests();
    if (!testResults)

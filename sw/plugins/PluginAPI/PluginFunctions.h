@@ -55,7 +55,7 @@ struct CommandLineOption {
 typedef struct BuildSequenceStep {
   CommandLineOption *option; // To run the function, the flagValue in here needs to be true
   int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
-                      ObjectFileList *tempObjectFiles, int previousStepFailed,
+                      ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
                       char *basePath);
   char * functionName;
 } BuildSequenceStep;
@@ -79,7 +79,7 @@ typedef struct BuildSequenceStep {
 //      - Can be skipped with --no-test-build command line option
 //      - Run the test executable
 //      - Check the test executbale exit status for segmentation faults
-//      - If a segmentation fault occurs in the test executable, display error
+//      - If a segmentation fault occurs in the test executable, display errorOnPreviousStep
 //      message
 //      - Otherwise return pass or fail
 // 7) compileObjectFilesIntoProjectExecutable()
@@ -122,7 +122,7 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
 }
 
 int printHelloWorld(TestFileList* testFiles, SourceFileList* sourceFiles,
-ObjectFileList* tempObjectFiles, int previousStepFailed, char* basePath)
+ObjectFileList* tempObjectFiles, int errorOnPreviousStep, char* basePath)
 {
    printf("Hello World From The Best Plugin\n");
    return 0; // 0 for Success, 1 for Failure

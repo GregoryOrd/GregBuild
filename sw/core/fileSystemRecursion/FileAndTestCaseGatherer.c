@@ -11,9 +11,9 @@
 #include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
 
-int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath)
+int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   exitIfPreviousStepFailed(previousStepFailed);
+   exitIfError(errorOnPreviousStep);
 
    char* fileOrSubDirectoryFullPath = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
    const struct dirent* fileOrSubDirectory;
@@ -27,7 +27,7 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
    while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL)
    {
       copyFileOrSubDirectoryNameIntoPath(fileOrSubDirectoryFullPath, basePath, fileOrSubDirectory->d_name);
-      addToListOrEnterSubDirectoryForRecursion(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
+      addToListOrEnterSubDirectoryForRecursion(testFiles, sourceFiles, tempObjectFiles, errorOnPreviousStep, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
    }
 
    closedir(basePathDirectory);
@@ -36,7 +36,7 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
 }
 
 void addToListOrEnterSubDirectoryForRecursion(
-    TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath,
+    TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath,
     const struct dirent* fileOrSubDirectory, const char* fileOrSubDirectoryFullPath)
 {
    if (isTestDir(basePath) && isTestFile(fileOrSubDirectory))
@@ -49,7 +49,7 @@ void addToListOrEnterSubDirectoryForRecursion(
    }
    else if (isVisibleDirectory(fileOrSubDirectory))
    {
-      loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, previousStepFailed, fileOrSubDirectoryFullPath);
+      loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, errorOnPreviousStep, fileOrSubDirectoryFullPath);
    }
 }
 
