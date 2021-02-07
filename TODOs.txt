@@ -1,13 +1,19 @@
 Refactoring and Minor Improvements
 -----------------------------------
-
+0) Rename exitIfPreviousStepFailed to exitIfError
 0a) add extern "C" section to all headers with functions
-0b) Create file reader in toolkit.
+    - This will give the ability to use these functions with C++ later if the 
+    need to do so arises.
+0b-0) Modify ArgList to use void** instead of char**
+0b-1) Create file reader in toolkit.
     - Have it loop through a file, reading one line at a time
     - Pass in a function_ptr to run on every iteration
     - Use this to replace addTestCaseToList() in FileAndTestCaseGatherer and
       processOrderConfigEntry() in PluginLoader()
     - Will need a way of passing in a function_ptr that takes in a generic set of arguments
+0b-2) Create a file system recursion function in the toolkit
+    - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
+    cycle
 0c) Make SRC_DIR constant configurable
 0d) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
