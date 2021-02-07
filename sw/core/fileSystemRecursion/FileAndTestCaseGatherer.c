@@ -7,6 +7,7 @@
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
+#include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
@@ -89,24 +90,30 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
 
 void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)
 {
-   FILE* testFilePtr;
-   char* buffer = malloc(255 * sizeof(char));
-   testFilePtr = fopen(pathToTestFile, "r");
+   ArgList* argsList = malloc(sizeof(ArgList));
+   argsList->size = 1;
+   argsList->args = malloc(argsList->size * sizeof(char*));
+   argsList->args[0] = (void*)testFileList;
 
-   while (fgets(buffer, 255, (FILE*)testFilePtr) != NULL)
-   {
-      if (isTestCaseDefinition(buffer))
-      {
-         addSingleTestCaseToList(testFileList, pathToTestFile, buffer);
-      }
-   }
-
-   free(buffer);
-   fclose(testFilePtr);
+   readFileWithActionAfterEachLine(pathToTestFile, argsList, addIfIsSingleTestCase);
 }
 
-void addSingleTestCaseToList(TestFileList* testFileList, const char* pathToTestFile, char* buffer)
+int addIfIsSingleTestCase(ArgList* argList)
 {
+   char* buffer = (char*)argList->args[argList->size - 1];
+   if (isTestCaseDefinition(buffer))
+   {
+      addSingleTestCaseToList(argList->args);
+   }
+
+   return 0;
+}
+
+void addSingleTestCaseToList(void* args[])
+{
+   TestFileList* testFileList = (TestFileList*)args[0];
+   char* buffer = (char*)args[1];
+
    TestFile* testFile = &testFileList->files[testFileList->size];
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
    testFile->cases[testFile->numTestCases].testName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));

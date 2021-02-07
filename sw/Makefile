@@ -46,6 +46,7 @@ COLLECTIONS=Collections
 COMMAND_LINE_OPTIONS=CommandLineOptions
 EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
 FAILURE_HANDLING=FailureHandling
+FILE_IO=FileIO
 FILE_SYSTEM=FileSystem
 STRING=String
 
@@ -53,6 +54,7 @@ COLLECTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o,$(notdi
 COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
 EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
 FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
+FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_IO) -name "*.c")))
 FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
 STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
@@ -60,6 +62,7 @@ TOOLKIT_OBJS =  $(COLLECTIONS_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
 				$(FAILURE_HANDLING_OBJS) \
+				$(FILE_IO_OBJS) \
 				$(FILE_SYSTEM_OBJS) \
 				$(STRING_OBJS)
 
@@ -132,6 +135,11 @@ $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o: $(TOOLKIT_SW)/$(FAILURE_HANDLING)/%
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o: $(TOOLKIT_SW)/$(FILE_IO)/%.c
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_IO)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@	
 
 $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.c
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)

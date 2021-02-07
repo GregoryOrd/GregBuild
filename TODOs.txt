@@ -1,14 +1,13 @@
 Refactoring and Minor Improvements
 -----------------------------------
 
-0a-0) Modify ArgList to use void** instead of char**
-    - Can we generalize the arguments used in our build sequence functions to use this ArgList 
-    if we make this change? -> No
 0a-1) Create file reader in toolkit.
     - Have it loop through a file, reading one line at a time
     - Pass in a function_ptr to run on every iteration
-    - Use this to replace addTestCaseToList() in FileAndTestCaseGatherer and
-      processOrderConfigEntry() in PluginLoader()
+    - Need to fix issue that happened when using this for 
+    addTestCasesToList.
+        - Problem with having multiple test files
+    - Use this to replace processOrderConfigEntry() in PluginLoader()
     - Will need a way of passing in a function_ptr that takes in a generic set of arguments
 0a-2) Create a file system recursion function in the toolkit
     - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
@@ -23,6 +22,9 @@ Refactoring and Minor Improvements
     clean error message if we read something in that doesn't follow our formatting rules
 0e) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
     - Should these definitions/concepts belong to the build system of the test framework?
+0f) Move ArgListDefs.h into toolkit
+    - Rename to ArgList
+    - Add functions addToEndOfArgList() and removeFromEndOfArgList()
 
 Major Improvements
 ---------------------

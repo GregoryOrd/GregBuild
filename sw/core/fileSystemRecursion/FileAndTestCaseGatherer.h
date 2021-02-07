@@ -2,6 +2,7 @@
 #define FILE_AND_TEST_CASE_GATHERER_H
 
 #include "../common/FileStructureDefs.h"
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 #include <dirent.h>
 #include <stdbool.h>
@@ -22,10 +23,10 @@ void addToListOrEnterSubDirectoryForRecursion(
 void copyFileOrSubDirectoryNameIntoPath(char *path, const char *basePath,
                                         const char *fileOrSubDirectoryName);
 void addTestFileToList(TestFileList *testFileList, const char *pathToTestFile);
-void addTestCasesToList(TestFileList *testFileList, const char *pathToTestFile);
 void addSourceFileToList(SourceFileList *list, const char *pathToSourceFile);
-void addSingleTestCaseToList(TestFileList *testFileList,
-                             const char *pathToTestFile, char *buffer);
+void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile);
+int addIfIsSingleTestCase(ArgList* argList);
+void addSingleTestCaseToList(void* args[]);
 void trimTestName(char *testName);
 
 #ifdef __cplusplus
