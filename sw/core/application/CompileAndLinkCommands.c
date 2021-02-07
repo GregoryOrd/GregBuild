@@ -31,8 +31,8 @@ int compileIntoTempObjectFiles(
    mvArgs->args = malloc(mvArgs->size * sizeof(char*));
 
    populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles);
-   forkAndRunChildProcess(gcc, gccArgs->args);
-   forkAndRunChildProcess(mv, mvArgs->args);
+   forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
+   forkAndRunChildProcess(mv, (char* const*)mvArgs->args);
 
    freeArgList(gccArgs);
    free(mvArgs);
@@ -79,7 +79,7 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
    gccArgs->args[gccArgs->size - 2] = LIB_GREG_TEST_DLL;
    gccArgs->args[gccArgs->size - 1] = NULL;
 
-   forkAndRunChildProcess(gcc, gccArgs->args);
+   forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
 
    freeArgList(gccArgs);
    return 0;
@@ -118,7 +118,7 @@ int compileObjectFilesIntoProjectExecutable(
    gccArgs->args[gccArgs->size - 1] = NULL;
 
    makeDir(DIST);
-   int retval = forkAndRunChildProcess(gcc, gccArgs->args);
+   int retval = forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
    freeArgList(gccArgs);
    if (retval == 0)
    {

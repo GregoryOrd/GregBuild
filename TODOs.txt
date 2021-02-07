@@ -2,6 +2,8 @@ Refactoring and Minor Improvements
 -----------------------------------
 
 0a-0) Modify ArgList to use void** instead of char**
+    - Can we generalize the arguments used in our build sequence functions to use this ArgList 
+    if we make this change?
 0a-1) Create file reader in toolkit.
     - Have it loop through a file, reading one line at a time
     - Pass in a function_ptr to run on every iteration
