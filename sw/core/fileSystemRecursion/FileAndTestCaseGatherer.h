@@ -6,6 +6,10 @@
 #include <dirent.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 int loadTestsAndSourceFiles(TestFileList *testFiles,
                             SourceFileList *sourceFiles,
                             ObjectFileList *tempObjectFiles,
@@ -23,5 +27,9 @@ void addSourceFileToList(SourceFileList *list, const char *pathToSourceFile);
 void addSingleTestCaseToList(TestFileList *testFileList,
                              const char *pathToTestFile, char *buffer);
 void trimTestName(char *testName);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

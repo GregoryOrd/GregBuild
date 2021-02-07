@@ -1,28 +1,25 @@
 Refactoring and Minor Improvements
 -----------------------------------
 0) Rename exitIfPreviousStepFailed to exitIfError
-0a) add extern "C" section to all headers with functions
-    - This will give the ability to use these functions with C++ later if the 
-    need to do so arises.
-0b-0) Modify ArgList to use void** instead of char**
-0b-1) Create file reader in toolkit.
+0a-0) Modify ArgList to use void** instead of char**
+0a-1) Create file reader in toolkit.
     - Have it loop through a file, reading one line at a time
     - Pass in a function_ptr to run on every iteration
     - Use this to replace addTestCaseToList() in FileAndTestCaseGatherer and
       processOrderConfigEntry() in PluginLoader()
     - Will need a way of passing in a function_ptr that takes in a generic set of arguments
-0b-2) Create a file system recursion function in the toolkit
+0a-2) Create a file system recursion function in the toolkit
     - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
     cycle
-0c) Make SRC_DIR constant configurable
-0d) Correct Test Finder so the comments in the test line can still be recognized 
+0b) Make SRC_DIR constant configurable
+0c) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
-0e) Instead of using removeTrailingNewLine() in the plugin loader, create a new toolkit
+0d) Instead of using removeTrailingNewLine() in the plugin loader, create a new toolkit
     function call removeTrailingWhitespace() and use that in it place.
     - In general, make the reading in of input from the order file more robust
     - Stick to our formatting rules, document those rules somewhere, then give a 
     clean error message if we read something in that doesn't follow our formatting rules
-0f) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
+0e) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
     - Should these definitions/concepts belong to the build system of the test framework?
 
 Major Improvements

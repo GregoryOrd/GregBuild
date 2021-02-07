@@ -4,6 +4,10 @@
 #include "../common/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif    
+
 int compileIntoTempObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
 void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, const TestFileList* testCases, const SourceFileList* sourceFiles);
 int linkObjectFilesWithGregTestDllToMakeProjectTestDll(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
@@ -15,5 +19,9 @@ void determineObjectFileName(char* objectFileName, const char* filePath);
 void addTempObjectFileToList(ObjectFileList* list, char* filename, bool isFromSource);
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles);
 void freeArgList(ArgList* argList);
+
+#ifdef __cplusplus
+}
+#endif 
 
 #endif

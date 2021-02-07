@@ -14,8 +14,16 @@ typedef struct BuildSequenceStep {
   char* functionName;
 } BuildSequenceStep;
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src);
 void allocateAndSetBuildSequenceStep(
     BuildSequenceStep* dest, const char* description, const char* optionText, bool flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

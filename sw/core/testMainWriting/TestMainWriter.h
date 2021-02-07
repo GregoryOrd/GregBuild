@@ -10,6 +10,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 int writeTestsToTestMain(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int previousStepFailed, const char* basePath);
 void writeToTestMainC(const TestFileList* testFiles);
 void populateTestMainCContents(char* contents, const TestFileList* testFiles);
@@ -29,5 +33,9 @@ void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTest
 void writeTestMainHEnd(char* contents);
 int sizeOfTestMainH(int numTests);
 void writeToFile(const char* filename, const char* contents);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

@@ -5,6 +5,10 @@
 #include "../common/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 void initBuildSequence(LinkedList *sequence);
 void setCoreBuildSequenceSteps(LinkedList *sequence);
 int executeBuildSequence(const LinkedList *buildSequence, LinkedList *options,
@@ -12,5 +16,9 @@ int executeBuildSequence(const LinkedList *buildSequence, LinkedList *options,
                          ObjectFileList *tempObjectFiles);
 void freeBuildSequence(LinkedList *sequence);
 void freeBuildSequenceStep(void *data);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

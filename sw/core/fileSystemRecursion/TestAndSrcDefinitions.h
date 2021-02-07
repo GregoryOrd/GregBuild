@@ -29,6 +29,10 @@ typedef struct LineAnalysisResults {
   bool correctBrackets;
 } LineAnalysisResults;
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 bool isTestDir(const char *dirName);
 bool isTestFile(const struct dirent *fileOrSubDirectory);
 bool isSourceFile(const struct dirent *fileOrSubDirectory);
@@ -44,5 +48,9 @@ int testNameEndOffset(const char *testName);
 bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
                                                int initialLength);
 bool isSpecialCharacter(const char c);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

@@ -7,6 +7,10 @@
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 #include <windows.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 void processPlugins(LinkedList *buildSequence, const PluginList *list,
                     LinkedList *pluginHModules, LinkedList *commandLineOptions);
 void processBeforeAndAfterSteps(const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions, const char* functionName, const char* beforeFunctionName, const char* afterFunctionName);
@@ -16,5 +20,9 @@ void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCore
 void searchPluginsAndAddStepsToBuildSequence(
     BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps, LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules,
     LinkedList* commandLineOptions);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif

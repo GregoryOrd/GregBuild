@@ -9,6 +9,10 @@
 
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  
+
 void initPluginList(PluginList *list);
 void freePluginList(PluginList *list);
 void freePluginHModules(LinkedList *pluginHModules);
@@ -31,5 +35,9 @@ void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPlu
 void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
 void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
 void printPluginInList(const PluginList *list);
+
+#ifdef __cplusplus
+}
+#endif  
 
 #endif
