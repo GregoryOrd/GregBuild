@@ -22,6 +22,7 @@ void initTestFiles(TestFileList* testFiles)
       testFiles->files[0].name = NULL;
       testFiles->files[0].numTestCases = 0;
       testFiles->files[0].cases = malloc(sizeof(TestCase));
+      testFiles->totalNumTestCases = 0;
    }
 }
 
