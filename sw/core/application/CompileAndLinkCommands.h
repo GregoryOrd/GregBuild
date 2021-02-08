@@ -16,7 +16,7 @@ int compileObjectFilesIntoProjectExecutable(const TestFileList* testFiles, const
 void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs);
 void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs);
 void determineObjectFileName(char* objectFileName, const char* filePath);
-void addTempObjectFileToList(ObjectFileList* list, char* filename, bool isFromSource);
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource);
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles);
 void freeArgList(ArgList* argList);
 

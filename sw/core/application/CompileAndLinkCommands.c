@@ -24,11 +24,11 @@ int compileIntoTempObjectFiles(
 
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = testFilesSize + sourceFiles->size + 3;
-   gccArgs->args = malloc(gccArgs->size * sizeof(char*));
+   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
    ArgList* mvArgs = malloc(sizeof(ArgList));
    mvArgs->size = testFilesSize + sourceFiles->size + 3;
-   mvArgs->args = malloc(mvArgs->size * sizeof(char*));
+   mvArgs->args = malloc(mvArgs->size * sizeof(void*));
 
    populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles);
    forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
@@ -65,7 +65,7 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
 
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = tempObjectFiles->size + 7;
-   gccArgs->args = malloc(gccArgs->size * sizeof(char*));
+   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
    gccArgs->args[0] = gcc;
    gccArgs->args[1] = "-shared";
@@ -100,7 +100,7 @@ int compileObjectFilesIntoProjectExecutable(
 
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
-   gccArgs->args = malloc(gccArgs->size * sizeof(char*));
+   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
    gccArgs->args[0] = gcc;
    int numObjectFilesFromSourceAddedToArgsList = 0;
@@ -133,49 +133,51 @@ int compileObjectFilesIntoProjectExecutable(
 
 void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)
 {
-   char* objectFileName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    int gccFileArgOffset = 2;
    int mvFileArgOffset = 1;
    int testFileIndex = 0;
    while (testFileIndex < testFiles->size)
    {
-      clearString(objectFileName);
       determineObjectFileName(objectFileName, testFiles->files[testFileIndex].name);
       addTempObjectFileToList(tempObjectFiles, objectFileName, false);
-      gccArgs->args[*argIndex + gccFileArgOffset] = testFiles->files[testFileIndex].name;
-      mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName) * sizeof(char));
+
+      gccArgs->args[*argIndex + gccFileArgOffset] = malloc(strlen(testFiles->files[testFileIndex].name));
+      mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName));
+
+      strcpy(gccArgs->args[*argIndex + gccFileArgOffset], testFiles->files[testFileIndex].name);
       strcpy(mvArgs->args[*argIndex + mvFileArgOffset], objectFileName);
       (*argIndex)++;
       testFileIndex++;
    }
-   free(objectFileName);
 }
 
 void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs)
 {
-   char* objectFileName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
    int gccFileArgOffset = 2;
    int mvFileArgOffset = 1;
    int sourceFileIndex = 0;
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    while (sourceFileIndex < sourceFiles->size)
    {
-      clearString(objectFileName);
       determineObjectFileName(objectFileName, sourceFiles->files[sourceFileIndex].name);
       addTempObjectFileToList(tempObjectFiles, objectFileName, true);
-      gccArgs->args[*argIndex + gccFileArgOffset] = sourceFiles->files[sourceFileIndex].name;
-      mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName) * sizeof(char));
+
+      gccArgs->args[*argIndex + gccFileArgOffset] = malloc(strlen(sourceFiles->files[sourceFileIndex].name));
+      mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName));
+
+      strcpy(gccArgs->args[*argIndex + gccFileArgOffset], sourceFiles->files[sourceFileIndex].name);
       strcpy(mvArgs->args[*argIndex + mvFileArgOffset], objectFileName);
       (*argIndex)++;
       sourceFileIndex++;
    }
-   free(objectFileName);
 }
 
 void determineObjectFileName(char* objectFileName, const char* filePath)
 {
    int length = strlen(filePath) - 1;
    int offset = 2;
-   char* reversedObjectFileName = malloc(length * sizeof(char));
+   char reversedObjectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    reversedObjectFileName[0] = 'o';
    reversedObjectFileName[1] = '.';
    bool pastExtension = false;
@@ -198,25 +200,20 @@ void determineObjectFileName(char* objectFileName, const char* filePath)
       }
    }
    reverseString(objectFileName, reversedObjectFileName);
-   free(reversedObjectFileName);
 }
 
-void addTempObjectFileToList(ObjectFileList* list, char* filename, bool isFromSource)
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource)
 {
-   int tempObjectFileLength = strlen(TEMP_DIR) + strlen("\\") + strlen(filename);
-   char* tempObjectFile = malloc(tempObjectFileLength * sizeof(char));
-   clearString(tempObjectFile);
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    strcat(tempObjectFile, TEMP_DIR);
    strcat(tempObjectFile, "\\");
    strcat(tempObjectFile, filename);
 
    list->files = (ObjectFile*)realloc(list->files, ((list->size + 1) * sizeof(ObjectFile)));
-   list->files[list->size].name = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+   list->files[list->size].name = malloc(strlen(tempObjectFile));
    strcpy(list->files[list->size].name, tempObjectFile);
    list->files[list->size].isFromSource = isFromSource;
    list->size++;
-
-   free(tempObjectFile);
 }
 
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles)
