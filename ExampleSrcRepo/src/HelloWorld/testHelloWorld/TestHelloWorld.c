@@ -2,7 +2,8 @@
 #include "../../GregTest.h"
 #include <stdio.h>
 
-void testMySt456uff(){
+void testMySt456uff()
+{
 	const char* expected = "Hello World";
 	const char* actual = "Hello World";
 

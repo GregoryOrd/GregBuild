@@ -17,7 +17,7 @@ int main(int argc, const char* argv[])
 {
    printf("Starting GregBuild\n");
    LinkedList* optionList = malloc(sizeof(LinkedList));
-   TestFileList* testFiles = NULL;
+   TestFileList* testFiles;
    SourceFileList* sourceFiles = malloc(sizeof(SourceFileList));
    ObjectFileList* tempObjectFiles = malloc(sizeof(ObjectFileList));
    PluginList* plugins = malloc(sizeof(PluginList));

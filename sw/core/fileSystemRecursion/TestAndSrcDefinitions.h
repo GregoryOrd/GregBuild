@@ -2,8 +2,8 @@
 #define TEST_DEFINITIONS_H
 
 #define TEST_NAME_TRIM_FRONT_OFFSET 5
-#define TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE 8
-#define TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_SAME_LINE 9
+#define TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE 3
+#define TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_SAME_LINE 4
 
 #include <dirent.h>
 #include <stdbool.h>
@@ -36,13 +36,12 @@ extern "C" {
 bool isTestDir(const char *dirName);
 bool isTestFile(const struct dirent *fileOrSubDirectory);
 bool isSourceFile(const struct dirent *fileOrSubDirectory);
-void gatherLineMetrics(LineMetrics *metrics, const char *line);
-void analyzeLineMetrics(LineMetrics *metrics, const char *line);
-void determineResults(LineAnalysisResults *results, const LineMetrics *metrics,
-                      const char *line);
-bool lineHasSpecialCharacters(const LineMetrics *metrics, const char *line);
-void initLineMetrics(LineMetrics *metrics);
-void initLineAnalysisResults(LineAnalysisResults *results);
+LineMetrics gatherLineMetrics(const char* line);
+LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line);
+LineAnalysisResults determineResults(const LineMetrics metrics, const char *line);
+bool lineHasSpecialCharacters(const LineMetrics metrics, const char *line);
+LineMetrics initLineMetrics();
+LineAnalysisResults initLineAnalysisResults();
 bool isTestCaseDefinition(const char *line);
 int testNameEndOffset(const char *testName);
 bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,

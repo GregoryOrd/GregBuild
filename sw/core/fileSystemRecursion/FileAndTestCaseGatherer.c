@@ -116,11 +116,10 @@ void addSingleTestCaseToList(void* args[])
 
    TestFile* testFile = &testFileList->files[testFileList->size];
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
-   testFile->cases[testFile->numTestCases].testName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
 
    trimTestName(buffer);
 
-   strcpy(testFile->cases[testFile->numTestCases].testName, buffer);
+   testFile->cases[testFile->numTestCases].testName = buffer;
    testFile->numTestCases++;
    testFileList->totalNumTestCases++;
 }

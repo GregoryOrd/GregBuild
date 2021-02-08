@@ -33,77 +33,76 @@ bool isSourceFile(const struct dirent* fileOrSubDirectory)
 
 bool isTestCaseDefinition(const char* line)
 {
-   LineMetrics* metrics = malloc(sizeof(LineMetrics));
-   LineAnalysisResults* results = malloc(sizeof(LineAnalysisResults));
-   initLineMetrics(metrics);
-   initLineAnalysisResults(results);
+   LineMetrics metrics = gatherLineMetrics(line);
+   metrics = analyzeLineMetrics(metrics, line);
+   LineAnalysisResults results = determineResults(metrics, line);
 
-   gatherLineMetrics(metrics, line);
-   analyzeLineMetrics(metrics, line);
-   determineResults(results, metrics, line);
+   bool isTestCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
 
-   bool isTestCase = results->correctStartOfLine && results->correctSpaces && results->correctBrackets && !results->hasSpecialCharacters;
-
-   free(metrics);
-   free(results);
    return isTestCase;
 }
 
-void gatherLineMetrics(LineMetrics* metrics, const char* line)
+LineMetrics gatherLineMetrics(const char* line)
 {
+   LineMetrics metrics = initLineMetrics();
    const char* currentPtr = line;
    while (*currentPtr != '\0' && *currentPtr != '\n')
    {
       if (*currentPtr == ' ')
       {
-         metrics->numSpaces++;
+         metrics.numSpaces++;
       }
       else if (*currentPtr == '(')
       {
-         metrics->numLeftBrackets++;
-         metrics->leftBracketIndex = metrics->length;
+         metrics.numLeftBrackets++;
+         metrics.leftBracketIndex = metrics.length;
       }
       else if (*currentPtr == ')')
       {
-         metrics->numRightBrackets++;
-         metrics->rightBracketIndex = metrics->length;
+         metrics.numRightBrackets++;
+         metrics.rightBracketIndex = metrics.length;
       }
-      metrics->length++;
+      metrics.length++;
       currentPtr++;
    }
+   return metrics;
 }
 
-void analyzeLineMetrics(LineMetrics* metrics, const char* line)
+LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line)
 {
    // Line will have form:
    // testSomething() or testSomthing(){
-   metrics->expectedLeftBracketIndex = metrics->length - 3;
-   if (theCurlyBraceIsOnTheSameLineAsTheTestName(line, metrics->length))
+   metrics.expectedLeftBracketIndex = metrics.length - 3;
+   if (theCurlyBraceIsOnTheSameLineAsTheTestName(line, metrics.length))
    {
-      metrics->expectedLeftBracketIndex--;
+      metrics.expectedLeftBracketIndex--;
    }
-   metrics->expectedRightBracketIndex = metrics->expectedLeftBracketIndex + 1;
+   metrics.expectedRightBracketIndex = metrics.expectedLeftBracketIndex + 1;
+   return metrics;
 }
 
-void determineResults(LineAnalysisResults* results, const LineMetrics* metrics, const char* line)
+LineAnalysisResults determineResults(const LineMetrics metrics, const char* line)
 {
-   results->correctStartOfLine = strncmp(line, "void test", 9) == 0;
-   results->singleSpaceBetweenBoolAndTestName = (strstr(line, " ") == &line[4]);
-   results->correctSpaces = results->singleSpaceBetweenBoolAndTestName && metrics->numSpaces == 1;
+   LineAnalysisResults results = initLineAnalysisResults();
 
-   results->correctBracketCount = metrics->numLeftBrackets == 1 && metrics->numRightBrackets == 1;
-   results->correctBracketPosition = metrics->leftBracketIndex == metrics->expectedLeftBracketIndex && metrics->rightBracketIndex == metrics->expectedRightBracketIndex;
-   results->correctBrackets = results->correctBracketCount && results->correctBracketPosition;
+   results.correctStartOfLine = strncmp(line, "void test", 9) == 0;
+   results.singleSpaceBetweenBoolAndTestName = (strstr(line, " ") == &line[4]);
+   results.correctSpaces = results.singleSpaceBetweenBoolAndTestName && metrics.numSpaces == 1;
 
-   if (results->correctStartOfLine && results->correctSpaces && results->correctBrackets)
+   results.correctBracketCount = metrics.numLeftBrackets == 1 && metrics.numRightBrackets == 1;
+   results.correctBracketPosition = metrics.leftBracketIndex == metrics.expectedLeftBracketIndex && metrics.rightBracketIndex == metrics.expectedRightBracketIndex;
+   results.correctBrackets = results.correctBracketCount && results.correctBracketPosition;
+
+   if (results.correctStartOfLine && results.correctSpaces && results.correctBrackets)
    {
-      results->hasSpecialCharacters = lineHasSpecialCharacters(metrics, line);
+      results.hasSpecialCharacters = lineHasSpecialCharacters(metrics, line);
    }
+   return results;
 }
 
-bool lineHasSpecialCharacters(const LineMetrics* metrics, const char* line)
+bool lineHasSpecialCharacters(const LineMetrics metrics, const char* line)
 {
-   for (int i = 0; i < metrics->length; i++)
+   for (int i = 0; i < metrics.length; i++)
    {
       if (isSpecialCharacter(line[i]))
       {
@@ -118,44 +117,54 @@ bool lineHasSpecialCharacters(const LineMetrics* metrics, const char* line)
    return false;
 }
 
-void initLineMetrics(LineMetrics* metrics)
+LineMetrics initLineMetrics()
 {
-   metrics->numSpaces = 0;
-   metrics->numLeftBrackets = 0;
-   metrics->numRightBrackets = 0;
-   metrics->leftBracketIndex = 0;
-   metrics->rightBracketIndex = 0;
-   metrics->length = 0;
-   metrics->expectedLeftBracketIndex = 0;
-   metrics->expectedRightBracketIndex = 0;
+   LineMetrics metrics;
+   metrics.numSpaces = 0;
+   metrics.numLeftBrackets = 0;
+   metrics.numRightBrackets = 0;
+   metrics.leftBracketIndex = 0;
+   metrics.rightBracketIndex = 0;
+   metrics.length = 0;
+   metrics.expectedLeftBracketIndex = 0;
+   metrics.expectedRightBracketIndex = 0;
+   return metrics;
 }
 
-void initLineAnalysisResults(LineAnalysisResults* results)
+LineAnalysisResults initLineAnalysisResults()
 {
-   results->correctStartOfLine = false;
-   results->singleSpaceBetweenBoolAndTestName = false;
-   results->hasSpecialCharacters = false;
-   results->correctSpaces = false;
-   results->correctBracketCount = false;
-   results->correctBracketPosition = false;
-   results->correctBrackets = false;
+   LineAnalysisResults results;
+   results.correctStartOfLine = false;
+   results.singleSpaceBetweenBoolAndTestName = false;
+   results.hasSpecialCharacters = false;
+   results.correctSpaces = false;
+   results.correctBracketCount = false;
+   results.correctBracketPosition = false;
+   results.correctBrackets = false;
+   return results;
 }
 
 void trimTestName(char* testName)
 {
-   int length = strlen(testName) - 1;
-   int endOffset = testNameEndOffset(testName);
-   for (int i = 0; i < strlen(testName) - 1; i++)
+   int endOffset = 0;
+   if (theCurlyBraceIsOnTheSameLineAsTheTestName(testName, strlen(testName)))
    {
-      if (i < length - endOffset)
-      {
-         testName[i] = testName[i + TEST_NAME_TRIM_FRONT_OFFSET];
-      }
-      else
-      {
-         testName[i] = '\0';
-      }
+      endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_SAME_LINE;
    }
+   else
+   {
+      endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
+   }
+   char temp[WINDOWS_MAX_PATH_LENGTH];
+   clearString(temp);
+   for (int i = TEST_NAME_TRIM_FRONT_OFFSET; i < strlen(testName) - endOffset; i++)
+   {
+      temp[i - TEST_NAME_TRIM_FRONT_OFFSET] = testName[i];
+      temp[i - TEST_NAME_TRIM_FRONT_OFFSET + 1] = '\0';
+   }
+   clearString(testName);
+
+   strcpy(testName, temp);
 }
 
 int testNameEndOffset(const char* testName)
