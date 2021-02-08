@@ -1,15 +1,7 @@
 Refactoring and Minor Improvements
 -----------------------------------
 
-0a-1) Create file reader in toolkit.
-    - Have it loop through a file, reading one line at a time
-    - Pass in a function_ptr to run on every iteration
-    - Need to fix issue that happened when using this for 
-    addTestCasesToList.
-        - Problem with having multiple test files
-    - Use this to replace processOrderConfigEntry() in PluginLoader()
-    - Will need a way of passing in a function_ptr that takes in a generic set of arguments
-0a-2) Create a file system recursion function in the toolkit
+0a) Create a file system recursion function in the toolkit
     - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
     cycle
 0b) Make SRC_DIR constant configurable
@@ -20,13 +12,15 @@ Refactoring and Minor Improvements
     - In general, make the reading in of input from the order file more robust
     - Stick to our formatting rules, document those rules somewhere, then give a 
     clean error message if we read something in that doesn't follow our formatting rules
+    - Improve handling so that order file does not need a newline character at
+    the end of the final line
 0e) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
     - Should these definitions/concepts belong to the build system of the test framework?
 0f) Move ArgListDefs.h into toolkit
     - Rename to ArgList
     - Add functions addToEndOfArgList() and removeFromEndOfArgList()
 0g) Remove mallocs where possible throughout the repo to reduce heap space usage
-0h) Add /%.h depencies to makefile so most things are rebuilt when headers change
+0h) Add /%.h dependencies to makefile so most things are rebuilt when headers change
 
 Major Improvements
 ---------------------

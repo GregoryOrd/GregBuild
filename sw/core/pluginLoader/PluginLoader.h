@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +31,8 @@ bool isPlugin(const struct dirent *fileOrSubDirectory);
 void addPluginToList(PluginList *list, LinkedList *pluginHModules,
                      const char *pluginPath);
 void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules);
-void readPluginsFromOrderConfigFileIntoTempLists(FILE* testFilePtr, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules);
-void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules);
+void readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules);
+int processOrderConfigEntry(ArgList* argsList);
 void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
 void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules);
 void printPluginInList(const PluginList *list);

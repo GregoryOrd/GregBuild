@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
@@ -108,32 +109,33 @@ void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginHModules)
    LinkedList* tempPluginHModules = malloc(sizeof(LinkedList));
    initEmptyLinkedList(tempPluginHModules, HMODULE_LL_TYPE);
 
-   FILE* orderConfigFilePtr = fopen(PLUGINS_LOAD_ORDER_CONFIG_FILE, "r");
-   if (orderConfigFilePtr)
-   {
-      readPluginsFromOrderConfigFileIntoTempLists(orderConfigFilePtr, list, tempPluginList, tempPluginHModules);
-      addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(list, tempPluginList, pluginHModules, tempPluginHModules);
-      copyTempListsIntoActualLists(list, tempPluginList, pluginHModules, tempPluginHModules);
-   }
-   fclose(orderConfigFilePtr);
+   readPluginsFromOrderConfigFileIntoTempLists(PLUGINS_LOAD_ORDER_CONFIG_FILE, list, tempPluginList, tempPluginHModules);
+   addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(list, tempPluginList, pluginHModules, tempPluginHModules);
+   copyTempListsIntoActualLists(list, tempPluginList, pluginHModules, tempPluginHModules);
 
    freePluginList(tempPluginList);
    freeHModuleNode(tempPluginHModules);
 }
 
-void readPluginsFromOrderConfigFileIntoTempLists(FILE* orderConfigFilePtr, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
+void readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
 {
-   char* buffer = malloc(255 * sizeof(char));
-   while (fgets(buffer, 255, (FILE*)orderConfigFilePtr) != NULL)
-   {
-      processOrderConfigEntry(buffer, list, tempPluginList, tempPluginHModules);
-   }
-   free(buffer);
+   ArgList* argsList = malloc(sizeof(ArgList));
+   argsList->size = 3;
+   argsList->args = malloc(argsList->size * sizeof(char*));
+   argsList->args[0] = (void*)list;
+   argsList->args[1] = (void*)tempPluginList;
+   argsList->args[2] = (void*)tempPluginHModules;
+
+   readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
 }
 
-void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginHModules)
+int processOrderConfigEntry(ArgList* argsList)
 {
-   removeTrailingNewLine(buffer);
+   PluginList* list = (PluginList*)argsList->args[0];
+   PluginList* tempPluginList = (PluginList*)argsList->args[1];
+   LinkedList* tempPluginHModules = (LinkedList*)argsList->args[2];
+   char* buffer = (char*)argsList->args[argsList->size - 1];
+
    for (int i = 0; i < list->size; i++)
    {
       if (strstr(list->plugins[i].name, buffer))
@@ -145,6 +147,7 @@ void processOrderConfigEntry(char* buffer, PluginList* list, PluginList* tempPlu
          addPluginToList(tempPluginList, tempPluginHModules, pluginPath);
       }
    }
+   return 0;
 }
 
 void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginHModules, LinkedList* tempPluginHModules)
