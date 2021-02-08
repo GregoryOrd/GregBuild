@@ -20,7 +20,6 @@ Refactoring and Minor Improvements
     - Rename to ArgList
     - Add functions addToEndOfArgList() and removeFromEndOfArgList()
 0g) Remove mallocs where possible throughout the repo to reduce heap space usage
-0h) Add /%.h dependencies to makefile so most things are rebuilt when headers change
 
 Major Improvements
 ---------------------
