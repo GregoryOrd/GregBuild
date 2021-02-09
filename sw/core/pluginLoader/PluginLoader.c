@@ -40,7 +40,7 @@ void freeHModuleNode(void* data) { free(data); }
 
 void loadPlugins(PluginList* plugins, LinkedList* pluginHModules, const char* basePath)
 {
-   char* fileOrSubDirectoryFullPath = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+   char fileOrSubDirectoryFullPath[WINDOWS_MAX_PATH_LENGTH] = "";
    struct dirent* fileOrSubDirectory;
 
    DIR* basePathDirectory = opendir(basePath);
@@ -56,7 +56,6 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginHModules, const char* ba
    }
 
    closedir(basePathDirectory);
-   free(fileOrSubDirectoryFullPath);
 }
 
 void copyNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
@@ -92,7 +91,7 @@ void addPluginToList(PluginList* list, LinkedList* pluginHModules, const char* p
    if (list != NULL && pluginHModules != NULL)
    {
       list->plugins = (Plugin*)realloc(list->plugins, ((list->size + 1) * sizeof(Plugin)));
-      list->plugins[list->size].name = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char*));
+      list->plugins[list->size].name = malloc(strlen(pluginPath));
       strcpy(list->plugins[list->size].name, pluginPath);
       list->size++;
 

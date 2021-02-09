@@ -108,9 +108,9 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    BuildSequenceStep* step =
    malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
-   step->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
-   step->option->description = malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
-   step->functionName = malloc(WINDOWS_MAX_PATH_LENGTH*sizeof(char));
+   step->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH);
+   step->option->description = malloc(WINDOWS_MAX_PATH_LENGTH);
+   step->functionName = malloc(WINDOWS_MAX_PATH_LENGTH);
 
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name

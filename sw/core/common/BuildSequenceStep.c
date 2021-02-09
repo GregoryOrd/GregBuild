@@ -5,25 +5,16 @@
 
 void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src)
 {
-   dest->option = malloc(sizeof(CommandLineOption));
-   dest->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->option->description = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->functionName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-
-   strcpy(dest->option->description, src->option->description);
-   strcpy(dest->option->optionText, src->option->optionText);
-   dest->option->flagValue = src->option->flagValue;
-   dest->function_ptr = src->function_ptr;
-   strcpy(dest->functionName, src->functionName);
+   allocateAndSetBuildSequenceStep(dest, src->option->description, src->option->optionText, src->option->flagValue, src->function_ptr, src->functionName);
 }
 
 void allocateAndSetBuildSequenceStep(
     BuildSequenceStep* dest, const char* description, const char* optionText, bool flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
 {
    dest->option = malloc(sizeof(CommandLineOption));
-   dest->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->option->description = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
-   dest->functionName = malloc(WINDOWS_MAX_PATH_LENGTH * sizeof(char));
+   dest->option->optionText = malloc(strlen(optionText));
+   dest->option->description = malloc(strlen(description));
+   dest->functionName = malloc(strlen(functionName));
 
    strcpy(dest->option->description, description);
    strcpy(dest->option->optionText, optionText);
