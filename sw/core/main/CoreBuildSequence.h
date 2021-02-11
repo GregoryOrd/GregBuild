@@ -8,6 +8,7 @@
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../testMainWriting/TestMainWriter.h"
+#include "../application/CompilerConfiguration.h"
 
 typedef struct BuildSequenceStepInfo
 {
@@ -18,8 +19,15 @@ typedef struct BuildSequenceStepInfo
     const char* functionName;
 } BuildSequenceStepInfo;
 
-BuildSequenceStepInfo coreBuildSequenceInfo[8] = 
+BuildSequenceStepInfo coreBuildSequenceInfo[9] = 
 {
+    {
+        NULL_COMMAND_LINE_DESCRIPTION, 
+        NULL_COMMAND_LINE_OPTION_TEXT, 
+        NULL_COMMAND_LINE_FLAG_VALUE, 
+        readCompilerConfigurationFromFile, 
+        "readCompilerConfigurationFromFile"
+    },
     {
         NULL_COMMAND_LINE_DESCRIPTION, 
         NULL_COMMAND_LINE_OPTION_TEXT, 

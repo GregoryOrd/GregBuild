@@ -10,6 +10,7 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
+#include "CompilerConfiguration.h"
 
 int compileIntoTempObjectFiles(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
@@ -31,7 +32,7 @@ int compileIntoTempObjectFiles(
    mvArgs->args = malloc(mvArgs->size * sizeof(void*));
 
    populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles);
-   forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
+   forkAndRunChildProcess(hostCompiler(), (char* const*)gccArgs->args);
    forkAndRunChildProcess(mv, (char* const*)mvArgs->args);
 
    freeArgList(gccArgs);
@@ -42,7 +43,7 @@ int compileIntoTempObjectFiles(
 void populateArgsFor_compileIntoTempObjectFiles(
     ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles)
 {
-   gccArgs->args[0] = gcc;
+   gccArgs->args[0] = hostCompiler();
    gccArgs->args[1] = "-c";
    gccArgs->args[gccArgs->size - 1] = NULL;
 
@@ -67,7 +68,7 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
    gccArgs->size = tempObjectFiles->size + 7;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
-   gccArgs->args[0] = gcc;
+   gccArgs->args[0] = hostCompiler();
    gccArgs->args[1] = "-shared";
    gccArgs->args[2] = "-o";
    gccArgs->args[3] = TEMP_TEST_PROJECT_DLL;
@@ -79,7 +80,7 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
    gccArgs->args[gccArgs->size - 2] = LIB_GREG_TEST_DLL;
    gccArgs->args[gccArgs->size - 1] = NULL;
 
-   forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
+   forkAndRunChildProcess(hostCompiler(), (char* const*)gccArgs->args);
 
    freeArgList(gccArgs);
    return 0;
@@ -89,8 +90,8 @@ int createTestMainExecutableFromProjectDllAndGregTestDll(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
-   char* const argv[] = {gcc, "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
-   return forkAndRunChildProcess(gcc, argv);
+   char* const argv[] = {hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
+   return forkAndRunChildProcess(hostCompiler(), argv);
 }
 
 int compileObjectFilesIntoProjectExecutable(
@@ -102,7 +103,7 @@ int compileObjectFilesIntoProjectExecutable(
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
-   gccArgs->args[0] = gcc;
+   gccArgs->args[0] = targetCompiler();
    int numObjectFilesFromSourceAddedToArgsList = 0;
    for (int i = 0; i < tempObjectFiles->size; i++)
    {
@@ -118,7 +119,7 @@ int compileObjectFilesIntoProjectExecutable(
    gccArgs->args[gccArgs->size - 1] = NULL;
 
    makeDir(DIST);
-   int retval = forkAndRunChildProcess(gcc, (char* const*)gccArgs->args);
+   int retval = forkAndRunChildProcess(targetCompiler(), (char* const*)gccArgs->args);
    freeArgList(gccArgs);
    if (retval == 0)
    {

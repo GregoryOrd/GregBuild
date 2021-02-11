@@ -1,11 +1,5 @@
 Refactoring and Minor Improvements
 -----------------------------------
-
-0) Remove mallocs where possible throughout the repo to reduce heap space usage
-    - Setting the coding standard that lists of dynamic length are malloc'd
-    - String as members of malloc'd struct passed to a function can be malloc'd
-    - Local variable strings are not malloc'd 
-    and are instead restricted to WINDOWS_MAX_PATH_LENGTH
 0a) Create a file system recursion function in the toolkit
     - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
     cycle
@@ -22,6 +16,7 @@ Refactoring and Minor Improvements
     - Should these definitions/concepts belong to the build system of the test framework?
 0e) Move ArgListDefs.h into toolkit
     - Rename to ArgList
+    - Add a .c file with freeArgList() function
     - Add functions addToEndOfArgList() and removeFromEndOfArgList()
 
 Major Improvements
@@ -37,6 +32,16 @@ Major Improvements
         or a "non-host target" hardware
         - Then, we want to capability to swap out both the "host" compiler and the "target"
         compiler.
+    1a) At this point in progress:
+        - Need to remove #define gcc
+        - Add in the compile step after running tests:
+            - Determine if the host compiler matches the target compiler
+                - If so, keep current behaviour
+                - If not, need to compile all of the temp .o files again with the
+                target compiler
+        - Improve parsing of the compile.config file
+            - whitespace issues and such
+            - Also refactor because the parsing function is quite long
 2) Add ability to use certain compiler flags during both the host and target
    compliter build sequence steps
     - This could be resource file configurable
