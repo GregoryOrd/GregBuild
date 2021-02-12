@@ -30,6 +30,11 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
    for (int i = 0; i < buildSequence->size; i++)
    {
       BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
+
+      printf("=================================\n");
+      printf("Executing: %s\n", step->functionName);
+      printf("=================================\n");
+
       bool flagVal = flagValueForOption_ll(options, step->option->optionText, COMMAND_LINE_OPTION_TYPE);
       if (!error && flagVal)
       {

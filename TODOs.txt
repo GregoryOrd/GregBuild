@@ -19,6 +19,9 @@ Refactoring and Minor Improvements
     - Add a .c file with freeArgList() function
     - Add functions addToEndOfArgList() and removeFromEndOfArgList()
 0f) Move FileOperations into common and fix all of the include paths that depend on it
+0g) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
+    - Some of the helpers in there right now might also belong in different files 
+    in the repo or in the toolkit
 
 Major Improvements
 ---------------------
@@ -34,22 +37,8 @@ Major Improvements
         - Then, we want to capability to swap out both the "host" compiler and the "target"
         compiler.
     1a) At this point in progress:
-        - Add in the compile step after running tests:
-            - Determine if the host compiler matches the target compiler
-                - If so, keep current behaviour
-                - If not, need to compile all of the temp .o files again with the
-                target compiler
-
-
-            -Solution IDEA:
-                - Pass the compiler path into compileIntoTempObjectFiles()
-                - Then in compileIntoProjectExecutable(), if hostComiler == targetcompiler
-                continue with what it current does. Otherwise, call compileIntoTempObjectFiles() with the target compiler
-                then do what it normally does.
-                - Also, have two seperate folders inside the build directory, one for the host .o's
-                and a second for the target .o's
-
-
+        - The compile into project executable step is failing
+        with a no input files issue. Need to resolve this.
         - Improve parsing of the compile.config file
             - whitespace issues and such
             - Also refactor because the parsing function is quite long

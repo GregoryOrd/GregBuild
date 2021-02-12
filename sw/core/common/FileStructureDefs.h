@@ -5,6 +5,9 @@
 
 #include <stdbool.h>
 
+#define TEST_FILE_LIST_TYPE 0
+#define SRC_FILE_LIST_TYPE 1
+
 typedef struct ObjectFile
 {
     char* name;
