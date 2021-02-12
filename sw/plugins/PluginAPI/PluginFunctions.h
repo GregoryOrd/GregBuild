@@ -82,7 +82,7 @@ typedef struct BuildSequenceStep {
 //      - If a segmentation fault occurs in the test executable, display errorOnPreviousStep
 //      message
 //      - Otherwise return pass or fail
-// 7) compileObjectFilesIntoProjectExecutable()
+// 7) compileIntoProjectExecutable()
 //      - The source files have already been compiled into .o files at this
 //      point
 //      - This step just links together the .o files that were created in step 2
@@ -147,8 +147,8 @@ BuildSequenceStep *after_createTestMainExecutableFromProjectDllAndGregTestDll();
 BuildSequenceStep *before_runTestsWithExitStatusCheck();
 BuildSequenceStep *after_runTestsWithExitStatusCheck();
 
-BuildSequenceStep *before_compileObjectFilesIntoProjectExecutable();
-BuildSequenceStep *after_compileObjectFilesIntoProjectExecutable();
+BuildSequenceStep *before_compileIntoProjectExecutable();
+BuildSequenceStep *after_compileIntoProjectExecutable();
 
 BuildSequenceStep *before_removeTempDir();
 BuildSequenceStep *after_removeTempDir();

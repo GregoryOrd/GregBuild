@@ -49,6 +49,13 @@ void freeObjectFileList(ObjectFileList* list)
    free(list);
 }
 
+void resetObjectFileList(ObjectFileList* list)
+{
+   freeObjectFileList(list);
+   list = malloc(sizeof(ObjectFileList));
+   initObjectFileList(list);
+}
+
 void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
    if (testFiles != NULL)

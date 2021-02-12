@@ -10,13 +10,19 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
+#include "../fileSystemRecursion/FileOperations.h"
 #include "CompilerConfiguration.h"
 
 int compileIntoTempObjectFiles(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
+   return compileIntoTempObjectFilesWithCompiler(testFiles, sourceFiles, tempObjectFiles, hostCompiler(), basePath);
+}
 
+int compileIntoTempObjectFilesWithCompiler(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath)
+{
    int testFilesSize = 0;
    if (testFiles != NULL)
    {
@@ -26,13 +32,28 @@ int compileIntoTempObjectFiles(
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = testFilesSize + sourceFiles->size + 3;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
+   gccArgs->args[0] = compiler;
 
    ArgList* mvArgs = malloc(sizeof(ArgList));
    mvArgs->size = testFilesSize + sourceFiles->size + 3;
-   mvArgs->args = malloc(mvArgs->size * sizeof(void*));
+   mvArgs->args = malloc(mvArgs->size * WINDOWS_MAX_PATH_LENGTH);
+   mvArgs->args[0] = mv;
 
-   populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles);
-   forkAndRunChildProcess(hostCompiler(), (char* const*)gccArgs->args);
+   char hardwarePlatform[7] = "target";
+   if (strcmp(compiler, hostCompiler()) == 0)
+   {
+      strcpy(hardwarePlatform, "host");
+   }
+   populateArgsFor_compileIntoTempObjectFiles(tempObjectFiles, gccArgs, mvArgs, testFiles, sourceFiles, hardwarePlatform);
+   forkAndRunChildProcess(compiler, (char* const*)gccArgs->args);
+
+   char tempFilePath[WINDOWS_MAX_PATH_LENGTH] = TEMP_DIR;
+   strcat(tempFilePath, "\\");
+   strcat(tempFilePath, hardwarePlatform);
+   makeDir(tempFilePath);
+   mvArgs->args[mvArgs->size - 2] = tempFilePath;
+   mvArgs->args[mvArgs->size - 1] = NULL;
+
    forkAndRunChildProcess(mv, (char* const*)mvArgs->args);
 
    freeArgList(gccArgs);
@@ -41,22 +62,19 @@ int compileIntoTempObjectFiles(
 }
 
 void populateArgsFor_compileIntoTempObjectFiles(
-    ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles)
+    ObjectFileList* tempObjectFiles, ArgList* gccArgs, ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* hardwarePlatform)
 {
-   gccArgs->args[0] = hostCompiler();
    gccArgs->args[1] = "-c";
    gccArgs->args[gccArgs->size - 1] = NULL;
 
-   mvArgs->args[0] = mv;
-   mvArgs->args[mvArgs->size - 2] = TEMP_DIR;
-   mvArgs->args[mvArgs->size - 1] = NULL;
+   // resetObjectFileList(tempObjectFiles);
 
    int argIndex = 0;
    if (testFiles != NULL)
    {
-      getArgsForTestFiles(tempObjectFiles, &argIndex, testFiles, gccArgs, mvArgs);
+      getArgsForTestFiles(tempObjectFiles, &argIndex, testFiles, gccArgs, mvArgs, hardwarePlatform);
    }
-   getArgsForSourceFiles(tempObjectFiles, &argIndex, sourceFiles, gccArgs, mvArgs);
+   getArgsForSourceFiles(tempObjectFiles, &argIndex, sourceFiles, gccArgs, mvArgs, hardwarePlatform);
 }
 
 int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
@@ -94,16 +112,25 @@ int createTestMainExecutableFromProjectDllAndGregTestDll(
    return forkAndRunChildProcess(hostCompiler(), argv);
 }
 
-int compileObjectFilesIntoProjectExecutable(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
+int compileIntoProjectExecutable(
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
 
+   if (strcmp(hostCompiler(), targetCompiler()) != 0)
+   {
+      compileIntoTempObjectFilesWithCompiler(testFiles, sourceFiles, tempObjectFiles, targetCompiler(), basePath);
+   }
+   return compileWithObjectFiles(targetCompiler(), tempObjectFiles);
+}
+
+int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
+{
    ArgList* gccArgs = malloc(sizeof(ArgList));
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + 4;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
 
-   gccArgs->args[0] = targetCompiler();
+   gccArgs->args[0] = compiler;
    int numObjectFilesFromSourceAddedToArgsList = 0;
    for (int i = 0; i < tempObjectFiles->size; i++)
    {
@@ -119,7 +146,7 @@ int compileObjectFilesIntoProjectExecutable(
    gccArgs->args[gccArgs->size - 1] = NULL;
 
    makeDir(DIST);
-   int retval = forkAndRunChildProcess(targetCompiler(), (char* const*)gccArgs->args);
+   int retval = forkAndRunChildProcess(compiler, (char* const*)gccArgs->args);
    freeArgList(gccArgs);
    if (retval == 0)
    {
@@ -132,7 +159,7 @@ int compileObjectFilesIntoProjectExecutable(
    return retval;
 }
 
-void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs)
+void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const TestFileList* testFiles, ArgList* gccArgs, ArgList* mvArgs, const char* hardwarePlatform)
 {
    char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    int gccFileArgOffset = 2;
@@ -141,7 +168,7 @@ void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const T
    while (testFileIndex < testFiles->size)
    {
       determineObjectFileName(objectFileName, testFiles->files[testFileIndex].name);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, false);
+      addTempObjectFileToList(tempObjectFiles, objectFileName, false, hardwarePlatform);
 
       gccArgs->args[*argIndex + gccFileArgOffset] = malloc(strlen(testFiles->files[testFileIndex].name));
       mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName));
@@ -153,7 +180,7 @@ void getArgsForTestFiles(ObjectFileList* tempObjectFiles, int* argIndex, const T
    }
 }
 
-void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs)
+void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const SourceFileList* sourceFiles, ArgList* gccArgs, ArgList* mvArgs, const char* hardwarePlatform)
 {
    int gccFileArgOffset = 2;
    int mvFileArgOffset = 1;
@@ -162,7 +189,7 @@ void getArgsForSourceFiles(ObjectFileList* tempObjectFiles, int* argIndex, const
    while (sourceFileIndex < sourceFiles->size)
    {
       determineObjectFileName(objectFileName, sourceFiles->files[sourceFileIndex].name);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, true);
+      addTempObjectFileToList(tempObjectFiles, objectFileName, true, hardwarePlatform);
 
       gccArgs->args[*argIndex + gccFileArgOffset] = malloc(strlen(sourceFiles->files[sourceFileIndex].name));
       mvArgs->args[*argIndex + mvFileArgOffset] = malloc(strlen(objectFileName));
@@ -203,10 +230,12 @@ void determineObjectFileName(char* objectFileName, const char* filePath)
    reverseString(objectFileName, reversedObjectFileName);
 }
 
-void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource)
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource, const char* hardwarePlatform)
 {
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    strcat(tempObjectFile, TEMP_DIR);
+   strcat(tempObjectFile, "\\");
+   strcat(tempObjectFile, hardwarePlatform);
    strcat(tempObjectFile, "\\");
    strcat(tempObjectFile, filename);
 

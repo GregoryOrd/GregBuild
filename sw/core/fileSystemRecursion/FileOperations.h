@@ -12,6 +12,7 @@ void initTestFiles(TestFileList* testFiles);
 void initSourceFiles(SourceFileList* sourceFiles);
 void freeObjectFileList(ObjectFileList* list);
 void initObjectFileList(ObjectFileList* objectFiles);
+void resetObjectFileList(ObjectFileList* list);
 void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeTestFileList(TestFileList* list);
 void freeSourceFileList(SourceFileList* list);
