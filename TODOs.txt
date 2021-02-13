@@ -39,6 +39,10 @@ Refactoring and Minor Improvements
     initGccArgsForCompileToObjectFiles()
         - Removed "r"
 0j) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
+0k) Restructure some directories. Pull a "compiler" directory out of core/application
+    - Could maybe move RunTests into core/testMainWriting and then rename it to be 
+    a more generic test module instead of specifically writing to TestMain
+    - Maybe also move CoreCommandLineOptions to core/main
 
 Major Improvements
 ---------------------
