@@ -224,6 +224,7 @@ int testFilesSize(const TestFileList* testFiles)
    {
       testFilesSize = testFiles->size;
    }
+   return testFilesSize;
 }
 
 void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler)
