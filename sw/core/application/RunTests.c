@@ -7,6 +7,7 @@
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/TestsWereRun.h"
 #include "CompileAndLinkCommands.h"
 
 int runTests()
@@ -15,7 +16,7 @@ int runTests()
    char* argv2[] = {TEMP_TEST_MAIN_EXE, NULL};
    int testResult = forkAndRunChildProcess(TEMP_TEST_MAIN_EXE, argv2);
    removeDllsFromCurrentDirectory();
-
+   setTestsWereRun();
    return testResult;
 }
 
@@ -23,34 +24,39 @@ int runTestsWithExitStatusCheck(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
-   int retval = 1;
-   int testResults = runTests();
-   if (!testResults)
+   if (tempObjectFiles->size > 0)
    {
-      retval = 0;
+      int retval = 1;
+      int testResults = runTests();
+      if (!testResults)
+      {
+         retval = 0;
+      }
+      else if (testResults == 139)
+      {
+         printf("\nSegmentation Fault While Running the Tests\n");
+         printf("Build Failed");
+      }
+      return retval;
    }
-   else if (testResults == 139)
-   {
-      printf("\nSegmentation Fault While Running the Tests\n");
-      printf("Build Failed");
-   }
-   return retval;
+
+   return 0;
 }
 
 void copyDllsToCurrentDirectory()
 {
    char* argv[] = {cp, TEMP_TEST_PROJECT_DLL, CURRENT_DIR, NULL};
-   forkAndRunChildProcess(cp, argv);
+   popenChildProcess(cp, 3, argv);
 
    char* argv1[] = {cp, LIB_GREG_TEST_DLL, CURRENT_DIR, NULL};
-   forkAndRunChildProcess(cp, argv1);
+   popenChildProcess(cp, 3, argv1);
 }
 
 void removeDllsFromCurrentDirectory()
 {
    char* argv[] = {rm, GREG_TEST_DLL, NULL};
-   forkAndRunChildProcess(rm, argv);
+   popenChildProcess(rm, 3, argv);
 
    char* argv1[] = {rm, TEST_PROJECT_DLL, NULL};
-   forkAndRunChildProcess(rm, argv1);
+   popenChildProcess(rm, 3, argv1);
 }

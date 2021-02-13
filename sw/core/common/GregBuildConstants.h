@@ -15,7 +15,7 @@
 #define TEMP_TEST_MAIN_EXE "temp/TestMain.exe"
 
 #define DIST "dist"
-#define PROJECT_EXE "dist/HelloWorld.exe"
+#define PROJECT_EXE "dist/blink.elf"
 #define SRC_DIR "src"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2
@@ -31,6 +31,8 @@
 #define BUILD_SEQUENCE_STEP_TYPE 1
 #define COMMAND_LINE_OPTION_TYPE 2
 #define HMODULE_LL_TYPE 3
+#define COMPILER_OPTION_TYPE 4
+#define LINKER_OPTION_TYPE 5
 
 #define PLUGINS_LIB_DIRECTORY "./lib/plugins"
 #define PLUGINS_LOAD_ORDER_CONFIG_FILE PLUGINS_LIB_DIRECTORY"/order"

@@ -8,10 +8,13 @@ the root directory of the repo to be built with GregBuild. Add a line to specify
 host compiler and a line to specify the target compiler. For example:
 
 ```
-host=/usr/bin/gcc.exe
-target=/opt/avr8-gnu-toolchain/bin/avr-gcc.exe
+host:/usr/bin/gcc.exe
+target:/opt/avr8-gnu-toolchain/bin/avr-gcc.exe
 ```
 
+If there are issues compiling with the host compiler, GregBuild will skip running the tests and proceed to attempting to compile with the host compiler. In the case that
+the target compiler successfully builds the program, but the tests were not run on
+the host, the final message will show as "Build Successful. NO TESTS WERE RUN".
 
 If you want to build just for the host system, set the target compiler to match
 the host compiler:
@@ -25,6 +28,19 @@ For GregBuild to use your compiler path, that compiler path needs to work with t
 will work. However, trying to use "C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe" may not work as Cygwin could give an error saying "command not found".
 
 
-## Configuring Compiler Flags
+## Configuring Compiler Options
 
-Coming soon...
+To configure compiler and linked options, add lines to compiler.config starting with 
+`compilerOption:` or `linkerOption:`. For example:
+
+```
+compilerOption:-DF_CPU=16000000UL
+compilerOption:-I/opt/atmel/ATmega_DFP/1.6.364/include
+compilerOption:-mmcu=atmega328p
+compilerOption:-Og
+
+linkerOption:-Wl,-Map="blink.map"
+linkerOption:-Wl,--start-group
+linkerOption:-Wl,-Wl,-lm
+linkerOption:-Wl,--end-group
+```

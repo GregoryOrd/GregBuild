@@ -7,8 +7,11 @@ int writeTestsToTestMain(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
-   writeToTestMainC(testFiles);
-   writeToTestMainH(testFiles);
+   if (tempObjectFiles->size > 0)
+   {
+      writeToTestMainC(testFiles);
+      writeToTestMainH(testFiles);
+   }
    return 0;
 }
 

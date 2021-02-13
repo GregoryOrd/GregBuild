@@ -15,12 +15,12 @@ int compileIntoTempObjectFiles(const TestFileList* testFiles, const SourceFileLi
 int compileIntoTempObjectFilesWithCompiler(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath);
 int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
 int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
-void populateArgsFor_compileIntoTempObjectFiles(ObjectFileList* tempObjectFiles, ArgList* argList, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* compiler, int offset);
+void populateTempObjectFileArgs(ObjectFileList* tempObjectFiles, ArgList* argList, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* compiler, int offset, int optionsOffset);
 int linkObjectFilesWithGregTestDllToMakeProjectTestDll(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 int createTestMainExecutableFromProjectDllAndGregTestDll(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 int compileIntoProjectExecutable(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles);
-void getArgsForFileList(ObjectFileList* tempObjectFiles, int* argIndex, const void* fileList, ArgList* argList, const char* compiler, int offset, int listType);
+void getArgsForFileList(ObjectFileList* tempObjectFiles, int* argIndex, const void* fileList, ArgList* argList, const char* compiler, int offset, int optionsOffset, int listType);
 
 void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
 void determineObjectFileName(char* objectFileName, const char* filePath);
@@ -36,7 +36,7 @@ void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList*
 void initMvArgsForCompilerToObjectFiles(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler);
 void tempDirPathFromCompiler(char* dest, const char* compiler);
 int listSize(const void* fileList, int listType);
-void copyTempObjectOrCFileNameIntoArgList(ArgList* argList, int* argIndex, int offset, const void* fileList, int index, char* objectFileName, int listType);
+void copyTempObjectOrCFileNameIntoArgList(ArgList* argList, int* argIndex, int offset, int optionsOffset, const void* fileList, int index, char* objectFileName, int listType);
 void strCopyUsingListType(int listType, char* dest, const void* fileList, int index);
 void printArgList(ArgList* argList);
 
