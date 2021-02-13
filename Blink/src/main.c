@@ -5,18 +5,18 @@
  * Author : gord
  */
 
-// #include <avr/io.h>
-// #include <avr/delay.h>
+#include <avr/io.h>
+#include <util/delay.h>
 
 int main(void)
 {
-   // DDRB = 0b00100001;
+   DDRB = 0b00100001;
    /* Replace with your application code */
    while (1)
    {
-      // PORTB = 0b00100001;
-      // _delay_ms(250);
-      // PORTB = 0b00000000;
-      // _delay_ms(250);
+      PORTB = 0b00100001;
+      _delay_ms(5000);
+      PORTB = 0b00000000;
+      _delay_ms(5000);
    }
 }
