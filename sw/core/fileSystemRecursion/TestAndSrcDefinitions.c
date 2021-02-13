@@ -23,11 +23,20 @@ bool isTestFile(const struct dirent* fileOrSubDirectory)
    return result;
 }
 
-bool isSourceFile(const struct dirent* fileOrSubDirectory)
+bool isSourceFile(const char* filename)
 {
    char lower[WINDOWS_MAX_PATH_LENGTH];
-   bool result =
-       (strncmp(fileOrSubDirectory->d_name, "test", 4) != 0 && (strstr(fileOrSubDirectory->d_name, ".c") != NULL || strstr(fileOrSubDirectory->d_name, ".cpp") != NULL));
+   bool isCFile = (filename[strlen(filename) - 2] == '.') && (filename[strlen(filename) - 1] == 'c');
+   bool result = (strncmp(filename, "test", 4) != 0 && isCFile);
+   return result;
+}
+
+bool isObjectFileFromSourceFile(const char* filename)
+{
+   char lower[WINDOWS_MAX_PATH_LENGTH];
+   lowerString(lower, filename);
+   bool isOFile = (filename[strlen(filename) - 2] == '.') && (filename[strlen(filename) - 1] == 'o');
+   bool result = (strncmp(lower, "test", 4) != 0 && isOFile);
    return result;
 }
 

@@ -16,7 +16,6 @@
 
 #define DIST "dist"
 #define PROJECT_EXE "dist/HelloWorld.exe"
-
 #define SRC_DIR "src"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2

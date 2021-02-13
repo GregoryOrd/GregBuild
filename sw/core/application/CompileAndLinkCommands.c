@@ -11,6 +11,7 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileOperations.h"
+#include "../fileSystemRecursion/TestAndSrcDefinitions.h"
 #include "CompilerConfiguration.h"
 
 int compileIntoTempObjectFiles(
@@ -134,7 +135,7 @@ void getArgsForFileList(ObjectFileList* tempObjectFiles, int* argIndex, const vo
    while (index < numFiles)
    {
       determineObjectFileNameUsingListType(listType, objectFileName, fileList, index);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, false, compiler);
+      addTempObjectFileToList(tempObjectFiles, objectFileName, compiler);
       copyTempObjectOrCFileNameIntoArgList(argList, argIndex, offset, fileList, index, objectFileName, listType);
 
       (*argIndex)++;
@@ -183,7 +184,7 @@ void determineObjectFileName(char* objectFileName, const char* filePath)
    reverseString(objectFileName, reversedObjectFileName);
 }
 
-void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource, const char* compiler)
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler)
 {
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    tempDirPathFromCompiler(tempObjectFile, compiler);
@@ -193,7 +194,7 @@ void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool is
    list->files = (ObjectFile*)realloc(list->files, ((list->size + 1) * sizeof(ObjectFile)));
    list->files[list->size].name = malloc(strlen(tempObjectFile));
    strcpy(list->files[list->size].name, tempObjectFile);
-   list->files[list->size].isFromSource = isFromSource;
+   list->files[list->size].isFromSource = isObjectFileFromSourceFile(filename);
    list->size++;
 }
 

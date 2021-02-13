@@ -35,7 +35,8 @@ extern "C" {
 
 bool isTestDir(const char *dirName);
 bool isTestFile(const struct dirent *fileOrSubDirectory);
-bool isSourceFile(const struct dirent *fileOrSubDirectory);
+bool isSourceFile(const char *fileOrSubDirectory);
+bool isObjectFileFromSourceFile(const char* filename);
 LineMetrics gatherLineMetrics(const char* line);
 LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line);
 LineAnalysisResults determineResults(const LineMetrics metrics, const char *line);

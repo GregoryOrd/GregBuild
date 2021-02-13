@@ -51,9 +51,12 @@ void freeObjectFileList(ObjectFileList* list)
 
 void resetObjectFileList(ObjectFileList* list)
 {
-   freeObjectFileList(list);
-   list = malloc(sizeof(ObjectFileList));
-   initObjectFileList(list);
+   for (int i = 0; i < list->size; i++)
+   {
+      list->files[i].name = "";
+      list->files[i].isFromSource = false;
+   }
+   list->size = 0;
 }
 
 void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)

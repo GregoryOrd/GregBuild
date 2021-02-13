@@ -43,7 +43,7 @@ void addToListOrEnterSubDirectoryForRecursion(
    {
       addTestFileToList(testFiles, fileOrSubDirectoryFullPath);
    }
-   else if (!isVisibleDirectory(fileOrSubDirectory) && isSourceFile(fileOrSubDirectory))
+   else if (!isVisibleDirectory(fileOrSubDirectory) && isSourceFile(fileOrSubDirectory->d_name))
    {
       addSourceFileToList(sourceFiles, fileOrSubDirectoryFullPath);
    }

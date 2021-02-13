@@ -24,7 +24,7 @@ void getArgsForFileList(ObjectFileList* tempObjectFiles, int* argIndex, const vo
 
 void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
 void determineObjectFileName(char* objectFileName, const char* filePath);
-void addTempObjectFileToList(ObjectFileList* list, const char* filename, bool isFromSource, const char* compiler);
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler);
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles);
 void freeArgList(ArgList* argList);
 int testFilesSize(const TestFileList* testFiles);
