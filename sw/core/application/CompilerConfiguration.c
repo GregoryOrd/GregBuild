@@ -43,27 +43,21 @@ int parseConfigurationFileLine(ArgList* argList)
          i++;
       }
 
-      if (equalSignReached && !newLineReached && buffer[i] != '\n')
+      if (equalSignReached)
       {
          value[i - indexOfEqualSign - 1] = buffer[i];
-      }
-
-      if (buffer[i] == '\n')
-      {
-         break;
       }
    }
 
    if (strcmp(param, "host") == 0)
    {
-      value[strlen(value) - 1] = '\0';
       strcpy(hostCompiler_, value);
+      printf("Host Compiler: %s\n", hostCompiler_);
    }
    else if (strcmp(param, "target") == 0)
    {
-      value[strlen(value) - 1] = '\0';
-      value[strlen(value) - 2] = '\0';
       strcpy(targetCompiler_, value);
+      printf("Target Compiler: %s\n", targetCompiler_);
    }
    return 0;
 }
