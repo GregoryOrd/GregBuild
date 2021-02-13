@@ -25,6 +25,13 @@ Refactoring and Minor Improvements
 0g) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
     - Some of the helpers in there right now might also belong in different files 
     in the repo or in the toolkit
+0h) Rename/change terminology from "compile" to "link" for the following function names:
+    - compileWithObjectFiles()
+    - initGccArgsForCompileTestExecutable()
+    - initGccArgsForCompileProjectExecutableFromObjectFiles()
+0i) Rename from initGccArgsForCompilerToObjectFiles() to:
+    initGccArgsForCompileToObjectFiles()
+        - Removed "r"
 
 Major Improvements
 ---------------------
@@ -40,14 +47,14 @@ Major Improvements
         - Then, we want to capability to swap out both the "host" compiler and the "target"
         compiler.
     1a) At this point in progress:
-        - The compile into project executable step is failing
-        with a no input files issue. Need to resolve this.
-        - Improve parsing of the compile.config file
-            - whitespace issues and such
-            - Also refactor because the parsing function is quite long
-2) Add ability to use certain compiler flags during both the host and target
-   compliter build sequence steps
-    - This could be resource file configurable
+        - Need to setup compiler and linker options
+        - To do this, have two ArgList* variable inside of CompilerConfigurationValues.h
+        - Then loop through this and add the options to gccArgs in CompileAndLinkCommands.c
+            - Compiler Options used in  
+                - initGccArgsForCompilerToObjectFiles()
+            - Linker options used in 
+                - initGccArgsForCompileTestExecutable()
+                - initGccArgsForCompileProjectExecutableFromObjectFiles() 
 3) Add in tests for the toolkit
 4) Add tests to this repo.
     - Use an earlier version of GregBuild and GregTest to write tests for
