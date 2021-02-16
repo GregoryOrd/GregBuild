@@ -43,6 +43,8 @@ Refactoring and Minor Improvements
     - Could maybe move RunTests into core/testMainWriting and then rename it to be 
     a more generic test module instead of specifically writing to TestMain
     - Maybe also move CoreCommandLineOptions to core/main
+0l) Don't print stuff when wrong command line option
+0m) Print thing before test section
 
 Major Improvements
 ---------------------
@@ -53,31 +55,31 @@ Major Improvements
         - Possible solution is to have the plugin from a .bat file
         that opens the AtmelStudio Command Prompt and gives it the appropriate
         inputs to issue the atprogram command
-2) Add in tests for the toolkit
-3) Add tests to this repo.
+3) Add in tests for the toolkit
+4) Add tests to this repo.
     - Use an earlier version of GregBuild and GregTest to write tests for
       future development of GregBuild and GregTest
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
         - LOL :)
     - Or actually might be better to avoid this and just use a makefile with 
     GregTest that follows the same steps as GregBuild
-4) Make GregBuild smart enough to not build files that have not been modified
+5) Make GregBuild smart enough to not build files that have not been modified
     - Will likely no to switch the default flag value for the --leave-temp command
     line option
     - Might also be good to rename to --delete-temp
     - Might also be good idea to rename temp dir to build or something
     - Will need to rename and after the functions in the build sequence and
     the functions in PluginFunctions.h
-5) Investigate multithreaded approach for execution of test cases
+6) Investigate multithreaded approach for execution of test cases
     a) Figure out when the dataset is large enough that multithreading is worth it
     b) Implement logic to swtich between single and multithreaded approach based on this information
-6) Can we also use a multithreaded solution for gathering the test and source files?
+7) Can we also use a multithreaded solution for gathering the test and source files?
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
-7) Add ability to build from deeper withing the src file tree
+8) Add ability to build from deeper withing the src file tree
     - Make SRC_DIR constant configurable
-8) Documentation Review and Improvements
-9) Verify support for different platforms
-10) Add a code ananlyzer/profiler
+9) Documentation Review and Improvements
+10) Verify support for different platforms
+11) Add a code ananlyzer/profiler
     - Valgrind might be a solution in this area
-11) Add a debug build ability
+12) Add a debug build ability
