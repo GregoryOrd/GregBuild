@@ -50,9 +50,18 @@ int compileIntoTempObjectFilesWithCompiler(
 
 int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
+   LinkedList* options;
+   if (strcmp(compiler, hostCompiler()) == 0)
+   {
+      options = hostCompilerOptions();
+   }
+   else
+   {
+      options = targetCompilerOptions();
+   }
    int numTestFiles = testFilesSize(testFiles);
    initGccArgsForCompilerToObjectFiles(gccArgs, sourceFiles, numTestFiles, compiler);
-   populateTempObjectFileArgs(tempObjectFiles, gccArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, compilerOptions()->size);
+   populateTempObjectFileArgs(tempObjectFiles, gccArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, options->size);
    return popenChildProcess(compiler, gccArgs->size, (char* const*)gccArgs->args);
 }
 
@@ -259,7 +268,15 @@ int testFilesSize(const TestFileList* testFiles)
 
 void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
-   LinkedList* options = linkerOptions();
+   LinkedList* options;
+   if (strcmp(compiler, hostCompiler()) == 0)
+   {
+      options = hostLinkerOptions();
+   }
+   else
+   {
+      options = targetLinkerOptions();
+   }
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
    gccArgs->args[0] = compiler;
@@ -290,7 +307,15 @@ void fileArgsForCompileProjectExecutable(ArgList* gccArgs, const ObjectFileList*
 
 void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
-   LinkedList* options = linkerOptions();
+   LinkedList* options;
+   if (strcmp(compiler, hostCompiler()) == 0)
+   {
+      options = hostLinkerOptions();
+   }
+   else
+   {
+      options = targetLinkerOptions();
+   }
    gccArgs->size = tempObjectFiles->size + options->size + 7;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
    for (int i = 0; i < gccArgs->size; i++)
@@ -323,7 +348,15 @@ void fileArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* te
 
 void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
 {
-   LinkedList* options = compilerOptions();
+   LinkedList* options;
+   if (strcmp(compiler, hostCompiler()) == 0)
+   {
+      options = hostCompilerOptions();
+   }
+   else
+   {
+      options = targetCompilerOptions();
+   }
    gccArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
    for (int i = 0; i < gccArgs->size; i++)

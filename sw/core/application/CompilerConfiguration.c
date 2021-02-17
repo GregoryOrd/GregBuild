@@ -13,10 +13,15 @@
 
 int readCompilerConfigurationFromFile()
 {
-   compilerOptions_ = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(compilerOptions_, COMPILER_OPTION_TYPE);
-   linkerOptions_ = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(linkerOptions_, LINKER_OPTION_TYPE);
+   hostCompilerOptions_ = malloc(sizeof(LinkedList));
+   targetCompilerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
+   initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
+
+   hostLinkerOptions_ = malloc(sizeof(LinkedList));
+   targetLinkerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
+   initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
 
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 0;
@@ -66,11 +71,29 @@ int parseConfigurationFileLine(ArgList* argList)
    }
    else if (strcmp(param, "compilerOption") == 0)
    {
-      append_string_ll(compilerOptions_, value, COMPILER_OPTION_TYPE);
+      append_string_ll(hostCompilerOptions_, value, COMPILER_OPTION_TYPE);
+      append_string_ll(targetCompilerOptions_, value, COMPILER_OPTION_TYPE);
+   }
+   else if (strcmp(param, "hostCompilerOption") == 0)
+   {
+      append_string_ll(hostCompilerOptions_, value, COMPILER_OPTION_TYPE);
+   }
+   else if (strcmp(param, "targetCompilerOption") == 0)
+   {
+      append_string_ll(targetCompilerOptions_, value, COMPILER_OPTION_TYPE);
    }
    else if (strcmp(param, "linkerOption") == 0)
    {
-      append_string_ll(linkerOptions_, value, LINKER_OPTION_TYPE);
+      append_string_ll(hostLinkerOptions_, value, LINKER_OPTION_TYPE);
+      append_string_ll(targetLinkerOptions_, value, LINKER_OPTION_TYPE);
+   }
+   else if (strcmp(param, "hostLinkerOption") == 0)
+   {
+      append_string_ll(hostLinkerOptions_, value, LINKER_OPTION_TYPE);
+   }
+   else if (strcmp(param, "targetLinkerOption") == 0)
+   {
+      append_string_ll(targetLinkerOptions_, value, LINKER_OPTION_TYPE);
    }
    return 0;
 }
@@ -79,22 +102,42 @@ char* hostCompiler() { return hostCompiler_; }
 
 char* targetCompiler() { return targetCompiler_; }
 
-LinkedList* compilerOptions()
+LinkedList* hostCompilerOptions()
 {
-   if (compilerOptions_ == NULL)
+   if (hostCompilerOptions_ == NULL)
    {
-      compilerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(compilerOptions_, COMPILER_OPTION_TYPE);
+      hostCompilerOptions_ = malloc(sizeof(LinkedList));
+      initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
    }
-   return compilerOptions_;
+   return hostCompilerOptions_;
 }
 
-LinkedList* linkerOptions()
+LinkedList* targetCompilerOptions()
 {
-   if (linkerOptions_ == NULL)
+   if (targetCompilerOptions_ == NULL)
    {
-      linkerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(linkerOptions_, LINKER_OPTION_TYPE);
+      targetCompilerOptions_ = malloc(sizeof(LinkedList));
+      initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
    }
-   return linkerOptions_;
+   return targetCompilerOptions_;
+}
+
+LinkedList* hostLinkerOptions()
+{
+   if (hostLinkerOptions_ == NULL)
+   {
+      hostLinkerOptions_ = malloc(sizeof(LinkedList));
+      initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
+   }
+   return hostLinkerOptions_;
+}
+
+LinkedList* targetLinkerOptions()
+{
+   if (targetLinkerOptions_ == NULL)
+   {
+      targetLinkerOptions_ = malloc(sizeof(LinkedList));
+      initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
+   }
+   return targetLinkerOptions_;
 }

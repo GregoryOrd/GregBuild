@@ -15,7 +15,7 @@
 #define TEMP_TEST_MAIN_EXE "temp/TestMain.exe"
 
 #define DIST "dist"
-#define PROJECT_EXE "dist/blink.elf"
+#define PROJECT_EXE "dist/HelloWorld.exe"
 #define SRC_DIR "src"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2

@@ -49,6 +49,14 @@ Refactoring and Minor Improvements
 Major Improvements
 ---------------------
 
+0) Exlude the projects main function from TestProjectDll
+    - Programs should have main call other things
+    - Splitting this out will allow us to organize source files
+    in appropriate way for testing.
+        - Can split things out in ways such that we do not 
+        need to test things like _delay_ms which we know 
+        will work, but will cause issues on the host system where
+        the tests are being run.
 1) Make the PROJECT_EXE variable configurable
 2) Add a plugin for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 

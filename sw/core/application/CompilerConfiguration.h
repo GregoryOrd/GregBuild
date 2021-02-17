@@ -14,8 +14,10 @@ extern "C"
    char* hostCompiler();
    char* targetCompiler();
 
-   LinkedList* compilerOptions();
-   LinkedList* linkerOptions();
+   LinkedList* hostCompilerOptions();
+   LinkedList* targetCompilerOptions();
+   LinkedList* hostLinkerOptions();
+   LinkedList* targetLinkerOptions();
 
 #ifdef __cplusplus
 }

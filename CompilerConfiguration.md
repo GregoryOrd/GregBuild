@@ -44,3 +44,21 @@ linkerOption:-Wl,--start-group
 linkerOption:-Wl,-Wl,-lm
 linkerOption:-Wl,--end-group
 ```
+
+The above entries will add compiler and linker options that are used when compiling
+and linking with both the host and the target compilers. 
+
+To add an option
+for just the host compiler or linker, use `hostCompilerOption` or `hostLinkerOption`.
+For just the target, use `targetCompilerOption ` or `targetLinkerOption`. For example:
+
+```
+hostCompilerOption:-D__AVR_ATmega328P__
+hostCompilerOption:-D__DELAY_BACKWARD_COMPATIBLE__
+
+hostLinkerOption:<Some Linker Option>
+
+targetCompilerOption:-mmcu=atmega328p
+
+targetLinkerOption:<Some Other Linker Option>
+```
