@@ -79,7 +79,7 @@ void checkForMainFunction(const char* pathToSourceFile)
    argList->size = 1;
    argList->args = malloc(sizeof(void*));
    argList->args[0] = malloc(WINDOWS_MAX_PATH_LENGTH);
-   argList->args[0] = pathToSourceFile;
+   argList->args[0] = (void*)pathToSourceFile;
    readFileWithActionAfterEachLine(pathToSourceFile, argList, markMainFunctionLine);
 }
 

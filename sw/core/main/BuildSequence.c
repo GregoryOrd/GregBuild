@@ -34,6 +34,9 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
       bool flagVal = flagValueForOption_ll(options, step->option->optionText, COMMAND_LINE_OPTION_TYPE);
       if (!error && flagVal)
       {
+         printf("\n===================================================================\n");
+         printf("%s\n", step->functionName);
+         printf("====================================================================\n");
          error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
       }
    }

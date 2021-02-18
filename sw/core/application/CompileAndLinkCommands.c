@@ -284,7 +284,7 @@ void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, con
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 1] = at_ll(options, LINKER_OPTION_TYPE, j);
+      gccArgs->args[j + 1] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
    }
 
    gccArgs->args[gccArgs->size - 3] = "-o";
@@ -333,7 +333,7 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 4] = at_ll(options, LINKER_OPTION_TYPE, j);
+      gccArgs->args[j + 4] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
    }
 
    gccArgs->args[gccArgs->size - 3] = "-L./";
@@ -381,7 +381,7 @@ void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList*
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 2] = at_ll(options, COMPILER_OPTION_TYPE, j);
+      gccArgs->args[j + 2] = (void*)at_ll(options, COMPILER_OPTION_TYPE, j);
    }
 
    gccArgs->args[gccArgs->size - 1] = NULL;
