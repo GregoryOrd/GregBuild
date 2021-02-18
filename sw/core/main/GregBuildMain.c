@@ -43,8 +43,6 @@ int main(int argc, const char* argv[])
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   printf("Main Function File: %s\n", mainFunctionFile());
-
    // Since each of the CommandLineOptions in optionsList is part of a BuildSequenceStep
    // in buildSequence, we do not need a call to freeCommandLineOptions(optionsList).
    freeBuildSequence(buildSequence);

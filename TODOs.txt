@@ -46,19 +46,17 @@ Refactoring and Minor Improvements
 0l) Don't print stuff when wrong command line option
 0m) Print thing before test section
 0n) Define better definition of the main function header line in FileAndTestCaseGatherer
+0o) Combine TestsWereRun and MainFunctionFile into a global variable module
+    - Consider moving some of the list variables that are created in
+    main() into this global variable module as well
+    - Maybe some of the future configuration stuff can live here as wel
+0p) Add message when no tests are found
 
 Major Improvements
 ---------------------
 
 0) Exlude the projects main function from TestProjectDll
-    - Programs should have main call other things
-    - Splitting this out will allow us to organize source files
-    in appropriate way for testing.
-        - Can split things out in ways such that we do not 
-        need to test things like _delay_ms which we know 
-        will work, but will cause issues on the host system where
-        the tests are being run.
-    - Combine TestsWereRun and MainFunctionFile into a global variable module
+    - Make the resource file configurable
 1) Make the PROJECT_EXE variable configurable
 2) Add a plugin for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
@@ -93,3 +91,6 @@ Major Improvements
 11) Add a code ananlyzer/profiler
     - Valgrind might be a solution in this area
 12) Add a debug build ability
+13) Add a verbose output option
+    - Add attributes to BuildSequenceStep that can be used to influence how
+    to execution of the step is displayed to the user on the console interface

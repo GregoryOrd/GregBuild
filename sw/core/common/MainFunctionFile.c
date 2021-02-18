@@ -2,8 +2,27 @@
 
 #include <string.h>
 
+#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "MainFunctionFile_Value.h"
 
-const char* mainFunctionFile() { return mainFunctionFilePath_; }
+void setMainFunctionFile(const char* filepath)
+{
+   strcpy(mainFunctionFilePath_, filepath);
+   char temp[WINDOWS_MAX_PATH_LENGTH] = "";
+   for (int i = strlen(filepath) - 1; i > -1; i--)
+   {
+      int index = strlen(filepath) - 1 - i;
+      temp[index] = filepath[i];
+      if (filepath[i] == '\\' || filepath[i] == '/')
+      {
+         break;
+      }
+   }
+   reverseString(mainFunctionFileName_, temp);
+   strcpy(mainFunctionObjectFileName_, mainFunctionFileName_);
+   mainFunctionObjectFileName_[strlen(mainFunctionObjectFileName_) - 1] = 'o';
+}
 
-void setMainFunctionFile(const char* filepath) { strcpy(mainFunctionFilePath_, filepath); }
+const char* mainFunctionFilePath() { return mainFunctionFilePath_; }
+const char* mainFunctionFileName() { return mainFunctionFileName_; }
+const char* mainFunctionObjectFileName() { return mainFunctionObjectFileName_; }

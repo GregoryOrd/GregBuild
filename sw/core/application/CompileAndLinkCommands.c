@@ -11,6 +11,7 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/MainFunctionFile.h"
 #include "../common/TestsWereRun.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/TestAndSrcDefinitions.h"
@@ -316,7 +317,9 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
    {
       options = targetLinkerOptions();
    }
-   gccArgs->size = tempObjectFiles->size + options->size + 7;
+   // The +7 is for the known args below
+   // The -1 is to not include the main function .o file
+   gccArgs->size = tempObjectFiles->size + options->size + 7 - 1;
    gccArgs->args = malloc(gccArgs->size * sizeof(void*));
    for (int i = 0; i < gccArgs->size; i++)
    {
@@ -340,9 +343,19 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
 
 void fileArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles)
 {
+   int offset = 4;
+   bool atLeastOneFileAdded = false;
    for (int i = 0; i < tempObjectFiles->size; i++)
    {
-      gccArgs->args[i + 4] = (&tempObjectFiles->files[i])->name;
+      if (strstr((&tempObjectFiles->files[i])->name, mainFunctionObjectFileName()))
+      {
+         i++;
+         offset--;
+      }
+      if (i < tempObjectFiles->size)
+      {
+         gccArgs->args[i + offset] = (&tempObjectFiles->files[i])->name;
+      }
    }
 }
 
