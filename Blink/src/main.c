@@ -8,8 +8,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-int main(void)
-{
+int main(void){
    DDRB = 0b00100001;
    /* Replace with your application code */
    while (1)

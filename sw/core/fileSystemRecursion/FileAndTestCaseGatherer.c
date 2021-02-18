@@ -9,6 +9,7 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
+#include "../common/MainFunctionFile.h"
 #include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
 
@@ -46,6 +47,7 @@ void addToListOrEnterSubDirectoryForRecursion(
    else if (!isVisibleDirectory(fileOrSubDirectory) && isSourceFile(fileOrSubDirectory->d_name))
    {
       addSourceFileToList(sourceFiles, fileOrSubDirectoryFullPath);
+      checkForMainFunction(fileOrSubDirectoryFullPath);
    }
    else if (isVisibleDirectory(fileOrSubDirectory))
    {
@@ -69,6 +71,85 @@ void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
       strcpy(list->files[list->size].name, pathToSourceFile);
       list->size++;
    }
+}
+
+void checkForMainFunction(const char* pathToSourceFile)
+{
+   ArgList* argList = malloc(sizeof(ArgList));
+   argList->size = 1;
+   argList->args = malloc(sizeof(void*));
+   argList->args[0] = malloc(WINDOWS_MAX_PATH_LENGTH);
+   argList->args[0] = pathToSourceFile;
+   readFileWithActionAfterEachLine(pathToSourceFile, argList, markMainFunctionLine);
+}
+
+int markMainFunctionLine(ArgList* argList)
+{
+   char filepath[MAX_LINE_LENGTH] = "";
+   strcpy(filepath, (char*)argList->args[0]);
+
+   char buffer[MAX_LINE_LENGTH] = "";
+   strcpy(buffer, (char*)argList->args[argList->size - 1]);
+
+   const char* mainFunctionVariants[48] = {
+       "void main()",
+       "void main(){",
+       "void main(int argc, char* argv[])",
+       "void main(int argc, char* argv[]){",
+       "void main(int argc, char** argv)",
+       "void main(int argc, char** argv){",
+       "void main(int argc, const char* argv[])",
+       "void main(int argc, const char* argv[]){",
+       "void main(int argc, const char** argv)",
+       "void main(int argc, const char** argv){",
+       "void main(void)",
+       "void main(void){"
+       "int main()",
+       "int main(){",
+       "int main(int argc, char* argv[])",
+       "int main(int argc, char* argv[]){",
+       "int main(int argc, char** argv)",
+       "int main(int argc, char** argv){",
+       "int main(int argc, const char* argv[])",
+       "int main(int argc, const char* argv[]){",
+       "int main(int argc, const char** argv)",
+       "int main(int argc, const char** argv){",
+       "int main(void)",
+       "int main(void){",
+       "void main ()",
+       "void main (){",
+       "void main (int argc, char* argv[])",
+       "void main (int argc, char* argv[]){",
+       "void main (int argc, char** argv)",
+       "void main (int argc, char** argv){",
+       "void main (int argc, const char* argv[])",
+       "void main (int argc, const char* argv[]){",
+       "void main (int argc, const char** argv)",
+       "void main (int argc, const char** argv){",
+       "void main (void)",
+       "void main (void){"
+       "int main ()",
+       "int main (){",
+       "int main (int argc, char* argv[])",
+       "int main (int argc, char* argv[]){",
+       "int main (int argc, char** argv)",
+       "int main (int argc, char** argv){",
+       "int main (int argc, const char* argv[])",
+       "int main (int argc, const char* argv[]){",
+       "int main (int argc, const char** argv)",
+       "int main (int argc, const char** argv){",
+       "int main (void)",
+       "int main (void){"};
+
+   for (int i = 0; i < 46; i++)
+   {
+      const char* variant = mainFunctionVariants[i];
+      if (strcmp(variant, buffer) == 0)
+      {
+         setMainFunctionFile(filepath);
+      }
+   }
+   return 0;
 }
 
 void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)

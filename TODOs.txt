@@ -45,6 +45,7 @@ Refactoring and Minor Improvements
     - Maybe also move CoreCommandLineOptions to core/main
 0l) Don't print stuff when wrong command line option
 0m) Print thing before test section
+0n) Define better definition of the main function header line in FileAndTestCaseGatherer
 
 Major Improvements
 ---------------------
@@ -57,6 +58,7 @@ Major Improvements
         need to test things like _delay_ms which we know 
         will work, but will cause issues on the host system where
         the tests are being run.
+    - Combine TestsWereRun and MainFunctionFile into a global variable module
 1) Make the PROJECT_EXE variable configurable
 2) Add a plugin for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 

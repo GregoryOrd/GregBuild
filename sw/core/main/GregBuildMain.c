@@ -6,6 +6,7 @@
 #include "../application/RunTests.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/MainFunctionFile.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../pluginLoader/PluginLoader.h"
@@ -41,6 +42,8 @@ int main(int argc, const char* argv[])
    processCommandLineOptions(optionList, argc, argv);
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
+
+   printf("Main Function File: %s\n", mainFunctionFile());
 
    // Since each of the CommandLineOptions in optionsList is part of a BuildSequenceStep
    // in buildSequence, we do not need a call to freeCommandLineOptions(optionsList).
