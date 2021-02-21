@@ -9,6 +9,7 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
+#include "../common/GregBuildConstants.h"
 #include "../common/MainFunctionFile.h"
 #include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
