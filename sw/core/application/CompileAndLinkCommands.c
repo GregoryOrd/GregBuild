@@ -228,7 +228,7 @@ void addTempObjectFileToList(ObjectFileList* list, const char* filename, const c
 {
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    tempDirPathFromCompiler(tempObjectFile, compiler);
-   strcat(tempObjectFile, "/");
+   strcat(tempObjectFile, DELIMITER);
    strcat(tempObjectFile, filename);
 
    list->files = (ObjectFile*)realloc(list->files, ((list->size + 1) * sizeof(ObjectFile)));
@@ -414,7 +414,7 @@ void tempDirPathFromCompiler(char* dest, const char* compiler)
 
    clearString(dest);
    strcpy(dest, TEMP_DIR);
-   strcat(dest, "/");
+   strcat(dest, DELIMITER);
    strcat(dest, hardwarePlatform);
 }
 

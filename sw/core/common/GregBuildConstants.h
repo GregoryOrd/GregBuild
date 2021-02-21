@@ -44,4 +44,6 @@
 #define PLUGINS_LIB_DIRECTORY "./lib/plugins"
 #define PLUGINS_LOAD_ORDER_CONFIG_FILE PLUGINS_LIB_DIRECTORY"/order"
 
+#define DELIMITER "/"
+
 #endif

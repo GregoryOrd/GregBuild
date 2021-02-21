@@ -58,7 +58,7 @@ void addToListOrEnterSubDirectoryForRecursion(
 void copyFileOrSubDirectoryNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
 {
    strcpy(path, basePath);
-   strcat(path, "/");
+   strcat(path, DELIMITER);
    strcat(path, fileOrSubDirectoryName);
 }
 
