@@ -51,6 +51,7 @@ Refactoring and Minor Improvements
     main() into this global variable module as well
     - Maybe some of the future configuration stuff can live here as wel
 0p) Add message when no tests are found
+0q) Plugin loader handle case of no order file present
 
 Major Improvements
 ---------------------
