@@ -232,7 +232,7 @@ void addTempObjectFileToList(ObjectFileList* list, const char* filename, const c
    strcat(tempObjectFile, filename);
 
    list->files = (ObjectFile*)realloc(list->files, ((list->size + 1) * sizeof(ObjectFile)));
-   list->files[list->size].name = malloc(strlen(tempObjectFile));
+   list->files[list->size].name = calloc(strlen(tempObjectFile), sizeof(char));
    strcpy(list->files[list->size].name, tempObjectFile);
    list->files[list->size].isFromSource = isObjectFileFromSourceFile(filename);
    list->size++;
@@ -279,7 +279,7 @@ void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, con
       options = targetLinkerOptions();
    }
    gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
-   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
+   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
    gccArgs->args[0] = compiler;
 
    for (int j = 0; j < options->size; j++)
@@ -320,10 +320,10 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
    // The +7 is for the known args below
    // The -1 is to not include the main function .o file
    gccArgs->size = tempObjectFiles->size + options->size + 7 - 1;
-   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
+   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
    for (int i = 0; i < gccArgs->size; i++)
    {
-      gccArgs->args[i] = malloc(WINDOWS_MAX_PATH_LENGTH);
+      gccArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
    gccArgs->args[0] = compiler;
@@ -371,10 +371,10 @@ void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList*
       options = targetCompilerOptions();
    }
    gccArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
-   gccArgs->args = malloc(gccArgs->size * sizeof(void*));
+   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
    for (int i = 0; i < gccArgs->size; i++)
    {
-      gccArgs->args[i] = malloc(WINDOWS_MAX_PATH_LENGTH);
+      gccArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
    gccArgs->args[0] = compiler;
    gccArgs->args[1] = "-c";
@@ -390,11 +390,11 @@ void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList*
 void initMvArgsForCompilerToObjectFiles(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
 {
    mvArgs->size = numTestFiles + sourceFiles->size + 3;
-   mvArgs->args = malloc(mvArgs->size * sizeof(void*));
+   mvArgs->args = calloc(mvArgs->size, sizeof(void*));
    mvArgs->args[0] = mv;
    for (int i = 1; i < mvArgs->size; i++)
    {
-      mvArgs->args[i] = malloc(sizeof(char*));
+      mvArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
    char tempFilePath[WINDOWS_MAX_PATH_LENGTH] = "";

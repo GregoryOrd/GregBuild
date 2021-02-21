@@ -67,7 +67,7 @@ void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
    if (list != NULL)
    {
       list->files = (SourceFile*)realloc(list->files, ((list->size + 1) * sizeof(SourceFile)));
-      list->files[list->size].name = malloc(strlen(pathToSourceFile));
+      list->files[list->size].name = calloc(strlen(pathToSourceFile), sizeof(char));
       strcpy(list->files[list->size].name, pathToSourceFile);
       list->size++;
    }
@@ -78,7 +78,7 @@ void checkForMainFunction(const char* pathToSourceFile)
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 1;
    argList->args = malloc(sizeof(void*));
-   argList->args[0] = malloc(WINDOWS_MAX_PATH_LENGTH);
+   argList->args[0] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    argList->args[0] = (void*)pathToSourceFile;
    readFileWithActionAfterEachLine(pathToSourceFile, argList, markMainFunctionLine);
 }
@@ -157,7 +157,7 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
    if (testFileList != NULL)
    {
       testFileList->files = (TestFile*)realloc(testFileList->files, (testFileList->size + 1) * sizeof(TestFile));
-      testFileList->files[testFileList->size].name = malloc(strlen(pathToTestFile));
+      testFileList->files[testFileList->size].name = calloc(strlen(pathToTestFile), sizeof(char));
       testFileList->files[testFileList->size].numTestCases = 0;
       testFileList->files[testFileList->size].cases = malloc(sizeof(TestCase));
       strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
@@ -172,7 +172,7 @@ void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)
 {
    ArgList* argsList = malloc(sizeof(ArgList));
    argsList->size = 1;
-   argsList->args = malloc(argsList->size * sizeof(char*));
+   argsList->args = calloc(argsList->size, sizeof(char*));
    argsList->args[0] = (void*)testFileList;
 
    readFileWithActionAfterEachLine(pathToTestFile, argsList, addIfIsSingleTestCase);
@@ -198,7 +198,7 @@ void addSingleTestCaseToList(void* args[])
 
    TestFile* testFile = &testFileList->files[testFileList->size];
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
-   testFile->cases[testFile->numTestCases].testName = malloc(strlen(buffer));
+   testFile->cases[testFile->numTestCases].testName = calloc(strlen(buffer), sizeof(char));
 
    strcpy(testFile->cases[testFile->numTestCases].testName, buffer);
    testFile->numTestCases++;

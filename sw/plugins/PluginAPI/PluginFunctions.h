@@ -96,7 +96,7 @@ typedef struct BuildSequenceStep {
 
 // To return this BuildSequenceStep*, plugins are expected to dynamically
 // allocate
-// memory with a malloc call. GregBuild core will then take care freeing this
+// memory with a malloc/calloc call. GregBuild core will then take care freeing this
 // memory.
 // For example, a plugin implementation of one of these functions should look as
 // shown below.
@@ -108,9 +108,9 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    BuildSequenceStep* step =
    malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
-   step->option->optionText = malloc(WINDOWS_MAX_PATH_LENGTH);
-   step->option->description = malloc(WINDOWS_MAX_PATH_LENGTH);
-   step->functionName = malloc(WINDOWS_MAX_PATH_LENGTH);
+   step->option->optionText = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   step->option->description = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   step->functionName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
 
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name

@@ -20,7 +20,7 @@ typedef BuildSequenceStep* (*PluginFunction)();
 void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginModules, LinkedList* commandLineOptions)
 {
    int numCoreBuildSequenceSteps = buildSequence->size;
-   BuildSequenceStep* coreBuildSequence = malloc(buildSequence->size * sizeof(BuildSequenceStep));
+   BuildSequenceStep* coreBuildSequence = calloc(buildSequence->size, sizeof(BuildSequenceStep));
    storeCurrentBuildSequenceIntoCoreBuildSequenceList(coreBuildSequence, buildSequence);
    searchPluginsAndAddStepsToBuildSequence(coreBuildSequence, numCoreBuildSequenceSteps, buildSequence, list, pluginModules, commandLineOptions);
    freeCoreBuildSequenceList(coreBuildSequence, numCoreBuildSequenceSteps);

@@ -8,10 +8,10 @@ BuildSequenceStep* before_loadTestsAndSourceFiles()
 {
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
-   step->option->optionText = malloc(strlen("--time"));
-   step->option->description = malloc(strlen("TimeTrackingPlugin"));
+   step->option->optionText = calloc(strlen("--time"), sizeof(char));
+   step->option->description = calloc(strlen("TimeTrackingPlugin"), sizeof(char));
    step->function_ptr = printHelloWorld;
-   step->functionName = malloc(strlen("printHelloWorld"));
+   step->functionName = calloc(strlen("printHelloWorld"), sizeof(char));
    strcpy(step->functionName, "printHelloWorld");
    strcpy(step->option->optionText, "--time");
    strcpy(step->option->description, "TimeTrackingPlugin");

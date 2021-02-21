@@ -31,21 +31,22 @@ int main(int argc, const char* argv[])
    }
    initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
 
-   LinkedList* buildSequence = malloc(sizeof(LinkedList));
-   initBuildSequence(buildSequence);
+   // LinkedList* buildSequence = malloc(sizeof(LinkedList));
+   // initBuildSequence(buildSequence);
 
-   initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
-   initPluginList(plugins);
-   loadPlugins(plugins, pluginModules, PLUGINS_LIB_DIRECTORY);
-   orderPluginsToMatchConfigFile(plugins, pluginModules);
-   processPlugins(buildSequence, plugins, pluginModules, optionList);
-   processCommandLineOptions(optionList, argc, argv);
+   // initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
+   // initPluginList(plugins);
+   // loadPlugins(plugins, pluginModules, PLUGINS_LIB_DIRECTORY);
+   // orderPluginsToMatchConfigFile(plugins, pluginModules);
+   // processPlugins(buildSequence, plugins, pluginModules, optionList);
+   // processCommandLineOptions(optionList, argc, argv);
 
-   int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
+   int error = 0;
+   // int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
    // Since each of the CommandLineOptions in optionsList is part of a BuildSequenceStep
    // in buildSequence, we do not need a call to freeCommandLineOptions(optionsList).
-   freeBuildSequence(buildSequence);
+   // freeBuildSequence(buildSequence);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
    return error;

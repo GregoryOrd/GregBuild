@@ -108,7 +108,7 @@ void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pl
    if (list != NULL && pluginModules != NULL)
    {
       list->plugins = (Plugin*)realloc(list->plugins, ((list->size + 1) * sizeof(Plugin)));
-      list->plugins[list->size].name = malloc(strlen(pluginPath));
+      list->plugins[list->size].name = calloc(strlen(pluginPath), sizeof(char));
       strcpy(list->plugins[list->size].name, pluginPath);
       list->size++;
 
@@ -143,7 +143,7 @@ void readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, Plu
 {
    ArgList* argsList = malloc(sizeof(ArgList));
    argsList->size = 3;
-   argsList->args = malloc(argsList->size * sizeof(char*));
+   argsList->args = calloc(argsList->size, sizeof(char*));
    argsList->args[0] = (void*)list;
    argsList->args[1] = (void*)tempPluginList;
    argsList->args[2] = (void*)temppluginModules;

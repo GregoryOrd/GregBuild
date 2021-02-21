@@ -33,8 +33,8 @@ void setCoreCommandLineOptions(LinkedList* list)
 
 void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, bool flagValue)
 {
-   option->optionText = malloc(strlen(optionText));
-   option->description = malloc(strlen(description));
+   option->optionText = calloc(strlen(optionText), sizeof(char));
+   option->description = calloc(strlen(description), sizeof(char));
 
    strcpy(option->optionText, optionText);
    strcpy(option->description, description);
