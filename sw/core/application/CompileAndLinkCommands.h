@@ -16,8 +16,8 @@ int compileIntoTempObjectFilesWithCompiler(const TestFileList* testFiles, const 
 int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
 int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
 void populateTempObjectFileArgs(ObjectFileList* tempObjectFiles, ArgList* argList, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* compiler, int offset, int optionsOffset);
-int linkObjectFilesWithGregTestDllToMakeProjectTestDll(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
-int createTestMainExecutableFromProjectDllAndGregTestDll(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
+int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
+int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 int compileIntoProjectExecutable(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles);
 void getArgsForFileList(ObjectFileList* tempObjectFiles, int* argIndex, const void* fileList, ArgList* argList, const char* compiler, int offset, int optionsOffset, int listType);

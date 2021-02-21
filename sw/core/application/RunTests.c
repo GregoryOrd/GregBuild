@@ -45,18 +45,18 @@ int runTestsWithExitStatusCheck(
 
 void copyDllsToCurrentDirectory()
 {
-   char* argv[] = {cp, TEMP_TEST_PROJECT_DLL, CURRENT_DIR, NULL};
+   char* argv[] = {cp, TEMP_TEST_PROJECT_LIBRARY, CURRENT_DIR, NULL};
    popenChildProcess(cp, 3, argv);
 
-   char* argv1[] = {cp, LIB_GREG_TEST_DLL, CURRENT_DIR, NULL};
+   char* argv1[] = {cp, LIB_GREG_TEST_LIBRARY, CURRENT_DIR, NULL};
    popenChildProcess(cp, 3, argv1);
 }
 
 void removeDllsFromCurrentDirectory()
 {
-   char* argv[] = {rm, GREG_TEST_DLL, NULL};
+   char* argv[] = {rm, GREG_TEST_LIBRARY, NULL};
    popenChildProcess(rm, 3, argv);
 
-   char* argv1[] = {rm, TEST_PROJECT_DLL, NULL};
+   char* argv1[] = {rm, TEST_PROJECT_LIBRARY, NULL};
    popenChildProcess(rm, 3, argv1);
 }

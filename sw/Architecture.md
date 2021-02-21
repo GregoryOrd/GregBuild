@@ -2,9 +2,9 @@
 
 The GregBuild works by using the fileSystemRecursion module to search through the file system recursively to find test and source files. Once all of the source files, test files, and test cases are identified, GregBuild uses the testMainWriting module to write the temp/TestMain.c and temp/TestMain.h files. The temp/TestMain.c file holds a function pointer for each test case that was identified in the repo and eventually make calls to those function pointers to execute each test case. 
 
-After writing the temp/TestMain.c and temp/testMain.h files, GregBuild compiles all of the found source and test files into object (.o) files and then links them into the temp/TestProject.dll library. The TestMain.c file is then compiled and linked with the TestProject.dll and GregTest.dll libraries to create the temp/TestMain.exe executable.
+After writing the temp/TestMain.c and temp/testMain.h files, GregBuild compiles all of the found source and test files into object (.o) files and then links them into the temp/TestProject.dll/TestProject.so library. The TestMain.c file is then compiled and linked with the TestProject.dll/.so and GregTest.dll/.so libraries to create the temp/TestMain.exe executable.
 
-Once GregBuild creates this TestMain executable, it runs the executable. Pass and fail messages for each test case is handled by the functions inside GregTest.dll and the TestMain executable exit status indicates if the tests passed or failed. If this exit status indicates all tests passed, GregBuild links the .o files (in the "temp" directory) that came from source files into
+Once GregBuild creates this TestMain executable, it runs the executable. Pass and fail messages for each test case is handled by the functions inside GregTest.dll/.so and the TestMain executable exit status indicates if the tests passed or failed. If this exit status indicates all tests passed, GregBuild links the .o files (in the "temp" directory) that came from source files into
 the final project executable. It places this executable inside the "dist" directory, then deletes the "temp" directory.
 
 ## Configurability

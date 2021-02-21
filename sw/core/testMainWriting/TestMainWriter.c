@@ -18,7 +18,7 @@ int writeTestsToTestMain(
 void writeToTestMainC(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainC(testFiles->totalNumTestCases);
-   char contents[size];
+   char contents[WINDOWS_MAX_PATH_LENGTH];
    contents[0] = '\0';
    populateTestMainCContents(contents, testFiles);
    char testMainC[WINDOWS_MAX_PATH_LENGTH] = TEMP_DIR;
@@ -110,11 +110,11 @@ void addTestMainCResultsCheckAndExits(char* main)
 void writeToTestMainH(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainH(testFiles->totalNumTestCases);
-   char contents[size];
+   char contents[WINDOWS_MAX_PATH_LENGTH];
    contents[0] = '\0';
    writeTestMainHGuardsAndDllDefine(contents);
-   writeTestMainHGregTestDllImports(contents);
-   writeTestMainHTestCaseDllImports(contents, testFiles);
+   writeTestMainHGregTestLibraryImports(contents);
+   writeTestMainHTestCaseLibraryImports(contents, testFiles);
    writeTestMainHEnd(contents);
    char testMainH[WINDOWS_MAX_PATH_LENGTH] = TEMP_DIR;
    strcat(testMainH, "/TestMain.h");
@@ -125,16 +125,16 @@ void writeTestMainHGuardsAndDllDefine(char* contents)
 {
    strcat(contents, "#ifndef TEST_MAIN_H\n");
    strcat(contents, "#define TEST_MAIN_H\n\n");
-   strcat(contents, "#define DllImport __declspec(dllimport)\n\n");
+   strcat(contents, LIBRARY_IMPORT_DEFINE);
 }
 
-void writeTestMainHGregTestDllImports(char* contents)
+void writeTestMainHGregTestLibraryImports(char* contents)
 {
    strcat(contents, "//From GregTest\n");
-   strcat(contents, "DllImport bool result();\n\n");
+   strcat(contents, "LibraryImport bool result();\n\n");
 }
 
-void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFiles)
+void writeTestMainHTestCaseLibraryImports(char* contents, const TestFileList* testFiles)
 {
    strcat(contents, "//Test Cases Found Throughout the Repo\n");
    if (testFiles->size == 0)
@@ -146,7 +146,7 @@ void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFi
    {
       const TestFile* file = &testFiles->files[fileIndex];
       numTotalTestCases = numTotalTestCases + file->numTestCases;
-      writeTestMainHTestCaseDllImportsForSpecificFile(contents, file->numTestCases, file->cases);
+      writeTestMainHTestCaseLibraryImportsForSpecificFile(contents, file->numTestCases, file->cases);
    }
    if (numTotalTestCases == 0 && testFiles->size != 0)
    {
@@ -154,12 +154,12 @@ void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFi
    }
 }
 
-void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, const TestCase* cases)
+void writeTestMainHTestCaseLibraryImportsForSpecificFile(char* contents, int numTests, const TestCase* cases)
 {
    for (int i = 0; i < numTests; i++)
    {
       const char* testName = cases[i].testName;
-      strcat(contents, "DllImport void ");
+      strcat(contents, "LibraryImport void ");
       strcat(contents, testName);
       strcat(contents, "();\n");
    }

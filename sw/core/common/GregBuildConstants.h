@@ -1,14 +1,21 @@
 #ifndef GREG_TEST_CONSTANTS_H
 #define GREG_TEST_CONSTANTS_H
 
-#define TEST_PROJECT_DLL "TestProject.dll"
-#define GREG_TEST_DLL "GregTest.dll"
-#define LIB_GREG_TEST_DLL "lib/GregTest.dll"
+#ifdef __WINDOWS__
+#define TEST_PROJECT_LIBRARY "TestProject.dll"
+#define GREG_TEST_LIBRARY "GregTest.dll"
+#define LIB_GREG_TEST_LIBRARY "lib/GregTest.dll"
+#define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.dll"
+#else
+#define TEST_PROJECT_LIBRARY "TestProject.so"
+#define GREG_TEST_LIBRARY "GregTest.so"
+#define LIB_GREG_TEST_LIBRARY "lib/GregTest.so"
+#define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.so"
+#endif
 
 #define CURRENT_DIR "."
 
 #define TEMP_DIR "temp"
-#define TEMP_TEST_PROJECT_DLL "temp/TestProject.dll"
 #define TEMP_TEST_MAIN "temp/TestMain"
 #define TEMP_TEST_MAIN_C "temp/TestMain.c"
 #define TEMP_TEST_MAIN_H "temp/TestMain.h"
@@ -30,7 +37,7 @@
 
 #define BUILD_SEQUENCE_STEP_TYPE 1
 #define COMMAND_LINE_OPTION_TYPE 2
-#define HMODULE_LL_TYPE 3
+#define PLUGIN_MODULE_LL_TYPE 3
 #define COMPILER_OPTION_TYPE 4
 #define LINKER_OPTION_TYPE 5
 

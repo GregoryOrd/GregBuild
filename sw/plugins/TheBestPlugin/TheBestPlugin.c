@@ -9,9 +9,9 @@ BuildSequenceStep* before_loadTestsAndSourceFiles()
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
    step->option->optionText = malloc(strlen("--best"));
-   step->option->description = malloc("TheBestPlugin");
+   step->option->description = malloc(strlen("TheBestPlugin"));
    step->function_ptr = printHelloWorld;
-   step->functionName = malloc("printHelloWorld");
+   step->functionName = malloc(strlen("printHelloWorld"));
    strcpy(step->functionName, "printHelloWorld");
    strcpy(step->option->optionText, "--best");
    strcpy(step->option->description, "TheBestPlugin");

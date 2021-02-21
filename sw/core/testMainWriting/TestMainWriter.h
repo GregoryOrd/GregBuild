@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if __WINDOWS__
+#define LIBRARY_IMPORT_DEFINE "#define LibraryImport __declspec(dllimport)\n\n"
+#else
+#define LIBRARY_IMPORT_DEFINE "#define LibraryImport \n\n"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif  
@@ -27,9 +33,9 @@ int sizeOfTestMainC(int numTests);
 
 void writeToTestMainH(const TestFileList* testFiles);
 void writeTestMainHGuardsAndDllDefine(char* contents);
-void writeTestMainHGregTestDllImports(char* contents);
-void writeTestMainHTestCaseDllImports(char* contents, const TestFileList* testFiles);
-void writeTestMainHTestCaseDllImportsForSpecificFile(char* contents, int numTests, const TestCase* cases);
+void writeTestMainHGregTestLibraryImports(char* contents);
+void writeTestMainHTestCaseLibraryImports(char* contents, const TestFileList* testFiles);
+void writeTestMainHTestCaseLibraryImportsForSpecificFile(char* contents, int numTests, const TestCase* cases);
 void writeTestMainHEnd(char* contents);
 int sizeOfTestMainH(int numTests);
 void writeToFile(const char* filename, const char* contents);

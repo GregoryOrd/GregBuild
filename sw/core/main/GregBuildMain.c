@@ -22,7 +22,7 @@ int main(int argc, const char* argv[])
    SourceFileList* sourceFiles = malloc(sizeof(SourceFileList));
    ObjectFileList* tempObjectFiles = malloc(sizeof(ObjectFileList));
    PluginList* plugins = malloc(sizeof(PluginList));
-   LinkedList* pluginHModules = malloc(sizeof(LinkedList));
+   LinkedList* pluginModules = malloc(sizeof(LinkedList));
 
    initCoreCommandLineOptions(optionList);
    if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE))
@@ -34,11 +34,11 @@ int main(int argc, const char* argv[])
    LinkedList* buildSequence = malloc(sizeof(LinkedList));
    initBuildSequence(buildSequence);
 
-   initEmptyLinkedList(pluginHModules, HMODULE_LL_TYPE);
+   initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
    initPluginList(plugins);
-   loadPlugins(plugins, pluginHModules, PLUGINS_LIB_DIRECTORY);
-   orderPluginsToMatchConfigFile(plugins, pluginHModules);
-   processPlugins(buildSequence, plugins, pluginHModules, optionList);
+   loadPlugins(plugins, pluginModules, PLUGINS_LIB_DIRECTORY);
+   orderPluginsToMatchConfigFile(plugins, pluginModules);
+   processPlugins(buildSequence, plugins, pluginModules, optionList);
    processCommandLineOptions(optionList, argc, argv);
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);

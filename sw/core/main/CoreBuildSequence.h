@@ -46,8 +46,8 @@ BuildSequenceStepInfo coreBuildSequenceInfo[9] =
         NO_TEST_DESCRIPTION, 
         NO_TEST_OPTION_TEXT, 
         NO_TEST_FLAG_VALUE, 
-        linkObjectFilesWithGregTestDllToMakeProjectTestDll, 
-        "linkObjectFilesWithGregTestDllToMakeProjectTestDll"
+        linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary, 
+        "linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary"
     },
     {
         NO_TEST_DESCRIPTION, 
@@ -60,8 +60,8 @@ BuildSequenceStepInfo coreBuildSequenceInfo[9] =
         NO_TEST_DESCRIPTION, 
         NO_TEST_OPTION_TEXT, 
         NO_TEST_FLAG_VALUE, 
-        createTestMainExecutableFromProjectDllAndGregTestDll, 
-        "createTestMainExecutableFromProjectDllAndGregTestDll"
+        createTestMainExecutableFromProjectLibraryAndGregTestLibrary, 
+        "createTestMainExecutableFromProjectLibraryAndGregTestLibrary"
     }, 
     {
         NO_TEST_DESCRIPTION, 

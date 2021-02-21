@@ -88,6 +88,7 @@ Major Improvements
     - Make SRC_DIR constant configurable
 9) Documentation Review and Improvements
 10) Verify support for different platforms
+    - Different make files. One for windows, one for linux
 11) Add a code ananlyzer/profiler
     - Valgrind might be a solution in this area
 12) Add a debug build ability

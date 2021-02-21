@@ -95,7 +95,7 @@ void printArgList(ArgList* argList)
    }
 }
 
-int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
+int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
@@ -116,13 +116,13 @@ int linkObjectFilesWithGregTestDllToMakeProjectTestDll(
    return 0;
 }
 
-int createTestMainExecutableFromProjectDllAndGregTestDll(
+int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
    if (tempObjectFiles->size > 0)
    {
-      char* const argv[] = {hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_DLL, LIB_GREG_TEST_DLL, NULL};
+      char* const argv[] = {hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, LIB_GREG_TEST_LIBRARY, NULL};
       return popenChildProcess(hostCompiler(), 7, argv);
    }
    return 0;
@@ -329,7 +329,7 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
    gccArgs->args[0] = compiler;
    gccArgs->args[1] = "-shared";
    gccArgs->args[2] = "-o";
-   gccArgs->args[3] = TEMP_TEST_PROJECT_DLL;
+   gccArgs->args[3] = TEMP_TEST_PROJECT_LIBRARY;
 
    for (int j = 0; j < options->size; j++)
    {
@@ -337,7 +337,7 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
    }
 
    gccArgs->args[gccArgs->size - 3] = "-L./";
-   gccArgs->args[gccArgs->size - 2] = LIB_GREG_TEST_DLL;
+   gccArgs->args[gccArgs->size - 2] = LIB_GREG_TEST_LIBRARY;
    gccArgs->args[gccArgs->size - 1] = NULL;
 }
 

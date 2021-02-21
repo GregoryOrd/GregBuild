@@ -8,4 +8,12 @@ typedef struct PluginList {
   Plugin *plugins;
 } PluginList;
 
+#define DELIMITER "/"
+
+#ifdef __WINDOWS__
+#define LIBRARY_EXTENSION ".dll"
+#else
+#define LIBRARY_EXTENSION ".so"
+#endif
+
 #endif

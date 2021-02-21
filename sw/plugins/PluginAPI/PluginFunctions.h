@@ -1,4 +1,4 @@
-// The file is provided to be used when creating plugin dlls
+// The file is provided to be used when creating plugin dlls/sos
 // The structs here are copies of those used internally by GregBuild
 // The functions declared here are open to be implemented by plugin developers
 // These functions are the only functions that will be recognized by the
@@ -65,15 +65,15 @@ typedef struct BuildSequenceStep {
 //      - This searches through the repo recursively for .c files.
 // 2) compileIntoTempObjectFiles()
 //      - Compiles all of the found .c files into .o files.
-// 3) linkObjectFilesWithGregTestDllToMakeProjectTestDll()
+// 3) linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary()
 //      - Can be skipped with --no-test-build command line option
 // 4) writeTestsToTestMain()
 //      - Can be skipped with --no-test-build command line option
 //      - Parses through the found test files to find test cases.
 //      - Uses these test cases to create TestMain.c and TestMain.h
-// 5) createTestMainExecutableFromProjectDllAndGregTestDll()
+// 5) createTestMainExecutableFromProjectLibraryAndGregTestLibrary()
 //      - Can be skipped with --no-test-build command line option
-//      - Compiles TestMain.c with the project test dll and GregTest.dll
+//      - Compiles TestMain.c with the project test dll/so and GregTest.dll/so
 //      - This creates an executable with all of the tests
 // 6) runTestsWithExitStatusCheck
 //      - Can be skipped with --no-test-build command line option
@@ -135,14 +135,14 @@ BuildSequenceStep *after_loadTestsAndSourceFiles();
 BuildSequenceStep *before_compileIntoTempObjectFiles();
 BuildSequenceStep *after_compileIntoTempObjectFiles();
 
-BuildSequenceStep *before_linkObjectFilesWithGregTestDllToMakeProjectTestDll();
-BuildSequenceStep *after_linkObjectFilesWithGregTestDllToMakeProjectTestDll();
+BuildSequenceStep *before_linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary();
+BuildSequenceStep *after_linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary();
 
 BuildSequenceStep *before_writeTestsToTestMain();
 BuildSequenceStep *after_writeTestsToTestMain();
 
-BuildSequenceStep *before_createTestMainExecutableFromProjectDllAndGregTestDll();
-BuildSequenceStep *after_createTestMainExecutableFromProjectDllAndGregTestDll();
+BuildSequenceStep *before_createTestMainExecutableFromProjectLibraryAndGregTestLibrary();
+BuildSequenceStep *after_createTestMainExecutableFromProjectLibraryAndGregTestLibrary();
 
 BuildSequenceStep *before_runTestsWithExitStatusCheck();
 BuildSequenceStep *after_runTestsWithExitStatusCheck();

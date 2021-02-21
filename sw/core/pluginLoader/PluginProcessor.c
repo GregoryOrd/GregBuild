@@ -1,24 +1,36 @@
 #include "PluginProcessor.h"
 
+#include <dlfcn.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef __WINDOWS__
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
 
 typedef BuildSequenceStep* (*PluginFunction)();
 
-void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules, LinkedList* commandLineOptions)
+void processPlugins(LinkedList* buildSequence, const PluginList* list, LinkedList* pluginModules, LinkedList* commandLineOptions)
 {
    int numCoreBuildSequenceSteps = buildSequence->size;
    BuildSequenceStep* coreBuildSequence = malloc(buildSequence->size * sizeof(BuildSequenceStep));
    storeCurrentBuildSequenceIntoCoreBuildSequenceList(coreBuildSequence, buildSequence);
-   searchPluginsAndAddStepsToBuildSequence(coreBuildSequence, numCoreBuildSequenceSteps, buildSequence, list, pluginHModules, commandLineOptions);
+   searchPluginsAndAddStepsToBuildSequence(coreBuildSequence, numCoreBuildSequenceSteps, buildSequence, list, pluginModules, commandLineOptions);
    freeCoreBuildSequenceList(coreBuildSequence, numCoreBuildSequenceSteps);
 }
 
+#ifdef __WINDOWS__
 void processBeforeAndAfterSteps(
-    const HMODULE* hLib, LinkedList* buildSequence, LinkedList* commandLineOptions, const char* functionName, const char* beforeFunctionName, const char* afterFunctionName)
+    const HMODULE* lib, LinkedList* buildSequence, LinkedList* commandLineOptions, const char* functionName, const char* beforeFunctionName, const char* afterFunctionName)
 {
-   PluginFunction beforeFunction = (PluginFunction)GetProcAddress(*hLib, beforeFunctionName);
+   PluginFunction beforeFunction = (PluginFunction)GetProcAddress(*lib, beforeFunctionName);
    int index = indexOf(buildSequence, functionName);
    if (beforeFunction != NULL && index != -1)
    {
@@ -28,7 +40,7 @@ void processBeforeAndAfterSteps(
       addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
    }
 
-   PluginFunction afterFunction = (PluginFunction)GetProcAddress(*hLib, afterFunctionName);
+   PluginFunction afterFunction = (PluginFunction)GetProcAddress(*lib, afterFunctionName);
    index = indexOf(buildSequence, functionName);
    if (afterFunction != NULL && index != -1)
    {
@@ -38,6 +50,31 @@ void processBeforeAndAfterSteps(
       addOptionIfItDoesntAlreadyExist(commandLineOptions, afterStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
    }
 }
+#else
+void processBeforeAndAfterSteps(
+    const void* lib, LinkedList* buildSequence, LinkedList* commandLineOptions, const char* functionName, const char* beforeFunctionName, const char* afterFunctionName)
+{
+   PluginFunction beforeFunction = (PluginFunction)dlsym((void*)lib, beforeFunctionName);
+   int index = indexOf(buildSequence, functionName);
+   if (beforeFunction != NULL && index != -1)
+   {
+      int beforeIndex = index;
+      BuildSequenceStep* beforeStep = beforeFunction();
+      insert_ll(buildSequence, beforeStep, BUILD_SEQUENCE_STEP_TYPE, beforeIndex);
+      addOptionIfItDoesntAlreadyExist(commandLineOptions, beforeStep->option, COMMAND_LINE_OPTION_TYPE, beforeIndex);
+   }
+
+   PluginFunction afterFunction = (PluginFunction)dlsym((void*)lib, afterFunctionName);
+   index = indexOf(buildSequence, functionName);
+   if (afterFunction != NULL && index != -1)
+   {
+      int afterIndex = index + 1;
+      BuildSequenceStep* afterStep = afterFunction();
+      insert_ll(buildSequence, afterStep, BUILD_SEQUENCE_STEP_TYPE, afterIndex);
+      addOptionIfItDoesntAlreadyExist(commandLineOptions, afterStep->option, COMMAND_LINE_OPTION_TYPE, afterIndex);
+   }
+}
+#endif
 
 int indexOf(const LinkedList* buildSequence, const char* functionName)
 {
@@ -75,19 +112,23 @@ void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCore
 }
 
 void searchPluginsAndAddStepsToBuildSequence(
-    BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps, LinkedList* buildSequence, const PluginList* list, LinkedList* pluginHModules,
+    BuildSequenceStep* coreBuildSequence, int numCoreBuildSequenceSteps, LinkedList* buildSequence, const PluginList* list, LinkedList* pluginModules,
     LinkedList* commandLineOptions)
 {
    for (int i = 0; i < list->size; i++)
    {
-      const HMODULE* hLib = (const HMODULE*)at_ll(pluginHModules, HMODULE_LL_TYPE, i);
+#ifdef __WINDOWS__
+      const HMODULE* lib = (const HMODULE*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
+#else
+      const void* lib = (const void*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
+#endif
       for (int j = 0; j < numCoreBuildSequenceSteps; j++)
       {
          char beforeFunctionName[WINDOWS_MAX_PATH_LENGTH] = "before_";
          char afterFunctionName[WINDOWS_MAX_PATH_LENGTH] = "after_";
          strcat(beforeFunctionName, coreBuildSequence[j].functionName);
          strcat(afterFunctionName, coreBuildSequence[j].functionName);
-         processBeforeAndAfterSteps(hLib, buildSequence, commandLineOptions, coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
+         processBeforeAndAfterSteps(lib, buildSequence, commandLineOptions, coreBuildSequence[j].functionName, beforeFunctionName, afterFunctionName);
       }
    }
 }

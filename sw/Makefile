@@ -12,6 +12,7 @@ TOOLKIT=GregCToolkit
 TOOLKIT_SW = external/$(TOOLKIT)/sw
 CC=gcc
 CFLAGS=-g
+LINKFLAGS=-ldl
 
 ############################################################################
 ######						 GregBuild OBJS 						  ######
@@ -71,11 +72,11 @@ TOOLKIT_OBJS =  $(COLLECTIONS_OBJS) \
 ############################################################################
 
 $(USR_BIN_EXE): $(DIST_EXE)
-	cp $(DIST_EXE) $(USR_BIN_EXE)
+	sudo cp $(DIST_EXE) $(USR_BIN_EXE)
 
 $(DIST_EXE): $(GREG_BUILD_OBJS) $(TOOLKIT_OBJS)
 	mkdir -p $(DIST)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
 
 ############################################################################
@@ -155,17 +156,29 @@ $(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c $(TOOLKIT_SW)/$(S
 ######						Plugin Rules	     					  ######
 ############################################################################
 
-Plugins: ../lib/plugins/TimeTrackingPlugin.dll ../lib/plugins/TheBestPlugin.dll
+Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/TheBestPlugin.so
 
-../lib/plugins/TimeTrackingPlugin.dll: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c plugins/TimeTrackingPlugin/TimeTrackingPlugin.h
+../lib/plugins/TimeTrackingPlugin.so: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c plugins/TimeTrackingPlugin/TimeTrackingPlugin.h
 	mkdir -p ../lib/plugins
+	mkdir -p ../ExampleSrcRepo/lib/plugins
+	mkdir -p ../Blink/lib/plugins
+	mkdir -p ~/ExampleSrcRepo/lib/plugins
+	mkdir -p ~/Blink/lib/plugins
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
+	cp $@ ~/ExampleSrcRepo/lib/plugins
+	cp $@ ~/Blink/lib/plugins
 
-../lib/plugins/TheBestPlugin.dll: plugins/TheBestPlugin/TheBestPlugin.c plugins/TheBestPlugin/TheBestPlugin.h
+../lib/plugins/TheBestPlugin.so: plugins/TheBestPlugin/TheBestPlugin.c plugins/TheBestPlugin/TheBestPlugin.h
 	mkdir -p ../lib/plugins
+	mkdir -p ../ExampleSrcRepo/lib/plugins
+	mkdir -p ../Blink/lib/plugins
+	mkdir -p ~/ExampleSrcRepo/lib/plugins
+	mkdir -p ~/Blink/lib/plugins
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
+	cp $@ ~/ExampleSrcRepo/lib/plugins
+	cp $@ ~/Blink/lib/plugins
 
 ############################################################################
 ######						Clean Rules								  ######
@@ -177,5 +190,7 @@ clean:
 	rm $(USR_BIN_EXE)
 
 cleanPlugins:
-	rm ../lib/plugins/TimeTrackingPlugin.dll
-	rm ../lib/plugins/TheBestPlugin.dll
+	rm ../lib/plugins/TimeTrackingPlugin.so
+	rm ../lib/plugins/TheBestPlugin.so
+	rm ~/ExampleSrcRepo/lib/plugins
+	rm ~/Blink/lib/plugins
