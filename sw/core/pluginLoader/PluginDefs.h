@@ -12,8 +12,12 @@ typedef struct PluginList {
 
 #ifdef __WINDOWS__
 #define LIBRARY_EXTENSION ".dll"
+#define REVERSED_LIBRARY_EXTENSION "lld."
+#define LIBRARY_EXTENSION_LENGTH 4
 #else
 #define LIBRARY_EXTENSION ".so"
+#define REVERSED_LIBRARY_EXTENSION "os."
+#define LIBRARY_EXTENSION_LENGTH 3
 #endif
 
 #endif

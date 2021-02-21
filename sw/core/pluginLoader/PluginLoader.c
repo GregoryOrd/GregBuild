@@ -78,7 +78,7 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* bas
 void copyNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
 {
    strcpy(path, basePath);
-   strcat(path, "/");
+   strcat(path, DELIMITER);
    strcat(path, fileOrSubDirectoryName);
 }
 
@@ -99,7 +99,7 @@ bool isPlugin(const struct dirent* fileOrSubDirectory)
 {
    char reversedLower[WINDOWS_MAX_PATH_LENGTH];
    reverseString(reversedLower, fileOrSubDirectory->d_name);
-   bool result = (strncmp(reversedLower, "lld.", 4) == 0 && strstr(fileOrSubDirectory->d_name, "Plugin") != NULL);
+   bool result = (strncmp(reversedLower, REVERSED_LIBRARY_EXTENSION, LIBRARY_EXTENSION_LENGTH) == 0 && strstr(fileOrSubDirectory->d_name, "Plugin") != NULL);
    return result;
 }
 
