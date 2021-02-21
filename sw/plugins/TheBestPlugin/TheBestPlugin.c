@@ -8,10 +8,10 @@ BuildSequenceStep* before_loadTestsAndSourceFiles()
 {
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
-   step->option->optionText = calloc(strlen("--best"), sizeof(char));
-   step->option->description = calloc(strlen("TheBestPlugin"), sizeof(char));
+   step->option->optionText = calloc(strlen("--best") + 1, sizeof(char));
+   step->option->description = calloc(strlen("TheBestPlugin") + 1, sizeof(char));
    step->function_ptr = printHelloWorld;
-   step->functionName = calloc(strlen("printHelloWorld"), sizeof(char));
+   step->functionName = calloc(strlen("printHelloWorld") + 1, sizeof(char));
    strcpy(step->functionName, "printHelloWorld");
    strcpy(step->option->optionText, "--best");
    strcpy(step->option->description, "TheBestPlugin");

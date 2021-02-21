@@ -10,7 +10,7 @@
 
 bool isTestDir(const char* dirName)
 {
-   char lower[WINDOWS_MAX_PATH_LENGTH];
+   char lower[WINDOWS_MAX_PATH_LENGTH] = "";
    lowerString(lower, dirName);
    return strstr(lower, "/test") != NULL;
 }

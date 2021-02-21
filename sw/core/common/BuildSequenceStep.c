@@ -12,9 +12,9 @@ void allocateAndSetBuildSequenceStep(
     BuildSequenceStep* dest, const char* description, const char* optionText, bool flagValue, const STEP_FUNCTION function_ptr, const char* functionName)
 {
    dest->option = malloc(sizeof(CommandLineOption));
-   dest->option->optionText = calloc(strlen(optionText), sizeof(char));
-   dest->option->description = calloc(strlen(description), sizeof(char));
-   dest->functionName = calloc(strlen(functionName), sizeof(char));
+   dest->option->optionText = calloc(strlen(optionText) + 1, sizeof(char));
+   dest->option->description = calloc(strlen(description) + 1, sizeof(char));
+   dest->functionName = calloc(strlen(functionName) + 1, sizeof(char));
 
    strcpy(dest->option->description, description);
    strcpy(dest->option->optionText, optionText);

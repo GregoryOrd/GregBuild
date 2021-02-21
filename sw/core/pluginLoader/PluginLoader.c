@@ -108,7 +108,7 @@ void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pl
    if (list != NULL && pluginModules != NULL)
    {
       list->plugins = (Plugin*)realloc(list->plugins, ((list->size + 1) * sizeof(Plugin)));
-      list->plugins[list->size].name = calloc(strlen(pluginPath), sizeof(char));
+      list->plugins[list->size].name = calloc(strlen(pluginPath) + 1, sizeof(char));
       strcpy(list->plugins[list->size].name, pluginPath);
       list->size++;
 
