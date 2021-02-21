@@ -63,7 +63,7 @@ int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, cons
    int numTestFiles = testFilesSize(testFiles);
    initGccArgsForCompilerToObjectFiles(gccArgs, sourceFiles, numTestFiles, compiler);
    populateTempObjectFileArgs(tempObjectFiles, gccArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, options->size);
-   return popenChildProcess(compiler, gccArgs->size, (char* const*)gccArgs->args);
+   return popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
 }
 
 int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
@@ -71,7 +71,7 @@ int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, con
    int numTestFiles = testFilesSize(testFiles);
    initMvArgsForCompilerToObjectFiles(mvArgs, sourceFiles, numTestFiles, compiler);
    populateTempObjectFileArgs(tempObjectFiles, mvArgs, testFiles, sourceFiles, compiler, mvFileArgOffset, 0);
-   return popenChildProcess(mv, mvArgs->size, (char* const*)mvArgs->args);
+   return popenChildProcess(mvArgs->size, (char* const*)mvArgs->args);
 }
 
 void populateTempObjectFileArgs(
@@ -109,7 +109,7 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
       ArgList* gccArgs = malloc(sizeof(ArgList));
       initGccArgsForCompileTestExecutable(gccArgs, tempObjectFiles, hostCompiler());
       fileArgsForCompileTestExecutable(gccArgs, tempObjectFiles);
-      popenChildProcess(hostCompiler(), gccArgs->size, (char* const*)gccArgs->args);
+      popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
       freeArgList(gccArgs);
    }
 
@@ -123,7 +123,7 @@ int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
    if (tempObjectFiles->size > 0)
    {
       char* const argv[] = {hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, LIB_GREG_TEST_LIBRARY, NULL};
-      return popenChildProcess(hostCompiler(), 7, argv);
+      return popenChildProcess(7, argv);
    }
    return 0;
 }
@@ -146,7 +146,7 @@ int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles
    initGccArgsForCompileProjectExecutableFromObjectFiles(gccArgs, tempObjectFiles, compiler);
    fileArgsForCompileProjectExecutable(gccArgs, tempObjectFiles);
    makeDir(DIST);
-   int retval = popenChildProcess(compiler, gccArgs->size, (char* const*)gccArgs->args);
+   int retval = popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
    freeArgList(gccArgs);
    if (retval == 0)
    {
