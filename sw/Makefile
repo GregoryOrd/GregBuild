@@ -4,7 +4,7 @@
 
 CORE=core
 BUILD=../build
-EXE=GB.exe
+EXE=GB
 DIST=../dist
 DIST_EXE=$(DIST)/$(EXE)
 USR_BIN_EXE=/usr/bin/$(EXE)
