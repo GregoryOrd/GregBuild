@@ -35,8 +35,9 @@ int compileIntoTempObjectFilesWithCompiler(
    error = compileIntoObjectFiles(gccArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
    if (error)
    {
-      printf("================================================\n");
+      printf("\n===================================================================\n");
       printf("Error compiling with compiler: %s\n", compiler);
+      printf("===================================================================\n");
       resetObjectFileList(tempObjectFiles);
    }
    else
@@ -71,7 +72,7 @@ int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, con
    int numTestFiles = testFilesSize(testFiles);
    initMvArgsForCompilerToObjectFiles(mvArgs, sourceFiles, numTestFiles, compiler);
    populateTempObjectFileArgs(tempObjectFiles, mvArgs, testFiles, sourceFiles, compiler, mvFileArgOffset, 0);
-   return popenChildProcess(mvArgs->size, (char* const*)mvArgs->args);
+   return forkAndRunChildProcess(mvArgs->size, (char* const*)mvArgs->args);
 }
 
 void populateTempObjectFileArgs(
@@ -101,8 +102,9 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
    exitIfError(errorOnPreviousStep);
    if (tempObjectFiles->size == 0)
    {
+      printf("\n===================================================================\n");
       printf("No host object files found, skipping tests\n");
-      printf("================================================\n");
+      printf("===================================================================\n");
    }
    else if (tempObjectFiles->size > 0)
    {
@@ -158,10 +160,6 @@ int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles
       {
          printf("\nBuild Successful. NO TESTS WERE RUN.\n");
       }
-   }
-   else
-   {
-      printf("Error Compiling the Code After Tests Completed\n");
    }
    return retval;
 }
