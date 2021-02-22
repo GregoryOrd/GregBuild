@@ -347,11 +347,6 @@ void fileArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* te
    bool atLeastOneFileAdded = false;
    for (int i = 0; i < tempObjectFiles->size; i++)
    {
-      if (strstr((&tempObjectFiles->files[i])->name, mainFunctionObjectFileName()))
-      {
-         i++;
-         offset--;
-      }
       if (i < tempObjectFiles->size)
       {
          gccArgs->args[i + offset] = (&tempObjectFiles->files[i])->name;

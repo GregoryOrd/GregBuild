@@ -18,12 +18,14 @@ int writeTestsToTestMain(
 void writeToTestMainC(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainC(testFiles->totalNumTestCases);
-   char contents[WINDOWS_MAX_PATH_LENGTH];
-   contents[0] = '\0';
+   char* contents = (char*)calloc(size, sizeof(char));
+   char* testMainC = (char*)calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+
    populateTestMainCContents(contents, testFiles);
-   char testMainC[WINDOWS_MAX_PATH_LENGTH] = TEMP_DIR;
+   strcpy(testMainC, TEMP_DIR);
    strcat(testMainC, "/TestMain.c");
    writeToFile(testMainC, contents);
+   free(contents);
 }
 
 void populateTestMainCContents(char* contents, const TestFileList* testFiles)
@@ -110,13 +112,15 @@ void addTestMainCResultsCheckAndExits(char* main)
 void writeToTestMainH(const TestFileList* testFiles)
 {
    int size = sizeOfTestMainH(testFiles->totalNumTestCases);
-   char contents[WINDOWS_MAX_PATH_LENGTH];
-   contents[0] = '\0';
+   char* contents = (char*)calloc(size, sizeof(char));
+   char* testMainH = (char*)calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+
    writeTestMainHGuardsAndDllDefine(contents);
    writeTestMainHGregTestLibraryImports(contents);
    writeTestMainHTestCaseLibraryImports(contents, testFiles);
    writeTestMainHEnd(contents);
-   char testMainH[WINDOWS_MAX_PATH_LENGTH] = TEMP_DIR;
+
+   strcpy(testMainH, TEMP_DIR);
    strcat(testMainH, "/TestMain.h");
    writeToFile(testMainH, contents);
 }

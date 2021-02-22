@@ -19,7 +19,12 @@
 #define TEMP_TEST_MAIN "temp/TestMain"
 #define TEMP_TEST_MAIN_C "temp/TestMain.c"
 #define TEMP_TEST_MAIN_H "temp/TestMain.h"
+
+#ifdef __WINDOWS__
 #define TEMP_TEST_MAIN_EXE "temp/TestMain.exe"
+#else
+#define TEMP_TEST_MAIN_EXE "temp/TestMain"
+#endif
 
 #define DIST "dist"
 #define PROJECT_EXE "dist/HelloWorld.exe"
