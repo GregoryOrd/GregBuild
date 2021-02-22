@@ -164,7 +164,7 @@ void trimTestName(char* testName)
    {
       endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
    }
-   char temp[WINDOWS_MAX_PATH_LENGTH];
+   char temp[WINDOWS_MAX_PATH_LENGTH] = "";
    clearString(temp);
    for (int i = TEST_NAME_TRIM_FRONT_OFFSET; i < strlen(testName) - endOffset; i++)
    {
