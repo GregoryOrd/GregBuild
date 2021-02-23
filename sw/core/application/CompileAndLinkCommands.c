@@ -72,7 +72,7 @@ int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, con
    int numTestFiles = testFilesSize(testFiles);
    initMvArgsForCompilerToObjectFiles(mvArgs, sourceFiles, numTestFiles, compiler);
    populateTempObjectFileArgs(tempObjectFiles, mvArgs, testFiles, sourceFiles, compiler, mvFileArgOffset, 0);
-   return forkAndRunChildProcess(mvArgs->size, (char* const*)mvArgs->args);
+   return forkAndRunChildProcess((char* const*)mvArgs->args);
 }
 
 void populateTempObjectFileArgs(

@@ -52,8 +52,9 @@ Refactoring and Minor Improvements
     - Maybe some of the future configuration stuff can live here as wel
 0p) Add message when no tests are found
 0q) Plugin loader handle case of no order file present
-0f) Remove build sequence step printing for test steps when tests are skipped as
+0r) Remove build sequence step printing for test steps when tests are skipped as
     a result of failed compilation on host 
+0s) Refactor parseConfigurationFileLine() to use strtok. Shorten the function.
 
 Major Improvements
 ---------------------

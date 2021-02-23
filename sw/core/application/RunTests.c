@@ -13,8 +13,8 @@
 int runTests()
 {
    copyDllsToCurrentDirectory();
-   char* argv2[] = {TEMP_TEST_MAIN_EXE, NULL};
-   int testResult = forkAndRunChildProcess(2, argv2);
+   char* argv[] = {TEMP_TEST_MAIN_EXE, NULL};
+   int testResult = forkAndRunChildProcess(argv);
    removeDllsFromCurrentDirectory();
    setTestsWereRun();
    return testResult;
@@ -46,17 +46,17 @@ int runTestsWithExitStatusCheck(
 void copyDllsToCurrentDirectory()
 {
    char* argv[] = {cp, TEMP_TEST_PROJECT_LIBRARY, CURRENT_DIR, NULL};
-   forkAndRunChildProcess(3, argv);
+   forkAndRunChildProcess(argv);
 
    char* argv1[] = {cp, LIB_GREG_TEST_LIBRARY, CURRENT_DIR, NULL};
-   forkAndRunChildProcess(3, argv1);
+   forkAndRunChildProcess(argv1);
 }
 
 void removeDllsFromCurrentDirectory()
 {
    char* argv[] = {rm, GREG_TEST_LIBRARY, NULL};
-   forkAndRunChildProcess(3, argv);
+   forkAndRunChildProcess(argv);
 
    char* argv1[] = {rm, TEST_PROJECT_LIBRARY, NULL};
-   forkAndRunChildProcess(3, argv1);
+   forkAndRunChildProcess(argv1);
 }
