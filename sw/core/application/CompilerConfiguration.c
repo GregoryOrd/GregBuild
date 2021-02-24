@@ -69,6 +69,10 @@ void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool
    }
 }
 
+// To simpilify this, implement a hash table from the param string
+// to a SetConfiguration struct. Each SetConfiguration struct can hold
+// the data and function pointers it needs for setting the configuration.
+// Then loop through the SetConfiguration struct and execute the function pointer.
 void setConfigurations(const char* param, const char* value)
 {
    if (strcmp(param, "host") == 0)

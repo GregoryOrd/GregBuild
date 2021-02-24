@@ -54,7 +54,8 @@ Refactoring and Minor Improvements
 0q) Plugin loader handle case of no order file present
 0r) Remove build sequence step printing for test steps when tests are skipped as
     a result of failed compilation on host 
-0s) Refactor parseConfigurationFileLine() to use strtok. Shorten the function.
+0s) Refactor setConfigurations(). See comment above its code for thoughts about
+    refactoring with a hash table.
 
 Major Improvements
 ---------------------
