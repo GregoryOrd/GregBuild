@@ -13,15 +13,7 @@
 
 int readCompilerConfigurationFromFile()
 {
-   hostCompilerOptions_ = malloc(sizeof(LinkedList));
-   targetCompilerOptions_ = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
-   initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
-
-   hostLinkerOptions_ = malloc(sizeof(LinkedList));
-   targetLinkerOptions_ = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
-   initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
+   initOptionLists();
 
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 0;
@@ -33,34 +25,52 @@ int readCompilerConfigurationFromFile()
 int parseConfigurationFileLine(ArgList* argList)
 {
    char buffer[MAX_LINE_LENGTH] = "";
-   strcpy(buffer, (char*)argList->args[argList->size - 1]);
-
-   bool colonReached = false;
-   bool newLineReached = false;
-   char delimiter = ':';
-
    char param[WINDOWS_MAX_PATH_LENGTH] = "";
    char value[WINDOWS_MAX_PATH_LENGTH] = "";
-   int indexOfEqualSign = 0;
+
+   strcpy(buffer, (char*)argList->args[argList->size - 1]);
+   parseParamAndValueFromBuffer(param, value, buffer);
+   setConfigurations(param, value);
+
+   return 0;
+}
+
+void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer)
+{
+   bool delimiterReached = false;
+   bool newLineReached = false;
+   int indexOfDelimiter = 0;
    for (int i = 0; i < strlen(buffer); i++)
    {
-      if (buffer[i] != delimiter && !colonReached)
-      {
-         param[i] = buffer[i];
-      }
-      else if (buffer[i] == delimiter)
-      {
-         colonReached = true;
-         indexOfEqualSign = i;
-         i++;
-      }
-
-      if (colonReached)
-      {
-         value[i - indexOfEqualSign - 1] = buffer[i];
-      }
+      addCharToParamIfBeforeDelimiter(i, param, buffer, &delimiterReached, &indexOfDelimiter);
+      addCharToValueIfAfterDelimiter(i, value, buffer, delimiterReached, indexOfDelimiter);
    }
+}
 
+void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter)
+{
+   if (buffer[i] != delimiter && !(*delimiterReached))
+   {
+      param[i] = buffer[i];
+   }
+   else if (buffer[i] == delimiter)
+   {
+      *delimiterReached = true;
+      *indexOfDelimiter = i;
+      i++;
+   }
+}
+
+void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool delimiterReached, int indexOfDelimiter)
+{
+   if (delimiterReached)
+   {
+      value[i - indexOfDelimiter - 1] = buffer[i];
+   }
+}
+
+void setConfigurations(const char* param, const char* value)
+{
    if (strcmp(param, "host") == 0)
    {
       strcpy(hostCompiler_, value);
@@ -95,7 +105,19 @@ int parseConfigurationFileLine(ArgList* argList)
    {
       append_string_ll(targetLinkerOptions_, value, LINKER_OPTION_TYPE);
    }
-   return 0;
+}
+
+void initOptionLists()
+{
+   hostCompilerOptions_ = malloc(sizeof(LinkedList));
+   targetCompilerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
+   initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
+
+   hostLinkerOptions_ = malloc(sizeof(LinkedList));
+   targetLinkerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
+   initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
 }
 
 char* hostCompiler() { return hostCompiler_; }

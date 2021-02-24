@@ -20,8 +20,8 @@ If you want to build just for the host system, set the target compiler to match
 the host compiler:
 
 ```
-host=/usr/bin/gcc.exe
-target=/usr/bin/gcc.exe
+host:/usr/bin/gcc.exe
+target:/usr/bin/gcc.exe
 ```
 
 For GregBuild to use your compiler path, that compiler path needs to work with the environment outside of GregBuild. For example, inside of Cygwin the above samples
