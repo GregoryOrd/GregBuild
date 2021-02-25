@@ -89,6 +89,11 @@ Major Improvements
 7) Can we also use a multithreaded solution for gathering the test and source files?
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
+    c) Investigate performance improvements that may result, in larger repos, from using hash tables 
+    to store the file lists instead of linked lists\
+        c0) Would need to improve the hash table implementation to dynamically scale to a table of any size
+            -> Could probably acheive this with external chaining rather than the current collision handling method
+            of linear probing
 8) Add ability to build from deeper withing the src file tree
     - Make SRC_DIR constant configurable
 9) Documentation Review and Improvements

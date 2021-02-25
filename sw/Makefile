@@ -61,8 +61,8 @@ FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o,$(notdir $(shel
 FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
 STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
-# Add COLLECTIONS_HASHTABLE_OBJS in when ready
 TOOLKIT_OBJS =  $(COLLECTIONS_LINKEDLIST_OBJS) \
+				$(COLLECTIONS_HASHTABLE_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
 				$(FAILURE_HANDLING_OBJS) \
