@@ -43,7 +43,8 @@ GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 ######						  Toolkit OBJS 	    					  ######
 ############################################################################
 
-COLLECTIONS=Collections
+COLLECTIONS_LINKEDLIST=Collections/LinkedList
+COLLECTIONS_HASHTABLE=Collections/HashTable
 COMMAND_LINE_OPTIONS=CommandLineOptions
 EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
 FAILURE_HANDLING=FailureHandling
@@ -51,7 +52,8 @@ FILE_IO=FileIO
 FILE_SYSTEM=FileSystem
 STRING=String
 
-COLLECTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS) -name "*.c")))
+COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -name "*.c")))
+COLLECTIONS_HASHTABLE_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE) -name "*.c")))
 COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
 EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
 FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
@@ -59,7 +61,8 @@ FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o,$(notdir $(shel
 FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
 STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
-TOOLKIT_OBJS =  $(COLLECTIONS_OBJS) \
+# Add COLLECTIONS_HASHTABLE_OBJS in when ready
+TOOLKIT_OBJS =  $(COLLECTIONS_LINKEDLIST_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
 				$(FAILURE_HANDLING_OBJS) \
@@ -117,8 +120,13 @@ $(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c $(CORE)/$(PLUGIN_LOA
 ######						Toolkit OBJ Rules						  ######
 ############################################################################
 
-$(BUILD)/$(TOOLKIT)/$(COLLECTIONS)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS)/%.c $(TOOLKIT_SW)/$(COLLECTIONS)/%.h
-	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS)
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 

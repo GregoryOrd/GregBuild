@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"

@@ -2,7 +2,7 @@
 #define COMPILER_CONFIGURATION_VALUES
 
 #include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 
 char hostCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";
 char targetCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";

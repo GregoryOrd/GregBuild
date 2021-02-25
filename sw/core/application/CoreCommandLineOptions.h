@@ -2,7 +2,7 @@
 #define CORE_COMMAND_LINE_OPTIONS_H
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include <stdbool.h>
 
 #ifdef __cplusplus

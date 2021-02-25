@@ -3,10 +3,10 @@
 
 #include <stdbool.h>
 
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
-const char delimiter = ':';
+#define COMPILER_CONFIG_DELIMITER ':'
 
 #ifdef __cplusplus
 extern "C"

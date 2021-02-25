@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 #ifdef __cplusplus

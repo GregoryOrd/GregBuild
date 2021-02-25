@@ -49,11 +49,11 @@ void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer)
 
 void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter)
 {
-   if (buffer[i] != delimiter && !(*delimiterReached))
+   if (buffer[i] != COMPILER_CONFIG_DELIMITER && !(*delimiterReached))
    {
       param[i] = buffer[i];
    }
-   else if (buffer[i] == delimiter)
+   else if (buffer[i] == COMPILER_CONFIG_DELIMITER)
    {
       *delimiterReached = true;
       *indexOfDelimiter = i;
@@ -73,6 +73,24 @@ void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool
 // to a SetConfiguration struct. Each SetConfiguration struct can hold
 // the data and function pointers it needs for setting the configuration.
 // Then loop through the SetConfiguration struct and execute the function pointer.
+//
+/*
+typedef void (*SET_CONFIGURATION_ACTION)(void**)
+typedef struct SetConfiguration
+{
+   SET_CONFIGURATION_ACTION[2] actions;
+   void** dataToActOn;
+} SetConfiguration
+
+An example action could look like:
+
+void thisAction(void** args)
+{
+   LinkedList* list = (LinkedList*)args[0];
+   const char* value = (const char*)args[1];
+   append_string_ll(list, value, COMPILER_OPTION_TYPE);
+}
+*/
 void setConfigurations(const char* param, const char* value)
 {
    if (strcmp(param, "host") == 0)

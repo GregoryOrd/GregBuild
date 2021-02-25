@@ -3,7 +3,7 @@
 
 #include "../common/BuildSequenceStep.h"
 #include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/Collections/LinkedList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 
 #ifdef __cplusplus
 extern "C" {
