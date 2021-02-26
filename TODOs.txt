@@ -54,8 +54,11 @@ Refactoring and Minor Improvements
 0q) Plugin loader handle case of no order file present
 0r) Remove build sequence step printing for test steps when tests are skipped as
     a result of failed compilation on host 
-0s) Refactor setConfigurations(). See comment above its code for thoughts about
-    refactoring with a hash table.
+0s) Refactor CompilerConfiguration into general configuration
+    and use it for the other variable that we want to make configurable.
+        - Change compiler.config to GregBuild.config
+        - Move to common folder so all other files can access the global configuration
+        variables
 
 Major Improvements
 ---------------------

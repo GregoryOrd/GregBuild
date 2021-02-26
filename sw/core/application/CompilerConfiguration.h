@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+#include "../../external/GregCToolkit/sw/Collections/HashTable/HashTable.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
@@ -14,12 +15,6 @@ extern "C"
 #endif
 
    int readCompilerConfigurationFromFile();
-   int parseConfigurationFileLine(ArgList* argList);
-   void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer);
-   void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter);
-   void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool delimiterReached, int indexOfDelimiter);
-   void setConfigurations(const char* param, const char* value);
-   void initOptionLists();
 
    char* hostCompiler();
    char* targetCompiler();

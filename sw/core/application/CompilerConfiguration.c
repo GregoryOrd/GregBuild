@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../external/GregCToolkit/sw/Collections/HashTable/HashTable.h"
 #include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
@@ -21,17 +20,26 @@
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
 
-void setDataToActOn(int i);
-HashTable* setupConfigurationsHashTable();
-int string_copy(void** args);
-void freeSetupConfigurations();
-
 typedef int (*SET_CONFIGURATION_ACTION)(void**);
 typedef struct SetConfiguration
 {
    SET_CONFIGURATION_ACTION actions[actionPerConfigurationSetting];
    void* dataToActOn[dataMembersPerAction * actionPerConfigurationSetting];
+
 } SetConfiguration;
+
+void setDataToActOn(int i);
+HashTable* setupConfigurationsHashTable();
+int string_copy(void** args);
+void freeSetupConfigurations();
+int parseConfigurationFileLine(ArgList* argList);
+void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer);
+void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter);
+void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool delimiterReached, int indexOfDelimiter);
+void setConfigurations(const char* param, const char* value);
+void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
+void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
+void initOptionLists();
 
 const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",    "hostCompilerOption", "targetCompilerOption",
                                                                 "linkerOption", "hostLinkerOption", "targetLinkerOption"};
@@ -55,10 +63,13 @@ int readCompilerConfigurationFromFile()
 {
    initOptionLists();
 
+   HashTable* table = setupConfigurationsHashTable();
    ArgList* argList = malloc(sizeof(ArgList));
-   argList->size = 0;
+   argList->size = 1;
    argList->args = malloc(sizeof(void*));
+   argList->args[0] = table;
    readFileWithActionAfterEachLine(COMPILER_CONFIG_FILE, argList, parseConfigurationFileLine);
+   freeHashTable(table, freeSetupConfigurations, false, false);
    return 0;
 }
 
@@ -68,9 +79,10 @@ int parseConfigurationFileLine(ArgList* argList)
    char param[WINDOWS_MAX_PATH_LENGTH] = "";
    char value[WINDOWS_MAX_PATH_LENGTH] = "";
 
+   HashTable* table = argList->args[0];
    strcpy(buffer, (char*)argList->args[argList->size - 1]);
    parseParamAndValueFromBuffer(param, value, buffer);
-   setConfigurations(param, value);
+   setConfigurationForSingleParameter(table, param, value);
 
    return 0;
 }
@@ -109,98 +121,40 @@ void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool
    }
 }
 
-// To simpilify this, implement a hash table from the param string
-// to a SetConfiguration struct. Each SetConfiguration struct can hold
-// the data and function pointers it needs for setting the configuration.
-// Then loop through the SetConfiguration struct and execute the function pointer.
-//
-/*
-typedef void (*SET_CONFIGURATION_ACTION)(void**)
-typedef struct SetConfiguration
+void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value)
 {
-   SET_CONFIGURATION_ACTION[2] actions;
-   void** dataToActOn;
-} SetConfiguration
-
-An example action could look like:
-
-void thisAction(void** args)
-{
-   LinkedList* list = (LinkedList*)args[0];
-   const char* value = (const char*)args[1];
-   append_string_ll(list, value, COMPILER_OPTION_TYPE);
-}
-*/
-void setConfigurations(const char* param, const char* value)
-{
-   HashTable* table = setupConfigurationsHashTable();
-   for (int i = 0; i < NUM_COMPILER_CONFIG_PARAMS; i++)
+   SetConfiguration* setConfiguration = (SetConfiguration*)hash_lookup(table, param, SET_CONFIGURATION_TYPE);
+   if (setConfiguration == NULL)
    {
-      SetConfiguration* setConfiguration = (SetConfiguration*)hash_lookup(table, param, SET_CONFIGURATION_TYPE);
-      for (int actionNum = 0; actionNum < actionPerConfigurationSetting; actionNum++)
-      {
-         SET_CONFIGURATION_ACTION action = setConfiguration->actions[actionNum];
-         if (action == NULL)
-         {
-            continue;
-         }
-         for (int dataNum = 0; dataNum < actionPerConfigurationSetting * dataMembersPerAction; dataNum++)
-         {
-            void* data = setConfiguration->dataToActOn[dataNum];
-            if (data == NULL)
-            {
-               continue;
-            }
-
-            void* args[3];
-            args[0] = data;
-            args[1] = (void*)value;
-            int listType = COMPILER_OPTION_TYPE;
-            if (action == append_string_voidArgs_ll && i < 2 && i > 4)
-            {
-               listType = LINKER_OPTION_TYPE;
-            }
-            args[2] = &listType;
-            action(args);
-         }
-      }
+      return;
    }
 
-   // if (strcmp(param, "host") == 0)
-   // {
-   //    strcpy(hostCompiler_, value);
-   // }
-   // else if (strcmp(param, "target") == 0)
-   // {
-   //    strcpy(targetCompiler_, value);
-   // }
-   // else if (strcmp(param, "compilerOption") == 0)
-   // {
-   //    append_string_ll(hostCompilerOptions_, value, COMPILER_OPTION_TYPE);
-   //    append_string_ll(targetCompilerOptions_, value, COMPILER_OPTION_TYPE);
-   // }
-   // else if (strcmp(param, "hostCompilerOption") == 0)
-   // {
-   //    append_string_ll(hostCompilerOptions_, value, COMPILER_OPTION_TYPE);
-   // }
-   // else if (strcmp(param, "targetCompilerOption") == 0)
-   // {
-   //    append_string_ll(targetCompilerOptions_, value, COMPILER_OPTION_TYPE);
-   // }
-   // else if (strcmp(param, "linkerOption") == 0)
-   // {
-   //    append_string_ll(hostLinkerOptions_, value, LINKER_OPTION_TYPE);
-   //    append_string_ll(targetLinkerOptions_, value, LINKER_OPTION_TYPE);
-   // }
-   // else if (strcmp(param, "hostLinkerOption") == 0)
-   // {
-   //    append_string_ll(hostLinkerOptions_, value, LINKER_OPTION_TYPE);
-   // }
-   // else if (strcmp(param, "targetLinkerOption") == 0)
-   // {
-   //    append_string_ll(targetLinkerOptions_, value, LINKER_OPTION_TYPE);
-   // }
-   freeHashTable(table, freeSetupConfigurations, false, false);
+   for (int actionNum = 0; actionNum < actionPerConfigurationSetting; actionNum++)
+   {
+      SET_CONFIGURATION_ACTION action = setConfiguration->actions[actionNum];
+      void* data = setConfiguration->dataToActOn[actionNum];  // Action #1 uses Data #1, Action #2 uses Data #2, etc.
+
+      executeActionOnDataWithValue(action, data, value);
+   }
+}
+
+void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value)
+{
+   if (action == NULL || data == NULL)
+   {
+      return;
+   }
+
+   void* args[3];
+   args[0] = data;
+   args[1] = (void*)value;
+   int listType = COMPILER_OPTION_TYPE;
+   if (action == append_string_voidArgs_ll && (data == hostLinkerOptions_ || data == targetLinkerOptions_))
+   {
+      listType = LINKER_OPTION_TYPE;
+   }
+   args[2] = &listType;
+   action(args);
 }
 
 void freeSetupConfigurations() {}
@@ -222,29 +176,27 @@ HashTable* setupConfigurationsHashTable()
 
 void setDataToActOn(int i)
 {
-   void* firstData = configurations[i].dataToActOn[0];
-   void* secondData = configurations[i].dataToActOn[0];
    switch (i)
    {
       case 2:  // compilerOption
-         firstData = (void*)hostCompilerOptions_;
-         secondData = (void*)targetCompilerOptions_;
+         configurations[i].dataToActOn[0] = (void*)hostCompilerOptions_;
+         configurations[i].dataToActOn[1] = (void*)targetCompilerOptions_;
          break;
       case 3:  // hostCompilerOption
-         firstData = (void*)hostCompilerOptions_;
+         configurations[i].dataToActOn[0] = (void*)hostCompilerOptions_;
          break;
       case 4:  // targetCompilerOption
-         firstData = (void*)hostCompilerOptions_;
+         configurations[i].dataToActOn[0] = (void*)targetCompilerOptions_;
          break;
       case 5:  // linkerOption
-         firstData = (void*)hostLinkerOptions_;
-         secondData = (void*)targetLinkerOptions_;
+         configurations[i].dataToActOn[0] = (void*)hostLinkerOptions_;
+         configurations[i].dataToActOn[1] = (void*)targetLinkerOptions_;
          break;
       case 6:  // hostLinkerOption
-         firstData = (void*)hostLinkerOptions_;
+         configurations[i].dataToActOn[0] = (void*)hostLinkerOptions_;
          break;
       case 7:  // targetLinkerOption
-         firstData = (void*)targetLinkerOptions_;
+         configurations[i].dataToActOn[0] = (void*)targetLinkerOptions_;
          break;
    }
 }
@@ -252,12 +204,8 @@ void setDataToActOn(int i)
 int string_copy(void** args)
 {
    char* configurationValue = (char*)args[0];
-   printf("%s\n", configurationValue);
    const char* value = (const char*)args[1];
-   printf("Value: %s\n", value);
    strcpy(configurationValue, value);
-   // printf("Copied into %s\n", configurationValue);
-   printf("=============================================\n");
    return 0;
 }
 
