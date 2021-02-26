@@ -12,49 +12,33 @@ Refactoring and Minor Improvements
     clean error message if we read something in that doesn't follow our formatting rules
     - Improve handling so that order file does not need a newline character at
     the end of the final line
-0d) Consider moving TestAndSrcDefinitions from sw/core/fileSystemRecursion to GregTest
-    - Should these definitions/concepts belong to the build system of the test framework?
-0e) Move ArgListDefs.h into toolkit
-    - Rename to ArgList
-    - Add a .c file with freeArgList() function
-    - Add functions addToEndOfArgList() and removeFromEndOfArgList()
-    - Bring printArgList function into this file
-
-   ***********************************************************************************
-   * Question: Should we switch from using the ArgList struct to using a linked list *
-   * implementation?                                                                 *
-   ***********************************************************************************
-
-0f) Move FileOperations into common and fix all of the include paths that depend on it
+0d) Move FileOperations into common and fix all of the include paths that depend on it
     - Add isSourceFile(), isObjectFileFromSourceFile() and isTestFile() to this common file
     - Some clean up some of the code in these functions
-0g) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
+0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
     - Some of the helpers in there right now might also belong in different files 
     in the repo or in the toolkit
-0h) Rename/change terminology from "compile" to "link" for the following function names:
+0f) Rename/change terminology from "compile" to "link" for the following function names:
     - compileWithObjectFiles()
     - initGccArgsForCompileTestExecutable()
     - initGccArgsForCompileProjectExecutableFromObjectFiles()
-0i) Rename from initGccArgsForCompilerToObjectFiles() to:
+0g) Rename from initGccArgsForCompilerToObjectFiles() to:
     initGccArgsForCompileToObjectFiles()
         - Removed "r"
-0j) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
-0k) Restructure some directories. Pull a "compiler" directory out of core/application
+0h) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
+0i) Restructure some directories. Pull a "compiler" directory out of core/application
     - Could maybe move RunTests into core/testMainWriting and then rename it to be 
     a more generic test module instead of specifically writing to TestMain
     - Maybe also move CoreCommandLineOptions to core/main
-0l) Don't print stuff when wrong command line option
-0m) Print thing before test section
-0n) Define better definition of the main function header line in FileAndTestCaseGatherer
-0o) Combine TestsWereRun and MainFunctionFile into a global variable module
+0j) Define better definition of the main function header line in FileAndTestCaseGatherer
+0k) Combine TestsWereRun and MainFunctionFile into a global variable module
     - Consider moving some of the list variables that are created in
     main() into this global variable module as well
-    - Maybe some of the future configuration stuff can live here as wel
-0p) Add message when no tests are found
-0q) Plugin loader handle case of no order file present
-0r) Remove build sequence step printing for test steps when tests are skipped as
+    - Maybe some of the future configuration stuff can live here as well
+0l) Plugin loader handle case of no order file present
+0m) Remove build sequence step printing for test steps when tests are skipped as
     a result of failed compilation on host 
-0s) Refactor CompilerConfiguration into general configuration
+0n) Refactor CompilerConfiguration into general configuration
     and use it for the other variable that we want to make configurable.
         - Change compiler.config to GregBuild.config
         - Move to common folder so all other files can access the global configuration

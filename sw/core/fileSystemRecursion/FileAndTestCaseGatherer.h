@@ -2,7 +2,7 @@
 #define FILE_AND_TEST_CASE_GATHERER_H
 
 #include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
+#include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
 
 #include <dirent.h>
 #include <stdbool.h>

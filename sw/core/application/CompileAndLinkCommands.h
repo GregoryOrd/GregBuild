@@ -2,7 +2,7 @@
 #define COMPILE_AND_LINK_COMMANDS_H 
 
 #include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
+#include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
 
 #define gccFileArgOffset 2
 #define mvFileArgOffset 1
@@ -26,7 +26,6 @@ void determineObjectFileNameUsingListType(int listType, char* objectFileName, co
 void determineObjectFileName(char* objectFileName, const char* filePath);
 void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler);
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles);
-void freeArgList(ArgList* argList);
 int testFilesSize(const TestFileList* testFiles);
 void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler);
 void fileArgsForCompileProjectExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles);

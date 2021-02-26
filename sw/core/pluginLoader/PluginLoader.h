@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
-#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
+#include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
 
 #ifdef __cplusplus
 extern "C" {

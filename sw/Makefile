@@ -43,6 +43,7 @@ GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 ######						  Toolkit OBJS 	    					  ######
 ############################################################################
 
+ARG_LIST=ArgList
 COLLECTIONS_LINKEDLIST=Collections/LinkedList
 COLLECTIONS_HASHTABLE=Collections/HashTable
 COMMAND_LINE_OPTIONS=CommandLineOptions
@@ -52,6 +53,7 @@ FILE_IO=FileIO
 FILE_SYSTEM=FileSystem
 STRING=String
 
+ARG_LIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(ARG_LIST) -name "*.c")))
 COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -name "*.c")))
 COLLECTIONS_HASHTABLE_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE) -name "*.c")))
 COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
@@ -61,7 +63,8 @@ FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o,$(notdir $(shel
 FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
 STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
-TOOLKIT_OBJS =  $(COLLECTIONS_LINKEDLIST_OBJS) \
+TOOLKIT_OBJS =  $(ARG_LIST_OBJS) \
+				$(COLLECTIONS_LINKEDLIST_OBJS) \
 				$(COLLECTIONS_HASHTABLE_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
@@ -119,6 +122,11 @@ $(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c $(CORE)/$(PLUGIN_LOA
 ############################################################################
 ######						Toolkit OBJ Rules						  ######
 ############################################################################
+
+$(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o: $(TOOLKIT_SW)/$(ARG_LIST)/%.c $(TOOLKIT_SW)/$(ARG_LIST)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(ARG_LIST)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@
 
 $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.h
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)

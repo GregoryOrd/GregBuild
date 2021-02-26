@@ -3,9 +3,9 @@
 
 #include <stdbool.h>
 
+#include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
 #include "../../external/GregCToolkit/sw/Collections/HashTable/HashTable.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
-#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ArgListDefs.h"
 
 #define COMPILER_CONFIG_DELIMITER ':'
 

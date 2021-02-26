@@ -249,12 +249,6 @@ int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles)
    return count;
 }
 
-void freeArgList(ArgList* argList)
-{
-   free(argList->args);
-   free(argList);
-}
-
 int testFilesSize(const TestFileList* testFiles)
 {
    int testFilesSize = 0;
