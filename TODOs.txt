@@ -18,21 +18,19 @@ Refactoring and Minor Improvements
 0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
     - Some of the helpers in there right now might also belong in different files 
     in the repo or in the toolkit
-
-0h) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
-0i) Restructure some directories. Pull a "compiler" directory out of core/application
+0f) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
+0g) Restructure some directories. Pull a "compiler" directory out of core/application
     - Could maybe move RunTests into core/testMainWriting and then rename it to be 
     a more generic test module instead of specifically writing to TestMain
     - Maybe also move CoreCommandLineOptions to core/main
-0j) Define better definition of the main function header line in FileAndTestCaseGatherer
-0k) Combine TestsWereRun and MainFunctionFile into a global variable module
+0h) Combine TestsWereRun and MainFunctionFile into a global variable module
     - Consider moving some of the list variables that are created in
     main() into this global variable module as well
     - Maybe some of the future configuration stuff can live here as well
-0l) Plugin loader handle case of no order file present
-0m) Remove build sequence step printing for test steps when tests are skipped as
+0i) Plugin loader handle case of no order file present
+0j) Remove build sequence step printing for test steps when tests are skipped as
     a result of failed compilation on host 
-0n) Refactor CompilerConfiguration into general configuration
+0k) Refactor CompilerConfiguration into general configuration
     and use it for the other variable that we want to make configurable.
         - Change compiler.config to GregBuild.config
         - Move to common folder so all other files can access the global configuration
@@ -41,14 +39,22 @@ Refactoring and Minor Improvements
 Major Improvements
 ---------------------
 
-0) Exlude the projects main function from TestProjectDll
-    - Make the resource file configurable
+0) Have a list of files that are exlcuded when compiling the tests on the host
+    - This is for the situation where target hardware specific files exist
+    and our host compiler doesn't know how to handle them when compiling the tests
+    - We can make this list known in the configuration file
+    - See Configuration.md
 1) Make the PROJECT_EXE variable configurable
-2) Add a plugin for creating a .hex from the outputted .elf 
+    - See Configuration.md for steps to accomplish this
+2) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
         - Possible solution is to have the plugin from a .bat file
         that opens the AtmelStudio Command Prompt and gives it the appropriate
         inputs to issue the atprogram command
+            - Windows
+        - Now with the linux environment, we should be able to do this with
+        avrdude
+            - Linux
 3) Add in tests for the toolkit
 4) Add tests to this repo.
     - Use an earlier version of GregBuild and GregTest to write tests for
@@ -80,12 +86,11 @@ Major Improvements
 9) Documentation Review and Improvements
 10) Verify support for different platforms
     - Different make files. One for windows, one for linux
-11) Add a code ananlyzer/profiler
-    - Valgrind might be a solution in this area
-12) Add a debug build ability
-13) Add a verbose output option
+11) Add a debug build ability
+    - Can this be achieved by simply using -g in the compiler options in the config file?
+12) Add a verbose output option
     - Add attributes to BuildSequenceStep that can be used to influence how
     to execution of the step is displayed to the user on the console interface
-14) Configurablity for exiting or continuing after failing to compile and run tests
+13) Configurablity for exiting or continuing after failing to compile and run tests
     on the host. Continuing would mean to try to build on the target without any of the 
-    tests being run on the host
+    tests being run on the host, as it currently does.
