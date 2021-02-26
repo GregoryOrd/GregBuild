@@ -18,13 +18,7 @@ Refactoring and Minor Improvements
 0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
     - Some of the helpers in there right now might also belong in different files 
     in the repo or in the toolkit
-0f) Rename/change terminology from "compile" to "link" for the following function names:
-    - compileWithObjectFiles()
-    - initGccArgsForCompileTestExecutable()
-    - initGccArgsForCompileProjectExecutableFromObjectFiles()
-0g) Rename from initGccArgsForCompilerToObjectFiles() to:
-    initGccArgsForCompileToObjectFiles()
-        - Removed "r"
+
 0h) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
 0i) Restructure some directories. Pull a "compiler" directory out of core/application
     - Could maybe move RunTests into core/testMainWriting and then rename it to be 

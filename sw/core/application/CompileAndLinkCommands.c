@@ -27,12 +27,12 @@ int compileIntoTempObjectFiles(
 int compileIntoTempObjectFilesWithCompiler(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath)
 {
-   ArgList* gccArgs = malloc(sizeof(ArgList));
+   ArgList* compilerArgs = malloc(sizeof(ArgList));
    ArgList* mvArgs = malloc(sizeof(ArgList));
 
    int error = 0;
 
-   error = compileIntoObjectFiles(gccArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
+   error = compileIntoObjectFiles(compilerArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
    if (error)
    {
       printf("\n===================================================================\n");
@@ -45,12 +45,12 @@ int compileIntoTempObjectFilesWithCompiler(
       moveObjectFilesToTempDir(mvArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
    }
 
-   freeArgList(gccArgs);
+   freeArgList(compilerArgs);
    free(mvArgs);
    return 0;
 }
 
-int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
+int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
    if (strcmp(compiler, hostCompiler()) == 0)
@@ -62,15 +62,15 @@ int compileIntoObjectFiles(ArgList* gccArgs, const TestFileList* testFiles, cons
       options = targetCompilerOptions();
    }
    int numTestFiles = testFilesSize(testFiles);
-   initGccArgsForCompilerToObjectFiles(gccArgs, sourceFiles, numTestFiles, compiler);
-   populateTempObjectFileArgs(tempObjectFiles, gccArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, options->size);
-   return popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
+   initArgsForCompilingToObjectFiles(compilerArgs, sourceFiles, numTestFiles, compiler);
+   populateTempObjectFileArgs(tempObjectFiles, compilerArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, options->size);
+   return popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
 }
 
 int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
    int numTestFiles = testFilesSize(testFiles);
-   initMvArgsForCompilerToObjectFiles(mvArgs, sourceFiles, numTestFiles, compiler);
+   initMvArgsForMovingCompiledObjectFilesToTempDir(mvArgs, sourceFiles, numTestFiles, compiler);
    populateTempObjectFileArgs(tempObjectFiles, mvArgs, testFiles, sourceFiles, compiler, mvFileArgOffset, 0);
    return forkAndRunChildProcess((char* const*)mvArgs->args);
 }
@@ -108,11 +108,11 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
    }
    else if (tempObjectFiles->size > 0)
    {
-      ArgList* gccArgs = malloc(sizeof(ArgList));
-      initGccArgsForCompileTestExecutable(gccArgs, tempObjectFiles, hostCompiler());
-      fileArgsForCompileTestExecutable(gccArgs, tempObjectFiles);
-      popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
-      freeArgList(gccArgs);
+      ArgList* linkerArgs = malloc(sizeof(ArgList));
+      initArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles, hostCompiler());
+      fileArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles);
+      popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
+      freeArgList(linkerArgs);
    }
 
    return 0;
@@ -139,17 +139,17 @@ int compileIntoProjectExecutable(
    {
       compileIntoTempObjectFilesWithCompiler(testFiles, sourceFiles, tempObjectFiles, targetCompiler(), basePath);
    }
-   return compileWithObjectFiles(targetCompiler(), tempObjectFiles);
+   return linkObjectFiles(targetCompiler(), tempObjectFiles);
 }
 
-int compileWithObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
+int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
 {
-   ArgList* gccArgs = malloc(sizeof(ArgList));
-   initGccArgsForCompileProjectExecutableFromObjectFiles(gccArgs, tempObjectFiles, compiler);
-   fileArgsForCompileProjectExecutable(gccArgs, tempObjectFiles);
+   ArgList* linkerArgs = malloc(sizeof(ArgList));
+   initArgsForLinkingProjectExecutable(linkerArgs, tempObjectFiles, compiler);
+   fileArgsForLinkingProjectExecutable(linkerArgs, tempObjectFiles);
    makeDir(DIST);
-   int retval = popenChildProcess(gccArgs->size, (char* const*)gccArgs->args);
-   freeArgList(gccArgs);
+   int retval = popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
+   freeArgList(linkerArgs);
    if (retval == 0)
    {
       if (testsWereRun())
@@ -259,7 +259,7 @@ int testFilesSize(const TestFileList* testFiles)
    return testFilesSize;
 }
 
-void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler)
+void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
    if (strcmp(compiler, hostCompiler()) == 0)
@@ -270,21 +270,21 @@ void initGccArgsForCompileProjectExecutableFromObjectFiles(ArgList* gccArgs, con
    {
       options = targetLinkerOptions();
    }
-   gccArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
-   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
-   gccArgs->args[0] = compiler;
+   linkerArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
+   linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
+   linkerArgs->args[0] = compiler;
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 1] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
+      linkerArgs->args[j + 1] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
    }
 
-   gccArgs->args[gccArgs->size - 3] = "-o";
-   gccArgs->args[gccArgs->size - 2] = PROJECT_EXE;
-   gccArgs->args[gccArgs->size - 1] = NULL;
+   linkerArgs->args[linkerArgs->size - 3] = "-o";
+   linkerArgs->args[linkerArgs->size - 2] = PROJECT_EXE;
+   linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 
-void fileArgsForCompileProjectExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles)
+void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles)
 {
    int numObjectFilesFromSourceAddedToArgsList = 0;
    for (int i = 0; i < tempObjectFiles->size; i++)
@@ -292,13 +292,13 @@ void fileArgsForCompileProjectExecutable(ArgList* gccArgs, const ObjectFileList*
       ObjectFile* file = &tempObjectFiles->files[i];
       if (file->isFromSource)
       {
-         gccArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
+         linkerArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
          numObjectFilesFromSourceAddedToArgsList++;
       }
    }
 }
 
-void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles, char* compiler)
+void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
    if (strcmp(compiler, hostCompiler()) == 0)
@@ -311,29 +311,29 @@ void initGccArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList*
    }
    // The +7 is for the known args below
    // The -1 is to not include the main function .o file
-   gccArgs->size = tempObjectFiles->size + options->size + 7 - 1;
-   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
-   for (int i = 0; i < gccArgs->size; i++)
+   linkerArgs->size = tempObjectFiles->size + options->size + 7 - 1;
+   linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
+   for (int i = 0; i < linkerArgs->size; i++)
    {
-      gccArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+      linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
-   gccArgs->args[0] = compiler;
-   gccArgs->args[1] = "-shared";
-   gccArgs->args[2] = "-o";
-   gccArgs->args[3] = TEMP_TEST_PROJECT_LIBRARY;
+   linkerArgs->args[0] = compiler;
+   linkerArgs->args[1] = "-shared";
+   linkerArgs->args[2] = "-o";
+   linkerArgs->args[3] = TEMP_TEST_PROJECT_LIBRARY;
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 4] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
+      linkerArgs->args[j + 4] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
    }
 
-   gccArgs->args[gccArgs->size - 3] = "-L./";
-   gccArgs->args[gccArgs->size - 2] = LIB_GREG_TEST_LIBRARY;
-   gccArgs->args[gccArgs->size - 1] = NULL;
+   linkerArgs->args[linkerArgs->size - 3] = "-L./";
+   linkerArgs->args[linkerArgs->size - 2] = LIB_GREG_TEST_LIBRARY;
+   linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 
-void fileArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* tempObjectFiles)
+void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles)
 {
    int offset = 4;
    bool atLeastOneFileAdded = false;
@@ -341,12 +341,12 @@ void fileArgsForCompileTestExecutable(ArgList* gccArgs, const ObjectFileList* te
    {
       if (i < tempObjectFiles->size)
       {
-         gccArgs->args[i + offset] = (&tempObjectFiles->files[i])->name;
+         linkerArgs->args[i + offset] = (&tempObjectFiles->files[i])->name;
       }
    }
 }
 
-void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
+void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
 {
    LinkedList* options;
    if (strcmp(compiler, hostCompiler()) == 0)
@@ -357,24 +357,24 @@ void initGccArgsForCompilerToObjectFiles(ArgList* gccArgs, const SourceFileList*
    {
       options = targetCompilerOptions();
    }
-   gccArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
-   gccArgs->args = calloc(gccArgs->size, sizeof(void*));
-   for (int i = 0; i < gccArgs->size; i++)
+   compilerArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
+   compilerArgs->args = calloc(compilerArgs->size, sizeof(void*));
+   for (int i = 0; i < compilerArgs->size; i++)
    {
-      gccArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+      compilerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
-   gccArgs->args[0] = compiler;
-   gccArgs->args[1] = "-c";
+   compilerArgs->args[0] = compiler;
+   compilerArgs->args[1] = "-c";
 
    for (int j = 0; j < options->size; j++)
    {
-      gccArgs->args[j + 2] = (void*)at_ll(options, COMPILER_OPTION_TYPE, j);
+      compilerArgs->args[j + 2] = (void*)at_ll(options, COMPILER_OPTION_TYPE, j);
    }
 
-   gccArgs->args[gccArgs->size - 1] = NULL;
+   compilerArgs->args[compilerArgs->size - 1] = NULL;
 }
 
-void initMvArgsForCompilerToObjectFiles(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
+void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
 {
    mvArgs->size = numTestFiles + sourceFiles->size + 3;
    mvArgs->args = calloc(mvArgs->size, sizeof(void*));
