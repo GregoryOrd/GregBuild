@@ -123,6 +123,9 @@ void writeToTestMainH(const TestFileList* testFiles)
    strcpy(testMainH, TEMP_DIR);
    strcat(testMainH, "/TestMain.h");
    writeToFile(testMainH, contents);
+
+   free(contents);
+   free(testMainH);
 }
 
 void writeTestMainHGuardsAndDllDefine(char* contents)
