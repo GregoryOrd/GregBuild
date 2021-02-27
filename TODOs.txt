@@ -3,33 +3,32 @@ Refactoring and Minor Improvements
 0a) Create a file system recursion function in the toolkit
     - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
     cycle
+    - Both the plugin loader and the file/test case gatherer could use this
+    - Both will need to specify an add function for the "add or continue recursion" 
+    functionality
 0b) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
-0c) Instead of using removeTrailingNewLine() in the plugin loader, create a new toolkit
-    function call removeTrailingWhitespace() and use that in it place.
-    - In general, make the reading in of input from the order file more robust
-    - Stick to our formatting rules, document those rules somewhere, then give a 
-    clean error message if we read something in that doesn't follow our formatting rules
-    - Improve handling so that order file does not need a newline character at
-    the end of the final line
+        - /**/ Comments at any point in the line
+        - // Comments at the end of the line
+0c) Make plugin loader parsing more robust
+    - handle whitespace before and after the contents of the param and value strings
 0d) Move FileOperations into common and fix all of the include paths that depend on it
     - Add isSourceFile(), isObjectFileFromSourceFile() and isTestFile() to this common file
     - Some clean up some of the code in these functions
 0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
-    - Some of the helpers in there right now might also belong in different files 
-    in the repo or in the toolkit
+
 
 Major Improvements
 ---------------------
 
-0) Have a list of files that are exlcuded when compiling the tests on the host
+1) Have a list of files that are exlcuded when compiling the tests on the host
     - This is for the situation where target hardware specific files exist
     and our host compiler doesn't know how to handle them when compiling the tests
     - We can make this list known in the configuration file
     - See Configuration.md
-1) Make the PROJECT_EXE variable configurable
+2) Make the PROJECT_EXE variable configurable
     - See Configuration.md for steps to accomplish this
-2) Add plugin(s) for creating a .hex from the outputted .elf 
+3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
         - Possible solution is to have the plugin from a .bat file
         that opens the AtmelStudio Command Prompt and gives it the appropriate
@@ -38,25 +37,55 @@ Major Improvements
         - Now with the linux environment, we should be able to do this with
         avrdude
             - Linux
-3) Add in tests for the toolkit
-4) Add tests to this repo.
-    - Use an earlier version of GregBuild and GregTest to write tests for
-      future development of GregBuild and GregTest
+4) Add a debug build ability
+    - Can this be achieved by simply using -g in the compiler options in the config file?
+5) Add a verbose output option
+    - Add attributes to BuildSequenceStep that can be used to influence how
+    to execution of the step is displayed to the user on the console interface
+6) Configurablity for exiting or continuing after failing to compile and run tests
+    on the host. Continuing would mean to try to build on the target without any of the 
+    tests being run on the host, as it currently does.
+7) Add asserts to GregTest for all standard types (int, double, float) and custom structs when provided with
+   a "comparator" function pointer for the customer struct
+8) Verify support for different platforms
+    - Different make files. One for windows, one for linux
+9) Documentation Review and Improvements
+10) Explore git tags and pre to make a formal release
+
+
+//////////////////////////////////////////////////////////////////////
+//              Mark this point in time as the 1.0 release          //
+//////////////////////////////////////////////////////////////////////
+
+
+Plan for Release 1.1:
+------------------------
+1) Add in tests for the toolkit
+2) Add tests to this repo.
+    - Use version 1.0 of GregBuild 
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
-        - LOL :)
-    - Or actually might be better to avoid this and just use a makefile with 
-    GregTest that follows the same steps as GregBuild
-5) Make GregBuild smart enough to not build files that have not been modified
+3) Make GregBuild smart enough to not build files that have not been modified
     - Will likely no to switch the default flag value for the --leave-temp command
     line option
     - Might also be good to rename to --delete-temp
     - Might also be good idea to rename temp dir to build or something
     - Will need to rename and after the functions in the build sequence and
     the functions in PluginFunctions.h
-6) Investigate multithreaded approach for execution of test cases
-    a) Figure out when the dataset is large enough that multithreading is worth it
-    b) Implement logic to swtich between single and multithreaded approach based on this information
-7) Can we also use a multithreaded solution for gathering the test and source files?
+
+
+
+Plan for Release 1.2:
+------------------------
+1) Add ability to build from deeper withing the src file tree
+    - Make SRC_DIR constant configurable
+2) Implement HashTable for storing file lists
+    - Will provide more efficient lookups for large sets of files
+
+
+
+Plan for Release 1.3:
+------------------------
+1) Multithreaded solution for gathering the test and source files
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
     c) Investigate performance improvements that may result, in larger repos, from using hash tables 
@@ -64,16 +93,11 @@ Major Improvements
         c0) Would need to improve the hash table implementation to dynamically scale to a table of any size
             -> Could probably acheive this with external chaining rather than the current collision handling method
             of linear probing
-8) Add ability to build from deeper withing the src file tree
-    - Make SRC_DIR constant configurable
-9) Documentation Review and Improvements
-10) Verify support for different platforms
-    - Different make files. One for windows, one for linux
-11) Add a debug build ability
-    - Can this be achieved by simply using -g in the compiler options in the config file?
-12) Add a verbose output option
-    - Add attributes to BuildSequenceStep that can be used to influence how
-    to execution of the step is displayed to the user on the console interface
-13) Configurablity for exiting or continuing after failing to compile and run tests
-    on the host. Continuing would mean to try to build on the target without any of the 
-    tests being run on the host, as it currently does.
+
+
+
+Plan for Release 1.4:
+-------------------------
+1) Multithreaded approach for execution of test cases
+    a) Figure out when the dataset is large enough that multithreading is worth it
+    b) Implement logic to swtich between single and multithreaded approach based on this information
