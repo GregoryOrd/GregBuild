@@ -31,10 +31,10 @@ bool isPlugin(const struct dirent *fileOrSubDirectory);
 void addPluginToList(PluginList *list, LinkedList *pluginModules,
                      const char *pluginPath);
 void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules);
-void readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* temppluginModules);
+int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules);
 int processOrderConfigEntry(ArgList* argsList);
-void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* temppluginModules);
-void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* temppluginModules);
+void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
+void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
 void printPluginInList(const PluginList *list);
 
 #ifdef __cplusplus

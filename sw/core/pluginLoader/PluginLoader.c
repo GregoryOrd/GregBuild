@@ -128,34 +128,37 @@ void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules)
 {
    PluginList* tempPluginList = malloc(sizeof(PluginList));
    initPluginList(tempPluginList);
-   LinkedList* temppluginModules = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(temppluginModules, PLUGIN_MODULE_LL_TYPE);
+   LinkedList* tempPluginModules = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(tempPluginModules, PLUGIN_MODULE_LL_TYPE);
 
-   readPluginsFromOrderConfigFileIntoTempLists(PLUGINS_LOAD_ORDER_CONFIG_FILE, list, tempPluginList, temppluginModules);
-   addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(list, tempPluginList, pluginModules, temppluginModules);
-   copyTempListsIntoActualLists(list, tempPluginList, pluginModules, temppluginModules);
+   int error = readPluginsFromOrderConfigFileIntoTempLists(PLUGINS_LOAD_ORDER_CONFIG_FILE, list, tempPluginList, tempPluginModules);
+   if (!error)
+   {
+      addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(list, tempPluginList, pluginModules, tempPluginModules);
+      copyTempListsIntoActualLists(list, tempPluginList, pluginModules, tempPluginModules);
+   }
 
    freePluginList(tempPluginList);
-   freeModuleNode(temppluginModules);
+   freeModuleNode(tempPluginModules);
 }
 
-void readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* temppluginModules)
+int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules)
 {
    ArgList* argsList = malloc(sizeof(ArgList));
    argsList->size = 3;
    argsList->args = calloc(argsList->size, sizeof(char*));
    argsList->args[0] = (void*)list;
    argsList->args[1] = (void*)tempPluginList;
-   argsList->args[2] = (void*)temppluginModules;
+   argsList->args[2] = (void*)tempPluginModules;
 
-   readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
+   return readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
 }
 
 int processOrderConfigEntry(ArgList* argsList)
 {
    PluginList* list = (PluginList*)argsList->args[0];
    PluginList* tempPluginList = (PluginList*)argsList->args[1];
-   LinkedList* temppluginModules = (LinkedList*)argsList->args[2];
+   LinkedList* tempPluginModules = (LinkedList*)argsList->args[2];
    char* buffer = (char*)argsList->args[argsList->size - 1];
 
    for (int i = 0; i < list->size; i++)
@@ -166,13 +169,13 @@ int processOrderConfigEntry(ArgList* argsList)
          strcat(pluginPath, DELIMITER);
          strcat(pluginPath, buffer);
          strcat(pluginPath, LIBRARY_EXTENSION);
-         addPluginToList(tempPluginList, temppluginModules, pluginPath);
+         addPluginToList(tempPluginList, tempPluginModules, pluginPath);
       }
    }
    return 0;
 }
 
-void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* temppluginModules)
+void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules)
 {
    for (int i = 0; i < list->size; i++)
    {
@@ -186,20 +189,20 @@ void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* l
       }
       if (!wasFoundInOrderConfigFile)
       {
-         addPluginToList(tempPluginList, temppluginModules, list->plugins[i].name);
+         addPluginToList(tempPluginList, tempPluginModules, list->plugins[i].name);
       }
    }
 }
 
-void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* temppluginModules)
+void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules)
 {
    for (int i = 0; i < tempPluginList->size; i++)
    {
       strcpy(list->plugins[i].name, tempPluginList->plugins[i].name);
 #ifdef __WINDOWS__
-      setAt_ll(pluginModules, (HMODULE*)at_ll(temppluginModules, PLUGIN_MODULE_LL_TYPE, i), PLUGIN_MODULE_LL_TYPE, i);
+      setAt_ll(pluginModules, (HMODULE*)at_ll(tempPluginModules, PLUGIN_MODULE_LL_TYPE, i), PLUGIN_MODULE_LL_TYPE, i);
 #else
-      setAt_ll(pluginModules, (void*)at_ll(temppluginModules, PLUGIN_MODULE_LL_TYPE, i), PLUGIN_MODULE_LL_TYPE, i);
+      setAt_ll(pluginModules, (void*)at_ll(tempPluginModules, PLUGIN_MODULE_LL_TYPE, i), PLUGIN_MODULE_LL_TYPE, i);
 #endif
    }
 }
