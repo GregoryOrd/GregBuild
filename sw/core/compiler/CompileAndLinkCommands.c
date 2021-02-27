@@ -46,7 +46,7 @@ int compileIntoTempObjectFilesWithCompiler(
    }
 
    freeArgList(compilerArgs, true);
-   free(mvArgs);
+   freeArgList(mvArgs, true);
    return 0;
 }
 
@@ -383,12 +383,13 @@ void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const Sour
 {
    mvArgs->size = numTestFiles + sourceFiles->size + 3;
    mvArgs->args = calloc(mvArgs->size, sizeof(void*));
-   mvArgs->args[0] = mv;
-   for (int i = 1; i < mvArgs->size; i++)
+
+   for (int i = 0; i < mvArgs->size; i++)
    {
       mvArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
+   strcpy(mvArgs->args[0], mv);
    char tempFilePath[WINDOWS_MAX_PATH_LENGTH] = "";
    tempDirPathFromCompiler(tempFilePath, compiler);
    makeDir(tempFilePath);
