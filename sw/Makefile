@@ -18,25 +18,25 @@ USR_BIN_EXE=/usr/bin/$(EXE)
 ######						 GregBuild OBJS 						  ######
 ############################################################################
 
-APPLICATION=application
 COMMON=common
 COMMON_GLOBAL=$(COMMON)/global
+COMPILER=compiler
 FILE_SYSTEM_RECURSION=fileSystemRecursion
 MAIN=main
 PLUGIN_LOADER=pluginLoader
 TEST_EXECUTION=testExecution
 
-APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -maxdepth 1 -name "*.c")))
 COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -maxdepth 1 -name "*.c")))
 COMMON_GLOBAL_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON_GLOBAL)/%.o,$(notdir $(shell find $(CORE)/$(COMMON_GLOBAL) -maxdepth 1 -name "*.c")))
+COMPILER_OBJS = $(patsubst %.c,$(BUILD)/$(COMPILER)/%.o,$(notdir $(shell find $(CORE)/$(COMPILER) -maxdepth 1 -name "*.c")))
 FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -maxdepth 1 -name "*.c")))
 MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -maxdepth 1 -name "*.c")))
 PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -maxdepth 1 -name "*.c")))
 TEST_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_EXECUTION)/%.o,$(notdir $(shell find $(CORE)/$(TEST_EXECUTION) -maxdepth 1 -name "*.c")))
 
-GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
-				  $(COMMON_OBJS) \
+GREG_BUILD_OBJS = $(COMMON_OBJS) \
 				  $(COMMON_GLOBAL_OBJS) \
+				  $(COMPILER_OBJS) \
 				  $(FILE_SYSTEM_RECURSION_OBJS) \
 				  $(MAIN_OBJS) \
                   $(PLUGIN_LOADER_OBJS) \
@@ -93,11 +93,6 @@ $(DIST_EXE): $(TOOLKIT_OBJS) $(GREG_BUILD_OBJS)
 ######						GregBuild OBJ Rules						  ######
 ############################################################################
 
-$(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c $(CORE)/$(APPLICATION)/%.h
-	mkdir -p $(BUILD)/$(APPLICATION)
-	$(CC) $(CFLAGS) -c $<
-	mv $(notdir $@) $@
-
 $(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c $(CORE)/$(COMMON)/%.h
 	mkdir -p $(BUILD)/$(COMMON)
 	$(CC) $(CFLAGS) -c $<
@@ -105,6 +100,11 @@ $(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c $(CORE)/$(COMMON)/%.h
 
 $(BUILD)/$(COMMON_GLOBAL)/%.o: $(CORE)/$(COMMON_GLOBAL)/%.c $(CORE)/$(COMMON_GLOBAL)/%.h
 	mkdir -p $(BUILD)/$(COMMON_GLOBAL)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(COMPILER)/%.o: $(CORE)/$(COMPILER)/%.c $(CORE)/$(COMPILER)/%.h
+	mkdir -p $(BUILD)/$(COMPILER)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 

@@ -1,7 +1,7 @@
 #ifndef CORE_BUILD_SEQUENCE_H
 #define CORE_BUILD_SEQUENCE_H
 
-#include "../application/CompileAndLinkCommands.h"
+#include "../compiler/CompileAndLinkCommands.h"
 #include "../common/BuildSequenceStep.h"
 #include "../testExecution/RunTests.h"
 #include "../common/GregBuildConstants.h"
