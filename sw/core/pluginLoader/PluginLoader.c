@@ -144,7 +144,7 @@ void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules)
    }
 
    freePluginList(tempPluginList);
-   freeModuleNode(tempPluginModules);
+   freePluginModules(tempPluginModules);
 }
 
 int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules)
