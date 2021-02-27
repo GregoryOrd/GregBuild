@@ -153,7 +153,7 @@ int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
    fileArgsForLinkingProjectExecutable(linkerArgs, tempObjectFiles);
    makeDir(DIST);
    int retval = popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
-   freeArgList(linkerArgs, false);
+   freeArgList(linkerArgs, true);
    if (retval == 0)
    {
       if (testsWereRun())
@@ -276,16 +276,20 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
    }
    linkerArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
-   linkerArgs->args[0] = compiler;
+   for (int i = 0; i < linkerArgs->size; i++)
+   {
+      linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   }
+   strcpy(linkerArgs->args[0], compiler);
 
    for (int j = 0; j < options->size; j++)
    {
-      linkerArgs->args[j + 1] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
+      strcpy(linkerArgs->args[j + 1], (char*)at_ll(options, LINKER_OPTION_TYPE, j));
    }
 
-   linkerArgs->args[linkerArgs->size - 3] = "-o";
-   linkerArgs->args[linkerArgs->size - 2] = PROJECT_EXE;
-   linkerArgs->args[linkerArgs->size - 1] = NULL;
+   strcpy(linkerArgs->args[linkerArgs->size - 3], "-o");
+   strcpy(linkerArgs->args[linkerArgs->size - 2], PROJECT_EXE);
+   linkerArgs->args[linkerArgs->size - 1], NULL;
 }
 
 void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles)
@@ -296,7 +300,7 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
       ObjectFile* file = &tempObjectFiles->files[i];
       if (file->isFromSource)
       {
-         linkerArgs->args[numObjectFilesFromSourceAddedToArgsList + 1] = file->name;
+         strcpy(linkerArgs->args[numObjectFilesFromSourceAddedToArgsList + 1], file->name);
          numObjectFilesFromSourceAddedToArgsList++;
       }
    }
