@@ -185,7 +185,13 @@ int testNameEndOffset(const char* testName)
    return TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
 }
 
-bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char* testName, int initialLength) { return testName[initialLength - 2] == '{'; }
+bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char* testName, int initialLength)
+{
+   // Using temp to get rid of valgrind message
+   char temp[WINDOWS_MAX_PATH_LENGTH] = "";
+   strcpy(temp, testName);
+   return temp[initialLength - 2] == '{';
+}
 
 bool isSpecialCharacter(const char c)
 {
