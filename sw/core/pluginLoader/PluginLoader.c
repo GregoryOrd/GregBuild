@@ -60,14 +60,14 @@ void freePluginModules(LinkedList* pluginModules)
       const HMODULE* lib = (const HMODULE*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
       FreeLibrary(*lib);
    }
-   freeLinkedList(pluginModules, &freeModuleNode);
+   free(pluginModules);
 #else
    for (int i = 0; i < pluginModules->size; i++)
    {
       void* lib = (void*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
       dlclose(lib);
    }
-   freeLinkedList(pluginModules, &freeModuleNode);
+   free(pluginModules);
 #endif
 }
 
@@ -76,6 +76,7 @@ void freeModuleNode(void* data) { free(data); }
 void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* basePath)
 {
    initPluginList(plugins);
+   initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 2;
    argList->args = calloc(2, sizeof(void*));

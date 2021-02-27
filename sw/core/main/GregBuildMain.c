@@ -17,33 +17,29 @@ int main(int argc, const char* argv[])
 {
    printf("Starting GregBuild\n");
    LinkedList* optionList = malloc(sizeof(LinkedList));
-   TestFileList* testFiles;
+   TestFileList* testFiles = malloc(sizeof(TestFileList));
    SourceFileList* sourceFiles = malloc(sizeof(SourceFileList));
    ObjectFileList* tempObjectFiles = malloc(sizeof(ObjectFileList));
    PluginList* plugins = malloc(sizeof(PluginList));
    LinkedList* pluginModules = malloc(sizeof(LinkedList));
+   LinkedList* buildSequence = malloc(sizeof(LinkedList));
 
    initCoreCommandLineOptions(optionList);
-   if (flagValueForOption_ll(optionList, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE))
-   {
-      testFiles = malloc(sizeof(TestFileList));
-   }
    initFileListsAndTempDir(testFiles, sourceFiles, tempObjectFiles);
-
-   LinkedList* buildSequence = malloc(sizeof(LinkedList));
    initBuildSequence(buildSequence);
 
-   initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
    loadPlugins(plugins, pluginModules, PLUGINS_LIB_DIRECTORY);
    processPlugins(buildSequence, plugins, pluginModules, optionList);
    processCommandLineOptions(optionList, argc, argv);
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   // Since each of the CommandLineOptions in optionsList is part of a BuildSequenceStep
-   // in buildSequence, we do not need a call to freeCommandLineOptions(optionsList).
-   freeBuildSequence(buildSequence);
+   // Since each of the CommandLineOptions in optionList is part of a BuildSequenceStep
+   // in buildSequence, we do not need a call to freeCommandLineOptions(optionList).
+   free(optionList);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
+   freePluginModules(pluginModules);
+   freeBuildSequence(buildSequence);
    return error;
 }

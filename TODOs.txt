@@ -16,6 +16,8 @@ Refactoring and Minor Improvements
     - Add isSourceFile(), isObjectFileFromSourceFile() and isTestFile() to this common file
     - Some clean up some of the code in these functions
 0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
+0f) Create strings are equal function in StringUtils
+    - Replace all of the instances of using strcmp(x, y) == 0
 
 
 Major Improvements
