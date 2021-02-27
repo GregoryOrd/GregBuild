@@ -2,7 +2,6 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../application/CompileAndLinkCommands.h"
-#include "../application/CoreCommandLineOptions.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
@@ -12,6 +11,7 @@
 #include "../testExecution/RunTests.h"
 #include "../testExecution/TestMainWriter.h"
 #include "BuildSequence.h"
+#include "CoreCommandLineOptions.h"
 
 int main(int argc, const char* argv[])
 {
