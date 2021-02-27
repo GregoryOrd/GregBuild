@@ -113,10 +113,7 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
       fileArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles);
       popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
 
-      free(linkerArgs->args[0]);
-      free(linkerArgs->args[1]);
-      free(linkerArgs->args[2]);
-      freeArgList(linkerArgs, false);
+      freeArgList(linkerArgs, true);
    }
 
    return 0;
@@ -349,7 +346,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    {
       if (i < tempObjectFiles->size)
       {
-         linkerArgs->args[i + offset] = (&tempObjectFiles->files[i])->name;
+         strcpy(linkerArgs->args[i + offset], (&tempObjectFiles->files[i])->name);
       }
    }
 }
