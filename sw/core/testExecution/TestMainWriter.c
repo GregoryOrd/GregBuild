@@ -25,7 +25,9 @@ void writeToTestMainC(const TestFileList* testFiles)
    strcpy(testMainC, TEMP_DIR);
    strcat(testMainC, "/TestMain.c");
    writeToFile(testMainC, contents);
+
    free(contents);
+   free(testMainC);
 }
 
 void populateTestMainCContents(char* contents, const TestFileList* testFiles)
