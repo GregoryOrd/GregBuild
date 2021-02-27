@@ -1,5 +1,6 @@
-#include "TestsWereRun.h"
-#include "TestsWereRun_Value.h"
+#include "GlobalVariables.h"
+
+#include "GlobalVariables_Values.h"
 
 bool testsWereRun() { return testsWereRun_; }
 

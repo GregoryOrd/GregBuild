@@ -20,6 +20,7 @@ USR_BIN_EXE=/usr/bin/$(EXE)
 
 APPLICATION=application
 COMMON=common
+COMMON_GLOBAL=$(COMMON)/global
 FILE_SYSTEM_RECURSION=fileSystemRecursion
 MAIN=main
 PLUGIN_LOADER=pluginLoader
@@ -27,6 +28,7 @@ TEST_MAIN_WRITING=testMainWriting
 
 APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
 COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
+COMMON_GLOBAL_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
 FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
 MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
 PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -name "*.c")))
@@ -34,6 +36,7 @@ TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notd
 
 GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 				  $(COMMON_OBJS) \
+				  $(COMMON_GLOBAL_OBJS) \
 				  $(FILE_SYSTEM_RECURSION_OBJS) \
 				  $(MAIN_OBJS) \
                   $(PLUGIN_LOADER_OBJS) \
@@ -44,8 +47,9 @@ GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 ############################################################################
 
 ARG_LIST=ArgList
-COLLECTIONS_HASHTABLE=Collections/HashTable
-COLLECTIONS_LINKEDLIST=Collections/LinkedList
+COLLECTIONS=Collections
+COLLECTIONS_HASHTABLE=$(COLLECTIONS)/HashTable
+COLLECTIONS_LINKEDLIST=$(COLLECTIONS)/LinkedList
 COMMAND_LINE_OPTIONS=CommandLineOptions
 EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
 FAILURE_HANDLING=FailureHandling
@@ -95,6 +99,11 @@ $(BUILD)/$(APPLICATION)/%.o: $(CORE)/$(APPLICATION)/%.c $(CORE)/$(APPLICATION)/%
 	mv $(notdir $@) $@
 
 $(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c $(CORE)/$(COMMON)/%.h
+	mkdir -p $(BUILD)/$(COMMON)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@
+
+$(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON_GLOBAL)/%.c $(CORE)/$(COMMON_GLOBAL)/%.h
 	mkdir -p $(BUILD)/$(COMMON)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@

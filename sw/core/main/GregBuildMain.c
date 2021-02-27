@@ -6,7 +6,6 @@
 #include "../application/RunTests.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
-#include "../common/MainFunctionFile.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../pluginLoader/PluginLoader.h"

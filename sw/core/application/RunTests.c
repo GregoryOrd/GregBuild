@@ -7,7 +7,7 @@
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../common/GregBuildConstants.h"
-#include "../common/TestsWereRun.h"
+#include "../common/global/GlobalVariables.h"
 #include "CompileAndLinkCommands.h"
 
 int runTests()

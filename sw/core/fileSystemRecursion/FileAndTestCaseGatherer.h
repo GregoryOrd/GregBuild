@@ -24,8 +24,6 @@ void copyFileOrSubDirectoryNameIntoPath(char *path, const char *basePath,
                                         const char *fileOrSubDirectoryName);
 void addTestFileToList(TestFileList *testFileList, const char *pathToTestFile);
 void addSourceFileToList(SourceFileList *list, const char *pathToSourceFile);
-void checkForMainFunction(const char* pathToSourceFile);
-int markMainFunctionLine(ArgList* argList);
 void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile);
 int addIfIsSingleTestCase(ArgList* argList);
 void addSingleTestCaseToList(void* args[]);
