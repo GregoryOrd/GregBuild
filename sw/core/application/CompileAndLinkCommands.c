@@ -12,6 +12,7 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/Global/GlobalVariables.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/global/GlobalVariables.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/TestAndSrcDefinitions.h"
 
@@ -36,6 +37,7 @@ int compileIntoTempObjectFilesWithCompiler(
       printf("\n===================================================================\n");
       printf("Error compiling with compiler: %s\n", compiler);
       printf("===================================================================\n");
+      setHostCompileFailed();
       resetObjectFileList(tempObjectFiles);
    }
    else

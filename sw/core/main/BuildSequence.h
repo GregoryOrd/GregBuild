@@ -14,6 +14,7 @@ void setCoreBuildSequenceSteps(LinkedList *sequence);
 int executeBuildSequence(const LinkedList *buildSequence, LinkedList *options,
                          TestFileList *testFiles, SourceFileList *sourceFiles,
                          ObjectFileList *tempObjectFiles);
+void printBuildSequenceExecutionMessage(BuildSequenceStep* step);
 void freeBuildSequence(LinkedList *sequence);
 void freeBuildSequenceStep(void *data);
 

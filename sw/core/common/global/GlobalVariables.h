@@ -10,6 +10,9 @@ extern "C"
 {
 #endif
 
+   bool hostCompileFailed();
+   void setHostCompileFailed();
+
    bool testsWereRun();
    void setTestsWereRun();
 

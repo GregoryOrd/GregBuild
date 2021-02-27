@@ -3,6 +3,7 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/global/GlobalVariables.h"
 #include "CoreBuildSequence.h"
 
 void initBuildSequence(LinkedList* sequence)
@@ -34,14 +35,23 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
       bool flagVal = flagValueForOption_ll(options, step->option->optionText, COMMAND_LINE_OPTION_TYPE);
       if (!error && flagVal)
       {
-         printf("\n===================================================================\n");
-         printf("%s\n", step->functionName);
-         printf("====================================================================\n");
+         printBuildSequenceExecutionMessage(step);
          error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
       }
    }
 
    return error;
+}
+
+void printBuildSequenceExecutionMessage(BuildSequenceStep* step)
+{
+   bool skippedTestStep = (strcmp(step->option->optionText, NO_TEST_OPTION_TEXT) == 0) && hostCompileFailed();
+   if (!skippedTestStep)
+   {
+      printf("\n===================================================================\n");
+      printf("%s\n", step->functionName);
+      printf("====================================================================\n");
+   }
 }
 
 void freeBuildSequence(LinkedList* sequence) { freeLinkedList(sequence, &freeBuildSequenceStep); }

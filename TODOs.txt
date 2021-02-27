@@ -23,13 +23,6 @@ Refactoring and Minor Improvements
     - Could maybe move RunTests into core/testMainWriting and then rename it to be 
     a more generic test module instead of specifically writing to TestMain
     - Maybe also move CoreCommandLineOptions to core/main
-0h) Remove build sequence step printing for test steps when tests are skipped as
-    a result of failed compilation on host 
-0i) Refactor CompilerConfiguration into general configuration
-    and use it for the other variable that we want to make configurable.
-        - Change compiler.config to GregBuild.config
-        - Move to common folder so all other files can access the global configuration
-        variables
 
 Major Improvements
 ---------------------

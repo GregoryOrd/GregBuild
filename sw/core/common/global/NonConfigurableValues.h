@@ -5,6 +5,7 @@
 
 #include <stdbool.h>
 
+bool hostCompileFailed_ = false;
 bool testsWereRun_ = false;
 
 #endif
