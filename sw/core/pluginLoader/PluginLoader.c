@@ -18,6 +18,24 @@
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
 
+//////////////////////////////////////////////////////////////////////
+//              Private Data and Function Prototypes                //
+//////////////////////////////////////////////////////////////////////
+bool addIfIsPlugin(ArgList* argList, const struct dirent* fileOrSubDirectory, const char* pluginPath);
+void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
+void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pluginPath);
+void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
+void freeModuleNode(void* data);
+void initPluginList(PluginList* list);
+bool isPlugin(const struct dirent* fileOrSubDirectory);
+void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules);
+int processOrderConfigEntry(ArgList* argsList);
+int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules);
+
+//////////////////////////////////////////////////////////////////////
+//                     Function Implementations                     //
+//////////////////////////////////////////////////////////////////////
+
 void initPluginList(PluginList* list)
 {
    list->size = 0;
@@ -57,6 +75,7 @@ void freeModuleNode(void* data) { free(data); }
 
 void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* basePath)
 {
+   initPluginList(plugins);
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 2;
    argList->args = calloc(2, sizeof(void*));
@@ -64,6 +83,7 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* bas
    argList->args[1] = pluginModules;
    recurseAndAddFilesToList(basePath, addIfIsPlugin, argList);
    freeArgList(argList);
+   orderPluginsToMatchConfigFile(plugins, pluginModules);
 }
 
 bool isPlugin(const struct dirent* fileOrSubDirectory)

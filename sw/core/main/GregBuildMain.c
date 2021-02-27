@@ -34,9 +34,7 @@ int main(int argc, const char* argv[])
    initBuildSequence(buildSequence);
 
    initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
-   initPluginList(plugins);
    loadPlugins(plugins, pluginModules, PLUGINS_LIB_DIRECTORY);
-   orderPluginsToMatchConfigFile(plugins, pluginModules);
    processPlugins(buildSequence, plugins, pluginModules, optionList);
    processCommandLineOptions(optionList, argc, argv);
 
