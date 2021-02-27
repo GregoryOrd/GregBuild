@@ -66,7 +66,7 @@ void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
    if (list != NULL)
    {
       list->files = (SourceFile*)realloc(list->files, ((list->size + 1) * sizeof(SourceFile)));
-      list->files[list->size].name = calloc(strlen(pathToSourceFile) + 1, sizeof(char));
+      list->files[list->size].name = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
       strcpy(list->files[list->size].name, pathToSourceFile);
       list->size++;
    }
@@ -77,7 +77,7 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
    if (testFileList != NULL)
    {
       testFileList->files = (TestFile*)realloc(testFileList->files, (testFileList->size + 1) * sizeof(TestFile));
-      testFileList->files[testFileList->size].name = calloc(strlen(pathToTestFile) + 1, sizeof(char));
+      testFileList->files[testFileList->size].name = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
       testFileList->files[testFileList->size].numTestCases = 0;
       testFileList->files[testFileList->size].cases = malloc(sizeof(TestCase));
       strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
@@ -120,7 +120,7 @@ void addSingleTestCaseToList(void* args[])
 
    TestFile* testFile = &testFileList->files[testFileList->size];
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
-   testFile->cases[testFile->numTestCases].testName = calloc(strlen(buffer) + 1, sizeof(char));
+   testFile->cases[testFile->numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
 
    strcpy(testFile->cases[testFile->numTestCases].testName, buffer);
    testFile->numTestCases++;
