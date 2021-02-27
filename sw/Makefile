@@ -212,7 +212,7 @@ Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/TheBestPlugin.so
 clean:
 	rm $(BUILD) -r
 	rm $(DIST) -r
-	rm $(USR_BIN_EXE)
+	sudo rm $(USR_BIN_EXE)
 
 cleanPlugins:
 	rm ../lib/plugins/TimeTrackingPlugin.so
