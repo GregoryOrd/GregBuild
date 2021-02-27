@@ -6,9 +6,9 @@
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
+#include "../application/CompileAndLinkCommands.h"
 #include "../common/GregBuildConstants.h"
 #include "../common/global/GlobalVariables.h"
-#include "CompileAndLinkCommands.h"
 
 int runTests()
 {

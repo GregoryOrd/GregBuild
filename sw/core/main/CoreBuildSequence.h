@@ -3,11 +3,11 @@
 
 #include "../application/CompileAndLinkCommands.h"
 #include "../common/BuildSequenceStep.h"
-#include "../application/RunTests.h"
+#include "../testExecution/RunTests.h"
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
-#include "../testMainWriting/TestMainWriter.h"
+#include "../testExecution/TestMainWriter.h"
 #include "../common/global/GlobalVariables.h"
 
 typedef struct BuildSequenceStepInfo

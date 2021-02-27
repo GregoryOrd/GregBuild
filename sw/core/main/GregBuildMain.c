@@ -3,14 +3,14 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../application/CompileAndLinkCommands.h"
 #include "../application/CoreCommandLineOptions.h"
-#include "../application/RunTests.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../pluginLoader/PluginLoader.h"
 #include "../pluginLoader/PluginProcessor.h"
-#include "../testMainWriting/TestMainWriter.h"
+#include "../testExecution/RunTests.h"
+#include "../testExecution/TestMainWriter.h"
 #include "BuildSequence.h"
 
 int main(int argc, const char* argv[])

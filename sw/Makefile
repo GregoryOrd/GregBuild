@@ -24,7 +24,7 @@ COMMON_GLOBAL=$(COMMON)/global
 FILE_SYSTEM_RECURSION=fileSystemRecursion
 MAIN=main
 PLUGIN_LOADER=pluginLoader
-TEST_MAIN_WRITING=testMainWriting
+TEST_EXECUTION=testExecution
 
 APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -maxdepth 1 -name "*.c")))
 COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -maxdepth 1 -name "*.c")))
@@ -32,7 +32,7 @@ COMMON_GLOBAL_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON_GLOBAL)/%.o,$(notdir $(she
 FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -maxdepth 1 -name "*.c")))
 MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -maxdepth 1 -name "*.c")))
 PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -maxdepth 1 -name "*.c")))
-TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -maxdepth 1 -name "*.c")))
+TEST_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_EXECUTION)/%.o,$(notdir $(shell find $(CORE)/$(TEST_EXECUTION) -maxdepth 1 -name "*.c")))
 
 GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 				  $(COMMON_OBJS) \
@@ -40,7 +40,7 @@ GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 				  $(FILE_SYSTEM_RECURSION_OBJS) \
 				  $(MAIN_OBJS) \
                   $(PLUGIN_LOADER_OBJS) \
-				  $(TEST_MAIN_WRITING_OBJS)
+				  $(TEST_EXECUTION_OBJS)
 
 ############################################################################
 ######						  Toolkit OBJS 	    					  ######
@@ -123,8 +123,8 @@ $(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c $(CORE)/$(PLUGIN_LOA
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c $(CORE)/$(TEST_MAIN_WRITING)/%.h
-	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
+$(BUILD)/$(TEST_EXECUTION)/%.o: $(CORE)/$(TEST_EXECUTION)/%.c $(CORE)/$(TEST_EXECUTION)/%.h
+	mkdir -p $(BUILD)/$(TEST_EXECUTION)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
