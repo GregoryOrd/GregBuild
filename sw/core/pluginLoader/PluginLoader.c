@@ -84,7 +84,7 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* bas
    argList->args[0] = plugins;
    argList->args[1] = pluginModules;
    recurseAndAddFilesToList(basePath, addIfIsPlugin, argList);
-   freeArgList(argList);
+   freeArgList(argList, false);
    orderPluginsToMatchConfigFile(plugins, pluginModules);
 }
 
@@ -157,7 +157,7 @@ int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, Plug
    argsList->args[2] = (void*)tempPluginModules;
 
    int result = readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
-   freeArgList(argsList);
+   freeArgList(argsList, false);
    return result;
 }
 

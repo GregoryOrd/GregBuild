@@ -97,7 +97,7 @@ void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)
 
    readFileWithActionAfterEachLine(pathToTestFile, argsList, addIfIsSingleTestCase);
 
-   freeArgList(argsList);
+   freeArgList(argsList, false);
 }
 
 int addIfIsSingleTestCase(ArgList* argList)

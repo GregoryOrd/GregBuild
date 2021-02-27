@@ -70,7 +70,7 @@ int readCompilerConfigurationFromFile()
    argList->args[0] = table;
    readFileWithActionAfterEachLine(COMPILER_CONFIG_FILE, argList, parseConfigurationFileLine);
    freeHashTable(table, freeSetupConfigurations, false, false);
-   freeArgList(argList);
+   freeArgList(argList, false);
    return 0;
 }
 

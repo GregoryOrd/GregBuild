@@ -45,7 +45,7 @@ int compileIntoTempObjectFilesWithCompiler(
       moveObjectFilesToTempDir(mvArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
    }
 
-   freeArgList(compilerArgs);
+   freeArgList(compilerArgs, true);
    free(mvArgs);
    return 0;
 }
@@ -112,7 +112,11 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
       initArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles, hostCompiler());
       fileArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles);
       popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
-      freeArgList(linkerArgs);
+
+      free(linkerArgs->args[0]);
+      free(linkerArgs->args[1]);
+      free(linkerArgs->args[2]);
+      freeArgList(linkerArgs, false);
    }
 
    return 0;
@@ -149,7 +153,7 @@ int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
    fileArgsForLinkingProjectExecutable(linkerArgs, tempObjectFiles);
    makeDir(DIST);
    int retval = popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
-   freeArgList(linkerArgs);
+   freeArgList(linkerArgs, false);
    if (retval == 0)
    {
       if (testsWereRun())
@@ -318,18 +322,18 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
       linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
-   linkerArgs->args[0] = compiler;
-   linkerArgs->args[1] = "-shared";
-   linkerArgs->args[2] = "-o";
-   linkerArgs->args[3] = TEMP_TEST_PROJECT_LIBRARY;
+   strcpy(linkerArgs->args[0], compiler);
+   strcpy(linkerArgs->args[1], "-shared");
+   strcpy(linkerArgs->args[2], "-o");
+   strcpy(linkerArgs->args[3], TEMP_TEST_PROJECT_LIBRARY);
 
    for (int j = 0; j < options->size; j++)
    {
-      linkerArgs->args[j + 4] = (void*)at_ll(options, LINKER_OPTION_TYPE, j);
+      strcpy(linkerArgs->args[j + 4], (char*)at_ll(options, LINKER_OPTION_TYPE, j));
    }
 
-   linkerArgs->args[linkerArgs->size - 3] = "-L./";
-   linkerArgs->args[linkerArgs->size - 2] = LIB_GREG_TEST_LIBRARY;
+   strcpy(linkerArgs->args[linkerArgs->size - 3], "-L./");
+   strcpy(linkerArgs->args[linkerArgs->size - 2], LIB_GREG_TEST_LIBRARY);
    linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 
@@ -363,12 +367,12 @@ void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileLi
    {
       compilerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
-   compilerArgs->args[0] = compiler;
-   compilerArgs->args[1] = "-c";
+   strcpy(compilerArgs->args[0], compiler);
+   strcpy(compilerArgs->args[1], "-c");
 
    for (int j = 0; j < options->size; j++)
    {
-      compilerArgs->args[j + 2] = (void*)at_ll(options, COMPILER_OPTION_TYPE, j);
+      strcpy(compilerArgs->args[j + 2], (char*)at_ll(options, COMPILER_OPTION_TYPE, j));
    }
 
    compilerArgs->args[compilerArgs->size - 1] = NULL;
