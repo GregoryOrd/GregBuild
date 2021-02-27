@@ -14,7 +14,6 @@
 #include "../common/GregBuildConstants.h"
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/TestAndSrcDefinitions.h"
-#include "CompilerConfiguration.h"
 
 int compileIntoTempObjectFiles(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)

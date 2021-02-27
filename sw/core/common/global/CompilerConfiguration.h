@@ -1,8 +1,13 @@
-#ifndef COMPILER_CONFIGURATION_VALUES
-#define COMPILER_CONFIGURATION_VALUES
+#ifndef COMPILER_CONFIGURATION_H
+#define COMPILER_CONFIGURATION_H
 
-#include "../common/FileStructureDefs.h"
-#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
+#include <stdlib.h>
+
+#include "../../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
+#include "../FileStructureDefs.h"
+#include "GlobalVariables.h"
+
+#define COMPILER_CONFIG_DELIMITER ':'
 
 char hostCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";
 char targetCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";

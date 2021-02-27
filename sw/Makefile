@@ -26,13 +26,13 @@ MAIN=main
 PLUGIN_LOADER=pluginLoader
 TEST_MAIN_WRITING=testMainWriting
 
-APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
-COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
-COMMON_GLOBAL_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
-FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
-MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
-PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -name "*.c")))
-TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
+APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -maxdepth 1 -name "*.c")))
+COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -maxdepth 1 -name "*.c")))
+COMMON_GLOBAL_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON_GLOBAL)/%.o,$(notdir $(shell find $(CORE)/$(COMMON_GLOBAL) -maxdepth 1 -name "*.c")))
+FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -maxdepth 1 -name "*.c")))
+MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -maxdepth 1 -name "*.c")))
+PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -maxdepth 1 -name "*.c")))
+TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -maxdepth 1 -name "*.c")))
 
 GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 				  $(COMMON_OBJS) \
@@ -103,8 +103,8 @@ $(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON)/%.c $(CORE)/$(COMMON)/%.h
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(COMMON)/%.o: $(CORE)/$(COMMON_GLOBAL)/%.c $(CORE)/$(COMMON_GLOBAL)/%.h
-	mkdir -p $(BUILD)/$(COMMON)
+$(BUILD)/$(COMMON_GLOBAL)/%.o: $(CORE)/$(COMMON_GLOBAL)/%.c $(CORE)/$(COMMON_GLOBAL)/%.h
+	mkdir -p $(BUILD)/$(COMMON_GLOBAL)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
@@ -137,6 +137,11 @@ $(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o: $(TOOLKIT_SW)/$(ARG_LIST)/%.c $(TOOLKIT_SW)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@
+
 $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST)/%.h
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)
 	$(CC) $(CFLAGS) -c $<
@@ -144,11 +149,6 @@ $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_L
 
 $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.h
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
-	$(CC) $(CFLAGS) -c $<
-	mv $(notdir $@) $@
-
-$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.h
-	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 

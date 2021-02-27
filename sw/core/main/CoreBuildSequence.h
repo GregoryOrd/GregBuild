@@ -8,7 +8,7 @@
 #include "../fileSystemRecursion/FileOperations.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../testMainWriting/TestMainWriter.h"
-#include "../application/CompilerConfiguration.h"
+#include "../common/global/GlobalVariables.h"
 
 typedef struct BuildSequenceStepInfo
 {

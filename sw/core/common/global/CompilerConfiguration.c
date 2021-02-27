@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
-#include "../../external/GregCToolkit/sw/String/StringUtils.h"
-#include "../common/FileStructureDefs.h"
-#include "../common/GregBuildConstants.h"
-#include "CompilerConfigurationValues.h"
+#include "../../../external/GregCToolkit/sw/Collections/HashTable/HashTable.h"
+#include "../../../external/GregCToolkit/sw/FileIO/FileReader.h"
+#include "../../../external/GregCToolkit/sw/String/StringUtils.h"
+#include "../../common/FileStructureDefs.h"
+#include "../../common/GregBuildConstants.h"
 
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
