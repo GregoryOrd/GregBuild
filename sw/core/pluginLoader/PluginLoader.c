@@ -49,6 +49,7 @@ void freePluginList(PluginList* list)
    {
       free(list->plugins[i].name);
    }
+   free(list->plugins);
    free(list);
 }
 
@@ -59,6 +60,7 @@ void freePluginModules(LinkedList* pluginModules)
    {
       const HMODULE* lib = (const HMODULE*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
       FreeLibrary(*lib);
+      free(lib);
    }
    free(pluginModules);
 #else
@@ -66,6 +68,7 @@ void freePluginModules(LinkedList* pluginModules)
    {
       void* lib = (void*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
       dlclose(lib);
+      free(lib);
    }
    free(pluginModules);
 #endif
