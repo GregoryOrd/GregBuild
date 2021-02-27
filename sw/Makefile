@@ -2,50 +2,50 @@
 ######						General Variables						  ######
 ############################################################################
 
-CORE=core
 BUILD=../build
-EXE=GB
-DIST=../dist
-DIST_EXE=$(DIST)/$(EXE)
-USR_BIN_EXE=/usr/bin/$(EXE)
-TOOLKIT=GregCToolkit
-TOOLKIT_SW = external/$(TOOLKIT)/sw
 CC=gcc
 CFLAGS=-g
+CORE=core
+DIST=../dist
+DIST_EXE=$(DIST)/$(EXE)
+EXE=GB
 LINKFLAGS=-ldl
+TOOLKIT=GregCToolkit
+TOOLKIT_SW = external/$(TOOLKIT)/sw
+USR_BIN_EXE=/usr/bin/$(EXE)
 
 ############################################################################
 ######						 GregBuild OBJS 						  ######
 ############################################################################
 
 APPLICATION=application
+COMMON=common
 FILE_SYSTEM_RECURSION=fileSystemRecursion
 MAIN=main
-TEST_MAIN_WRITING=testMainWriting
 PLUGIN_LOADER=pluginLoader
-COMMON=common
+TEST_MAIN_WRITING=testMainWriting
 
 APPLICATION_OBJS = $(patsubst %.c,$(BUILD)/$(APPLICATION)/%.o,$(notdir $(shell find $(CORE)/$(APPLICATION) -name "*.c")))
 COMMON_OBJS = $(patsubst %.c,$(BUILD)/$(COMMON)/%.o,$(notdir $(shell find $(CORE)/$(COMMON) -name "*.c")))
 FILE_SYSTEM_RECURSION_OBJS = $(patsubst %.c,$(BUILD)/$(FILE_SYSTEM_RECURSION)/%.o,$(notdir $(shell find $(CORE)/$(FILE_SYSTEM_RECURSION) -name "*.c")))
 MAIN_OBJS = $(patsubst %.c,$(BUILD)/$(MAIN)/%.o,$(notdir $(shell find $(CORE)/$(MAIN) -name "*.c")))
-TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
 PLUGIN_LOADER_OBJS = $(patsubst %.c,$(BUILD)/$(PLUGIN_LOADER)/%.o,$(notdir $(shell find $(CORE)/$(PLUGIN_LOADER) -name "*.c")))
+TEST_MAIN_WRITING_OBJS = $(patsubst %.c,$(BUILD)/$(TEST_MAIN_WRITING)/%.o,$(notdir $(shell find $(CORE)/$(TEST_MAIN_WRITING) -name "*.c")))
 
 GREG_BUILD_OBJS = $(APPLICATION_OBJS) \
 				  $(COMMON_OBJS) \
 				  $(FILE_SYSTEM_RECURSION_OBJS) \
 				  $(MAIN_OBJS) \
-				  $(TEST_MAIN_WRITING_OBJS) \
-                  $(PLUGIN_LOADER_OBJS)
+                  $(PLUGIN_LOADER_OBJS) \
+				  $(TEST_MAIN_WRITING_OBJS)
 
 ############################################################################
 ######						  Toolkit OBJS 	    					  ######
 ############################################################################
 
 ARG_LIST=ArgList
-COLLECTIONS_LINKEDLIST=Collections/LinkedList
 COLLECTIONS_HASHTABLE=Collections/HashTable
+COLLECTIONS_LINKEDLIST=Collections/LinkedList
 COMMAND_LINE_OPTIONS=CommandLineOptions
 EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
 FAILURE_HANDLING=FailureHandling
@@ -54,8 +54,8 @@ FILE_SYSTEM=FileSystem
 STRING=String
 
 ARG_LIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(ARG_LIST) -name "*.c")))
-COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -name "*.c")))
 COLLECTIONS_HASHTABLE_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE) -name "*.c")))
+COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -name "*.c")))
 COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
 EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
 FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
@@ -64,8 +64,8 @@ FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdi
 STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
 
 TOOLKIT_OBJS =  $(ARG_LIST_OBJS) \
-				$(COLLECTIONS_LINKEDLIST_OBJS) \
 				$(COLLECTIONS_HASHTABLE_OBJS) \
+				$(COLLECTIONS_LINKEDLIST_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
 				$(FAILURE_HANDLING_OBJS) \
@@ -109,13 +109,13 @@ $(BUILD)/$(MAIN)/%.o: $(CORE)/$(MAIN)/%.c
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c $(CORE)/$(TEST_MAIN_WRITING)/%.h
-	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
+$(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c $(CORE)/$(PLUGIN_LOADER)/%.h
+	mkdir -p $(BUILD)/$(PLUGIN_LOADER)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(PLUGIN_LOADER)/%.o: $(CORE)/$(PLUGIN_LOADER)/%.c $(CORE)/$(PLUGIN_LOADER)/%.h
-	mkdir -p $(BUILD)/$(PLUGIN_LOADER)
+$(BUILD)/$(TEST_MAIN_WRITING)/%.o: $(CORE)/$(TEST_MAIN_WRITING)/%.c $(CORE)/$(TEST_MAIN_WRITING)/%.h
+	mkdir -p $(BUILD)/$(TEST_MAIN_WRITING)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
@@ -133,13 +133,13 @@ $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_L
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.h
-	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)
+$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o: $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.c $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS)/%.h
-	mkdir -p $(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)
+$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o: $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.c $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
