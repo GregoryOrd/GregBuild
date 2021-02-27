@@ -120,12 +120,10 @@ void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pl
       list->size++;
 
 #ifdef __WINDOWS__
-      HMODULE* lib = malloc(sizeof(HMODULE));
-      *lib = LoadLibrary(list->plugins[list->size - 1].name);
-      append_ll(pluginModules, lib, PLUGIN_MODULE_LL_TYPE);
+      HMODULE lib = LoadLibrary(list->plugins[list->size - 1].name);
+      append_ll(pluginModules, &lib, PLUGIN_MODULE_LL_TYPE);
 #else
-      void* lib = malloc(sizeof(void*));
-      lib = dlopen(list->plugins[list->size - 1].name, RTLD_LAZY);
+      void* lib = dlopen(list->plugins[list->size - 1].name, RTLD_LAZY);
       append_ll(pluginModules, lib, PLUGIN_MODULE_LL_TYPE);
 #endif
    }
