@@ -21,7 +21,6 @@ void initTestFiles(TestFileList* testFiles)
       testFiles->files = malloc(sizeof(TestFile));
       testFiles->files[0].name = NULL;
       testFiles->files[0].numTestCases = 0;
-      testFiles->files[0].cases = malloc(sizeof(TestCase));
       testFiles->totalNumTestCases = 0;
    }
 }
@@ -46,6 +45,7 @@ void freeObjectFileList(ObjectFileList* list)
    {
       free(list->files[i].name);
    }
+   free(list->files);
    free(list);
 }
 
@@ -75,6 +75,7 @@ void freeSourceFileList(SourceFileList* list)
    {
       free(list->files[i].name);
    }
+   free(list->files);
    free(list);
 }
 
