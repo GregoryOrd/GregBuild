@@ -18,7 +18,6 @@ Refactoring and Minor Improvements
 0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
     - Some of the helpers in there right now might also belong in different files 
     in the repo or in the toolkit
-0f) Cleanup LinkedList. Duplication between insert_ll and insert_string_ll can be reduced
 
 Major Improvements
 ---------------------
