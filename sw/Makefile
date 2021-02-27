@@ -53,19 +53,19 @@ COLLECTIONS_LINKEDLIST=$(COLLECTIONS)/LinkedList
 COMMAND_LINE_OPTIONS=CommandLineOptions
 EXTERNAL_PROGRAM_EXECUTION=ExternalProgramExecution
 FAILURE_HANDLING=FailureHandling
-FILE_IO=FileIO
 FILE_SYSTEM=FileSystem
+FILE_SYSTEM_FILE_IO=$(FILE_SYSTEM)/FileIO
 STRING=String
 
-ARG_LIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(ARG_LIST) -name "*.c")))
-COLLECTIONS_HASHTABLE_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE) -name "*.c")))
-COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -name "*.c")))
-COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -name "*.c")))
-EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -name "*.c")))
-FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -name "*.c")))
-FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_IO) -name "*.c")))
-FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -name "*.c")))
-STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -name "*.c")))
+ARG_LIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(ARG_LIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(ARG_LIST) -maxdepth 1 -name "*.c")))
+COLLECTIONS_HASHTABLE_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_HASHTABLE)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_HASHTABLE) -maxdepth 1 -name "*.c")))
+COLLECTIONS_LINKEDLIST_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COLLECTIONS_LINKEDLIST)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COLLECTIONS_LINKEDLIST) -maxdepth 1 -name "*.c")))
+COMMAND_LINE_OPTIONS_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(COMMAND_LINE_OPTIONS)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(COMMAND_LINE_OPTIONS) -maxdepth 1 -name "*.c")))
+EXTERNAL_PROGRAM_EXECUTION_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(EXTERNAL_PROGRAM_EXECUTION) -maxdepth 1 -name "*.c")))
+FAILURE_HANDLING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FAILURE_HANDLING) -maxdepth 1 -name "*.c")))
+FILE_SYSTEM_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM) -maxdepth 1 -name "*.c")))
+FILE_SYSTEM_FILE_IO_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM_FILE_IO)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(FILE_SYSTEM_FILE_IO) -maxdepth 1 -name "*.c")))
+STRING_OBJS = $(patsubst %.c,$(BUILD)/$(TOOLKIT)/$(STRING)/%.o,$(notdir $(shell find $(TOOLKIT_SW)/$(STRING) -maxdepth 1 -name "*.c")))
 
 TOOLKIT_OBJS =  $(ARG_LIST_OBJS) \
 				$(COLLECTIONS_HASHTABLE_OBJS) \
@@ -73,8 +73,8 @@ TOOLKIT_OBJS =  $(ARG_LIST_OBJS) \
 				$(COMMAND_LINE_OPTIONS_OBJS) \
 				$(EXTERNAL_PROGRAM_EXECUTION_OBJS) \
 				$(FAILURE_HANDLING_OBJS) \
-				$(FILE_IO_OBJS) \
 				$(FILE_SYSTEM_OBJS) \
+				$(FILE_SYSTEM_FILE_IO_OBJS) \
 				$(STRING_OBJS)
 
 ############################################################################
@@ -162,15 +162,15 @@ $(BUILD)/$(TOOLKIT)/$(FAILURE_HANDLING)/%.o: $(TOOLKIT_SW)/$(FAILURE_HANDLING)/%
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
 
-$(BUILD)/$(TOOLKIT)/$(FILE_IO)/%.o: $(TOOLKIT_SW)/$(FILE_IO)/%.c $(TOOLKIT_SW)/$(FILE_IO)/%.h
-	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_IO)
-	$(CC) $(CFLAGS) -c $<
-	mv $(notdir $@) $@	
-
 $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.c $(TOOLKIT_SW)/$(FILE_SYSTEM)/%.h
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM)
 	$(CC) $(CFLAGS) -c $<
 	mv $(notdir $@) $@
+
+$(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM_FILE_IO)/%.o: $(TOOLKIT_SW)/$(FILE_SYSTEM_FILE_IO)/%.c $(TOOLKIT_SW)/$(FILE_SYSTEM_FILE_IO)/%.h
+	mkdir -p $(BUILD)/$(TOOLKIT)/$(FILE_SYSTEM_FILE_IO)
+	$(CC) $(CFLAGS) -c $<
+	mv $(notdir $@) $@	
 
 $(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c $(TOOLKIT_SW)/$(STRING)/%.h
 	mkdir -p $(BUILD)/$(TOOLKIT)/$(STRING)

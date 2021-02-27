@@ -7,7 +7,7 @@
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
-#include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
+#include "../../external/GregCToolkit/sw/FileSystem/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/GregBuildConstants.h"
 #include "FileOperations.h"

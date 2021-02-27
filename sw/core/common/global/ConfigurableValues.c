@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "../../../external/GregCToolkit/sw/Collections/HashTable/HashTable.h"
-#include "../../../external/GregCToolkit/sw/FileIO/FileReader.h"
+#include "../../../external/GregCToolkit/sw/FileSystem/FileIO/FileReader.h"
 #include "../../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../../common/FileStructureDefs.h"
 #include "../../common/GregBuildConstants.h"
@@ -75,7 +75,7 @@ int readCompilerConfigurationFromFile()
 
 int parseConfigurationFileLine(ArgList* argList)
 {
-   char buffer[MAX_LINE_LENGTH] = "";
+   char buffer[WINDOWS_MAX_PATH_LENGTH] = "";
    char param[WINDOWS_MAX_PATH_LENGTH] = "";
    char value[WINDOWS_MAX_PATH_LENGTH] = "";
 

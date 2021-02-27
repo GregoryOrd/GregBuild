@@ -1,6 +1,5 @@
 #include "PluginLoader.h"
 
-#include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +11,8 @@
 #endif
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
-#include "../../external/GregCToolkit/sw/FileIO/FileReader.h"
+#include "../../external/GregCToolkit/sw/FileSystem/FileIO/FileReader.h"
+#include "../../external/GregCToolkit/sw/FileSystem/FileSystemRecurser.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
@@ -57,42 +57,13 @@ void freeModuleNode(void* data) { free(data); }
 
 void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* basePath)
 {
-   char fileOrSubDirectoryFullPath[WINDOWS_MAX_PATH_LENGTH] = "";
-   struct dirent* fileOrSubDirectory;
-
-   DIR* basePathDirectory = opendir(basePath);
-   if (!basePathDirectory)
-   {
-      return;
-   }
-
-   while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL)
-   {
-      copyNameIntoPath(fileOrSubDirectoryFullPath, basePath, fileOrSubDirectory->d_name);
-      addPluginToListOrContinueRecursion(plugins, pluginModules, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
-   }
-
-   closedir(basePathDirectory);
-}
-
-void copyNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
-{
-   strcpy(path, basePath);
-   strcat(path, DELIMITER);
-   strcat(path, fileOrSubDirectoryName);
-}
-
-void addPluginToListOrContinueRecursion(
-    PluginList* plugins, LinkedList* pluginModules, const char* basePath, const struct dirent* fileOrSubDirectory, const char* fileOrSubDirectoryFullPath)
-{
-   if (isPlugin(fileOrSubDirectory))
-   {
-      addPluginToList(plugins, pluginModules, fileOrSubDirectoryFullPath);
-   }
-   else if (isVisibleDirectory(fileOrSubDirectory))
-   {
-      loadPlugins(plugins, pluginModules, fileOrSubDirectoryFullPath);
-   }
+   ArgList* argList = malloc(sizeof(ArgList));
+   argList->size = 2;
+   argList->args = calloc(2, sizeof(void*));
+   argList->args[0] = plugins;
+   argList->args[1] = pluginModules;
+   recurseAndAddFilesToList(basePath, addIfIsPlugin, argList);
+   freeArgList(argList);
 }
 
 bool isPlugin(const struct dirent* fileOrSubDirectory)
@@ -101,6 +72,20 @@ bool isPlugin(const struct dirent* fileOrSubDirectory)
    reverseString(reversedLower, fileOrSubDirectory->d_name);
    bool result = (strncmp(reversedLower, REVERSED_LIBRARY_EXTENSION, LIBRARY_EXTENSION_LENGTH) == 0 && strstr(fileOrSubDirectory->d_name, "Plugin") != NULL);
    return result;
+}
+
+bool addIfIsPlugin(ArgList* argList, const struct dirent* fileOrSubDirectory, const char* pluginPath)
+{
+   if (!isPlugin(fileOrSubDirectory))
+   {
+      return false;
+   }
+
+   PluginList* list = (PluginList*)argList->args[0];
+   LinkedList* pluginModules = (LinkedList*)argList->args[1];
+
+   addPluginToList(list, pluginModules, pluginPath);
+   return true;
 }
 
 void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pluginPath)
@@ -151,7 +136,9 @@ int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, Plug
    argsList->args[1] = (void*)tempPluginList;
    argsList->args[2] = (void*)tempPluginModules;
 
-   return readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
+   int result = readFileWithActionAfterEachLine(pathToTestFile, argsList, processOrderConfigEntry);
+   freeArgList(argsList);
+   return result;
 }
 
 int processOrderConfigEntry(ArgList* argsList)
