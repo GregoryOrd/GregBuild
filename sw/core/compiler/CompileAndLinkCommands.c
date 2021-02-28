@@ -318,7 +318,7 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    // The -1 is to not include the main function .o file
    linkerArgs->size = tempObjectFiles->size + options->size + 7 - 1;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
-   for (int i = 0; i < linkerArgs->size; i++)
+   for (int i = 0; i < linkerArgs->size - 1; i++)
    {
       linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
@@ -364,7 +364,7 @@ void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileLi
    }
    compilerArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
    compilerArgs->args = calloc(compilerArgs->size, sizeof(void*));
-   for (int i = 0; i < compilerArgs->size; i++)
+   for (int i = 0; i < compilerArgs->size - 1; i++)
    {
       compilerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
@@ -384,7 +384,7 @@ void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const Sour
    mvArgs->size = numTestFiles + sourceFiles->size + 3;
    mvArgs->args = calloc(mvArgs->size, sizeof(void*));
 
-   for (int i = 0; i < mvArgs->size; i++)
+   for (int i = 0; i < mvArgs->size - 1; i++)
    {
       mvArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }

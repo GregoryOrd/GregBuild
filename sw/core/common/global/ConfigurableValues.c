@@ -164,7 +164,7 @@ HashTable* setupConfigurationsHashTable()
 {
    HashTable* table = malloc(sizeof(HashTable));
    initHashTable(table, SET_CONFIGURATION_TYPE, NUM_COMPILER_CONFIG_PARAMS);
-   for (int i = 0; i < NUM_COMPILER_CONFIG_PARAMS; i++)
+   for (int i = 0; i < NUM_COMPILER_CONFIG_PARAMS - 1; i++)
    {
       setDataToActOn(i);
       HashTableItem* item = malloc(sizeof(HashTableItem));
