@@ -53,7 +53,7 @@ int compileIntoTempObjectFilesWithCompiler(
 int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
-   if (strcmp(compiler, hostCompiler()) == 0)
+   if (stringsAreEqual(compiler, hostCompiler()))
    {
       options = hostCompilerOptions();
    }
@@ -136,7 +136,7 @@ int compileIntoProjectExecutable(
 {
    exitIfError(errorOnPreviousStep);
 
-   if (strcmp(hostCompiler(), targetCompiler()) != 0)
+   if (!stringsAreEqual(hostCompiler(), targetCompiler()))
    {
       compileIntoTempObjectFilesWithCompiler(testFiles, sourceFiles, tempObjectFiles, targetCompiler(), basePath);
    }
@@ -263,7 +263,7 @@ int testFilesSize(const TestFileList* testFiles)
 void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
-   if (strcmp(compiler, hostCompiler()) == 0)
+   if (stringsAreEqual(compiler, hostCompiler()))
    {
       options = hostLinkerOptions();
    }
@@ -306,7 +306,7 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
-   if (strcmp(compiler, hostCompiler()) == 0)
+   if (stringsAreEqual(compiler, hostCompiler()))
    {
       options = hostLinkerOptions();
    }
@@ -354,7 +354,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
 void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
 {
    LinkedList* options;
-   if (strcmp(compiler, hostCompiler()) == 0)
+   if (stringsAreEqual(compiler, hostCompiler()))
    {
       options = hostCompilerOptions();
    }
@@ -400,7 +400,7 @@ void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const Sour
 void tempDirPathFromCompiler(char* dest, const char* compiler)
 {
    char hardwarePlatform[7] = "target";
-   if (strcmp(compiler, hostCompiler()) == 0)
+   if (stringsAreEqual(compiler, hostCompiler()))
    {
       strcpy(hardwarePlatform, "host");
    }

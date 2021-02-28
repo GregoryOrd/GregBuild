@@ -189,7 +189,7 @@ void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* l
       bool wasFoundInOrderConfigFile = false;
       for (int j = 0; j < tempPluginList->size; j++)
       {
-         if (strcmp(list->plugins[i].name, tempPluginList->plugins[j].name) == 0)
+         if (stringsAreEqual(list->plugins[i].name, tempPluginList->plugins[j].name))
          {
             wasFoundInOrderConfigFile = true;
          }

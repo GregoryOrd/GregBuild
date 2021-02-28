@@ -1,6 +1,7 @@
 #include "BuildSequence.h"
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
 #include "../common/global/GlobalVariables.h"
@@ -45,7 +46,7 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
 
 void printBuildSequenceExecutionMessage(BuildSequenceStep* step)
 {
-   bool skippedTestStep = (strcmp(step->option->optionText, NO_TEST_OPTION_TEXT) == 0) && hostCompileFailed();
+   bool skippedTestStep = (stringsAreEqual(step->option->optionText, NO_TEST_OPTION_TEXT) && hostCompileFailed());
    if (!skippedTestStep)
    {
       printf("\n===================================================================\n");

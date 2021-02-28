@@ -12,6 +12,7 @@
 #endif
 
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
 
@@ -81,7 +82,7 @@ int indexOf(const LinkedList* buildSequence, const char* functionName)
    for (int i = 0; i < buildSequence->size; i++)
    {
       BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
-      if (step->functionName != NULL && strcmp(step->functionName, functionName) == 0)
+      if (step->functionName != NULL && stringsAreEqual(step->functionName, functionName))
       {
          return i;
       }
