@@ -1,22 +1,16 @@
 Refactoring and Minor Improvements
 -----------------------------------
-0a) Create a file system recursion function in the toolkit
-    - Same idea as the file reader, pass in a function_ptr to tell what to do an each recursion 
-    cycle
-    - Both the plugin loader and the file/test case gatherer could use this
-    - Both will need to specify an add function for the "add or continue recursion" 
-    functionality
-0b) Correct Test Finder so the comments in the test line can still be recognized 
+0a) Correct Test Finder so the comments in the test line can still be recognized 
    as a test case
         - /**/ Comments at any point in the line
         - // Comments at the end of the line
-0c) Make plugin loader parsing more robust
+0b) Make plugin loader parsing more robust
     - handle whitespace before and after the contents of the param and value strings
-0d) Move FileOperations into common and fix all of the include paths that depend on it
+0c) Move FileOperations into common and fix all of the include paths that depend on it
     - Add isSourceFile(), isObjectFileFromSourceFile() and isTestFile() to this common file
     - Some clean up some of the code in these functions
-0e) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
-0f) Get more memory leaks from valgrind report
+0d) Split out CompileAndLinkCommandsHelpers from CompileAndLinkCommandsHelpers 
+0e) Get more memory leaks from valgrind report
 
 Major Improvements
 ---------------------
