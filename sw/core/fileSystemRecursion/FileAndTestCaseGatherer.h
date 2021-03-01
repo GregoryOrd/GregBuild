@@ -15,11 +15,7 @@ int loadTestsAndSourceFiles(TestFileList *testFiles,
                             SourceFileList *sourceFiles,
                             ObjectFileList *tempObjectFiles,
                             int errorOnPreviousStep, const char *basePath);
-void addToListOrEnterSubDirectoryForRecursion(
-    TestFileList *testFiles, SourceFileList *sourceFiles,
-    ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
-    const char *basePath, const struct dirent *fileOrSubDirectory,
-    const char *fileOrSubDirectoryFullPath);
+bool addToTestOrSourceList(ArgList* list, const char* basePath, const struct dirent* fileOrSubDirectory, const char* fileOrSubDirectoryFullPath);
 void copyFileOrSubDirectoryNameIntoPath(char *path, const char *basePath,
                                         const char *fileOrSubDirectoryName);
 void addTestFileToList(TestFileList *testFileList, const char *pathToTestFile);

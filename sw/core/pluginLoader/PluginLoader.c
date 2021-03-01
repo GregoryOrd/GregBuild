@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
-bool addIfIsPlugin(ArgList* argList, const struct dirent* fileOrSubDirectory, const char* pluginPath);
+bool addIfIsPlugin(ArgList* argList, const char* basePath, const struct dirent* fileOrSubDirectory, const char* pluginPath);
 void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
 void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pluginPath);
 void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
@@ -78,9 +78,10 @@ void loadPlugins(PluginList* plugins, LinkedList* pluginModules, const char* bas
 {
    initPluginList(plugins);
    initEmptyLinkedList(pluginModules, PLUGIN_MODULE_LL_TYPE);
+   int numArgs = 2;
    ArgList* argList = malloc(sizeof(ArgList));
-   argList->size = 2;
-   argList->args = calloc(2, sizeof(void*));
+   argList->size = numArgs;
+   argList->args = calloc(numArgs, sizeof(void*));
    argList->args[0] = plugins;
    argList->args[1] = pluginModules;
    recurseAndAddFilesToList(basePath, addIfIsPlugin, argList);
@@ -96,7 +97,7 @@ bool isPlugin(const struct dirent* fileOrSubDirectory)
    return result;
 }
 
-bool addIfIsPlugin(ArgList* argList, const struct dirent* fileOrSubDirectory, const char* pluginPath)
+bool addIfIsPlugin(ArgList* argList, const char* basePath, const struct dirent* fileOrSubDirectory, const char* pluginPath)
 {
    if (!isPlugin(fileOrSubDirectory))
    {

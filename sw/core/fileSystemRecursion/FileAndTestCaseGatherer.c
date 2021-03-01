@@ -8,6 +8,7 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/FileSystem/FileIO/FileReader.h"
+#include "../../external/GregCToolkit/sw/FileSystem/FileSystemRecurser.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/GregBuildConstants.h"
 #include "FileOperations.h"
@@ -17,41 +18,39 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
 {
    exitIfError(errorOnPreviousStep);
 
-   char fileOrSubDirectoryFullPath[WINDOWS_MAX_PATH_LENGTH] = "";
-   const struct dirent* fileOrSubDirectory;
+   int numArgs = 3;
+   ArgList* argList = malloc(sizeof(ArgList));
+   argList->size = numArgs;
+   argList->args = calloc(numArgs, sizeof(void*));
+   argList->args[0] = testFiles;
+   argList->args[1] = sourceFiles;
+   argList->args[2] = tempObjectFiles;
+   recurseAndAddFilesToList(basePath, addToTestOrSourceList, argList);
+   freeArgList(argList, false);
 
-   DIR* basePathDirectory = opendir(basePath);
-   if (!basePathDirectory)
-   {
-      return 1;
-   }
-
-   while ((fileOrSubDirectory = readdir(basePathDirectory)) != NULL)
-   {
-      copyFileOrSubDirectoryNameIntoPath(fileOrSubDirectoryFullPath, basePath, fileOrSubDirectory->d_name);
-      addToListOrEnterSubDirectoryForRecursion(testFiles, sourceFiles, tempObjectFiles, errorOnPreviousStep, basePath, fileOrSubDirectory, fileOrSubDirectoryFullPath);
-   }
-
-   closedir(basePathDirectory);
    return 0;
 }
 
-void addToListOrEnterSubDirectoryForRecursion(
-    TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath,
-    const struct dirent* fileOrSubDirectory, const char* fileOrSubDirectoryFullPath)
+bool addToTestOrSourceList(ArgList* list, const char* basePath, const struct dirent* fileOrSubDirectory, const char* fileOrSubDirectoryFullPath)
 {
+   TestFileList* testFiles = (TestFileList*)list->args[0];
+   SourceFileList* sourceFiles = (SourceFileList*)list->args[1];
+   ObjectFileList* tempObjectFiles = (ObjectFileList*)list->args[2];
+
+   bool testDir = isTestDir(basePath);
+   bool testFile = isTestFile(fileOrSubDirectory);
    if (isTestDir(basePath) && isTestFile(fileOrSubDirectory))
    {
       addTestFileToList(testFiles, fileOrSubDirectoryFullPath);
+      return true;
    }
    else if (!isVisibleDirectory(fileOrSubDirectory) && isSourceFile(fileOrSubDirectory->d_name))
    {
       addSourceFileToList(sourceFiles, fileOrSubDirectoryFullPath);
+      return true;
    }
-   else if (isVisibleDirectory(fileOrSubDirectory))
-   {
-      loadTestsAndSourceFiles(testFiles, sourceFiles, tempObjectFiles, errorOnPreviousStep, fileOrSubDirectoryFullPath);
-   }
+
+   return false;
 }
 
 void copyFileOrSubDirectoryNameIntoPath(char* path, const char* basePath, const char* fileOrSubDirectoryName)
