@@ -8,9 +8,9 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
+#include "../common/FileOperations.h"
 #include "../common/GregBuildConstants.h"
 #include "../common/global/GlobalVariables.h"
-#include "../fileSystemRecursion/FileOperations.h"
 #include "CompileAndLinkHelpers.h"
 
 int compileIntoTempObjectFiles(

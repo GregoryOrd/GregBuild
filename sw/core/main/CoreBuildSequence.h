@@ -5,7 +5,7 @@
 #include "../common/BuildSequenceStep.h"
 #include "../testExecution/RunTests.h"
 #include "../common/GregBuildConstants.h"
-#include "../fileSystemRecursion/FileOperations.h"
+#include "../common/FileOperations.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../testExecution/TestMainWriter.h"
 #include "../common/global/GlobalVariables.h"

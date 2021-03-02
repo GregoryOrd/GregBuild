@@ -10,8 +10,8 @@
 #include "../../external/GregCToolkit/sw/FileSystem/FileIO/FileReader.h"
 #include "../../external/GregCToolkit/sw/FileSystem/FileSystemRecurser.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
+#include "../common/FileOperations.h"
 #include "../common/GregBuildConstants.h"
-#include "FileOperations.h"
 #include "TestAndSrcDefinitions.h"
 
 int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
