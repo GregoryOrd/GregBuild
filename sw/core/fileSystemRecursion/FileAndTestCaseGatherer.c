@@ -12,7 +12,7 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/FileOperations.h"
 #include "../common/GregBuildConstants.h"
-#include "TestAndSrcDefinitions.h"
+#include "../common/TestAndSrcDefinitions.h"
 
 int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {

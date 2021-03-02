@@ -7,8 +7,8 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
-#include "../fileSystemRecursion/TestAndSrcDefinitions.h"
 
 void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index)
 {

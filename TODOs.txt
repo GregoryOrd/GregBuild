@@ -6,10 +6,7 @@ Refactoring and Minor Improvements
         - // Comments at the end of the line
 0b) Make plugin loader parsing more robust
     - handle whitespace before and after the contents of the param and value strings
-0c) Move FileOperations into common and fix all of the include paths that depend on it
-    - Add isSourceFile(), isObjectFileFromSourceFile() and isTestFile() to this common file
-    - Some clean up some of the code in these functions
-0d) Get more memory leaks from valgrind report
+0c) Get more memory leaks from valgrind report
 
 Major Improvements
 ---------------------
@@ -47,14 +44,15 @@ Plan for Release 1.1:
 2) Add tests to this repo.
     - Use version 1.0 of GregBuild 
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
-3) Make GregBuild smart enough to not build files that have not been modified
+3) Timeout protection for infinite loops/hanging while running test cases 
+4) Make GregBuild smart enough to not build files that have not been modified
     - Will likely no to switch the default flag value for the --leave-temp command
     line option
     - Might also be good to rename to --delete-temp
     - Might also be good idea to rename temp dir to build or something
     - Will need to rename and after the functions in the build sequence and
     the functions in PluginFunctions.h
-4) Add a verbose output option
+5) Add a verbose output option
     - Add attributes to BuildSequenceStep that can be used to influence how
     to execution of the step is displayed to the user on the console interface
 
