@@ -102,8 +102,10 @@ void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)
 int addIfIsSingleTestCase(ArgList* argList)
 {
    char* buffer = (char*)argList->args[argList->size - 1];
-   if (isTestCaseDefinition(buffer))
+   TestCaseCheckStruct check = isTestCaseDefinition(buffer);
+   if (check.isTestCase)
    {
+      strcpy(buffer, check.commentsRemovedTestName);
       addSingleTestCaseToList(argList->args);
    }
 

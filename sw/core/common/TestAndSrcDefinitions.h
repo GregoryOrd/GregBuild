@@ -8,6 +8,14 @@
 #include <dirent.h>
 #include <stdbool.h>
 
+#include "FileStructureDefs.h"
+
+typedef struct TestCaseCheckStruct
+{
+  bool isTestCase;
+  char commentsRemovedTestName[255];
+} TestCaseCheckStruct;
+
 typedef struct LineMetrics {
   int numSpaces;
   int numLeftBrackets;
@@ -17,6 +25,7 @@ typedef struct LineMetrics {
   int length;
   int expectedLeftBracketIndex;
   int expectedRightBracketIndex;
+  char commentsRemovedTestName[WINDOWS_MAX_PATH_LENGTH];
 } LineMetrics;
 
 typedef struct LineAnalysisResults {
@@ -43,7 +52,7 @@ LineAnalysisResults determineResults(const LineMetrics metrics, const char *line
 bool lineHasSpecialCharacters(const LineMetrics metrics, const char *line);
 LineMetrics initLineMetrics();
 LineAnalysisResults initLineAnalysisResults();
-bool isTestCaseDefinition(const char *line);
+TestCaseCheckStruct isTestCaseDefinition(const char *line);
 int testNameEndOffset(const char *testName);
 bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
                                                int initialLength);

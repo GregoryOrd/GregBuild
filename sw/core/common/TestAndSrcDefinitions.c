@@ -40,38 +40,61 @@ bool isObjectFileFromSourceFile(const char* filename)
    return result;
 }
 
-bool isTestCaseDefinition(const char* line)
+TestCaseCheckStruct isTestCaseDefinition(const char* line)
 {
    LineMetrics metrics = gatherLineMetrics(line);
    metrics = analyzeLineMetrics(metrics, line);
    LineAnalysisResults results = determineResults(metrics, line);
 
-   bool isTestCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
+   bool testCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
 
-   return isTestCase;
+   TestCaseCheckStruct check;
+   check.isTestCase = testCase;
+   strcpy(check.commentsRemovedTestName, metrics.commentsRemovedTestName);
+
+   return check;
 }
 
 LineMetrics gatherLineMetrics(const char* line)
 {
    LineMetrics metrics = initLineMetrics();
    const char* currentPtr = line;
+   bool inComment = false;
    while (*currentPtr != '\0' && *currentPtr != '\n')
    {
-      if (*currentPtr == ' ')
+      bool doubleSlashComment = (*currentPtr == '/') && *(currentPtr + 1) == '/';
+      bool startMultiLineComment = (*currentPtr == '/') && *(currentPtr + 1) == '*';
+      bool endMultiLineComment = (*currentPtr == '*') && *(currentPtr + 1) == '/';
+      if (doubleSlashComment || startMultiLineComment)
       {
-         metrics.numSpaces++;
+         inComment = true;
+         currentPtr++;
       }
-      else if (*currentPtr == '(')
+      else if (endMultiLineComment)
       {
-         metrics.numLeftBrackets++;
-         metrics.leftBracketIndex = metrics.length;
+         inComment = false;
+         currentPtr++;
       }
-      else if (*currentPtr == ')')
+
+      if (!inComment)
       {
-         metrics.numRightBrackets++;
-         metrics.rightBracketIndex = metrics.length;
+         if (*currentPtr == ' ')
+         {
+            metrics.numSpaces++;
+         }
+         else if (*currentPtr == '(')
+         {
+            metrics.numLeftBrackets++;
+            metrics.leftBracketIndex = metrics.length;
+         }
+         else if (*currentPtr == ')')
+         {
+            metrics.numRightBrackets++;
+            metrics.rightBracketIndex = metrics.length;
+         }
+         metrics.commentsRemovedTestName[metrics.length] = *currentPtr;
+         metrics.length++;
       }
-      metrics.length++;
       currentPtr++;
    }
    return metrics;
