@@ -8,6 +8,17 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
 
+//////////////////////////////////////////////////////////////////////
+//              Private Data and Function Prototypes                //
+//////////////////////////////////////////////////////////////////////
+
+bool firstTokenIsCorrect(const char* token);
+bool secondTokenIsCorrect(const char* token);
+
+//////////////////////////////////////////////////////////////////////
+//                     Function Implementations                     //
+//////////////////////////////////////////////////////////////////////
+
 bool isTestDir(const char* dirName)
 {
    char lower[WINDOWS_MAX_PATH_LENGTH] = "";
@@ -46,68 +57,77 @@ bool isTestCaseDefinition(const char* line)
    char* token;
    strcpy(temp, line);
 
-   int tokenCount = 0;
    bool correctFirstToken = false;
    bool correctSecondToken = false;
+
+   int tokenCount = 0;
    while (token = strtok_r(temp, " \r\t\n", &temp))
    {
-      if (tokenCount == 0 && stringsAreEqual(token, "void"))
+      if (tokenCount == 0)
       {
-         correctFirstToken = true;
+         correctFirstToken = firstTokenIsCorrect(token);
       }
       else if (tokenCount == 1)
       {
-         bool hasBrackets = false;
-         bool hasLeftBrace = false;
-         bool hasRightBrace = false;
-         bool hasSingleLineComment = false;
-         bool hasMultiLineCommentStart = false;
-         bool hasMultiLineCommentEnd = false;
-
-         if (strstr(token, "{"))
-         {
-            hasLeftBrace = true;
-         }
-
-         if (strstr(token, "}"))
-         {
-            hasRightBrace = true;
-         }
-
-         if (strstr(token, "//"))
-         {
-            hasSingleLineComment = true;
-         }
-
-         if (strstr(token, "/*"))
-         {
-            hasMultiLineCommentStart = true;
-         }
-
-         if (strstr(token, "*/"))
-         {
-            hasMultiLineCommentEnd = true;
-         }
-
-         char* brackets;
-         if (brackets = strstr(token, "()"))
-         {
-            if (!hasLeftBrace && !hasRightBrace && !hasSingleLineComment && !hasMultiLineCommentStart && !hasMultiLineCommentEnd)
-            {
-               char* secondLast = token + strlen(token) - 2;
-               correctSecondToken = secondLast == brackets;
-            }
-            else if (hasLeftBrace)
-            {
-               char* thirdLast = token + strlen(token) - 3;
-               correctSecondToken = thirdLast == brackets;
-            }
-         }
+         correctSecondToken = secondTokenIsCorrect(token);
       }
       tokenCount++;
    }
 
    return correctFirstToken && correctSecondToken;
+}
+
+bool firstTokenIsCorrect(const char* token) { return stringsAreEqual(token, "void"); }
+
+bool secondTokenIsCorrect(const char* token)
+{
+   bool hasBrackets = false;
+   bool hasLeftBrace = false;
+   bool hasRightBrace = false;
+   bool hasSingleLineComment = false;
+   bool hasMultiLineCommentStart = false;
+   bool hasMultiLineCommentEnd = false;
+
+   if (strstr(token, "{"))
+   {
+      hasLeftBrace = true;
+   }
+
+   if (strstr(token, "}"))
+   {
+      hasRightBrace = true;
+   }
+
+   if (strstr(token, "//"))
+   {
+      hasSingleLineComment = true;
+   }
+
+   if (strstr(token, "/*"))
+   {
+      hasMultiLineCommentStart = true;
+   }
+
+   if (strstr(token, "*/"))
+   {
+      hasMultiLineCommentEnd = true;
+   }
+
+   char* brackets;
+   if (brackets = strstr(token, "()"))
+   {
+      if (!hasLeftBrace && !hasRightBrace && !hasSingleLineComment && !hasMultiLineCommentStart && !hasMultiLineCommentEnd)
+      {
+         char* secondLast = (char*)token + strlen(token) - 2;
+         return secondLast == brackets;
+      }
+      else if (hasLeftBrace)
+      {
+         char* thirdLast = (char*)token + strlen(token) - 3;
+         return thirdLast == brackets;
+      }
+   }
+   return false;
 }
 
 void trimTestName(char* testName)
