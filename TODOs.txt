@@ -1,9 +1,6 @@
 Refactoring and Minor Improvements
 -----------------------------------
-0a) Correct Test Finder so the comments in the test line can still be recognized 
-   as a test case
-        - /**/ Comments at any point in the line
-        - // Comments at the end of the line
+0a) General cleanup, Refactoring, and better handling of test cases and comments in test cases
 0b) Make plugin loader parsing more robust
     - handle whitespace before and after the contents of the param and value strings
 0c) Get more memory leaks from valgrind report
