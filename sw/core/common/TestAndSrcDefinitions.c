@@ -48,6 +48,16 @@ TestCaseCheckStruct isTestCaseDefinition(const char* line)
 
    bool testCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
 
+   // if (strstr(line, "test"))
+   // {
+   //    printf("Line: %s\n", line);
+   //    printf("results.correctStartOfLine : %d\n", results.correctStartOfLine);
+   //    printf("results.correctSpaces : %d\n", results.correctSpaces);
+   //    printf("results.correctBrackets : %d\n", results.correctBrackets);
+   //    printf("metrics.leftBracketIndex : %d\n", metrics.leftBracketIndex);
+   //    printf("metrics.expectedLeftBracketIndex: %d\n", metrics.expectedLeftBracketIndex);
+   // }
+
    TestCaseCheckStruct check;
    check.isTestCase = testCase;
    strcpy(check.commentsRemovedTestName, metrics.commentsRemovedTestName);
@@ -104,10 +114,10 @@ LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line)
 {
    // Line will have form:
    // testSomething() or testSomthing(){
-   metrics.expectedLeftBracketIndex = metrics.length - 3;
-   if (theCurlyBraceIsOnTheSameLineAsTheTestName(line, metrics.length))
+   metrics.expectedLeftBracketIndex = metrics.length - 2;
+   if (theCurlyBraceIsOnTheSameLineAsTheTestName(metrics.commentsRemovedTestName, metrics.length))
    {
-      metrics.expectedLeftBracketIndex--;
+      metrics.expectedLeftBracketIndex = metrics.length - 3;
    }
    metrics.expectedRightBracketIndex = metrics.expectedLeftBracketIndex + 1;
    return metrics;
@@ -199,6 +209,7 @@ void trimTestName(char* testName)
    clearString(testName);
 
    strcpy(testName, temp);
+   printf("Trimmed: %s\n", testName);
 }
 
 int testNameEndOffset(const char* testName)
@@ -215,7 +226,7 @@ bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char* testName, int initial
    // Using temp to get rid of valgrind message
    char temp[WINDOWS_MAX_PATH_LENGTH] = "";
    strcpy(temp, testName);
-   return temp[initialLength - 2] == '{';
+   return temp[initialLength - 1] == '{';
 }
 
 bool isSpecialCharacter(const char c)

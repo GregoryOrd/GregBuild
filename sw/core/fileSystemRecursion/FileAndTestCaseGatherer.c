@@ -106,6 +106,7 @@ int addIfIsSingleTestCase(ArgList* argList)
    if (check.isTestCase)
    {
       strcpy(buffer, check.commentsRemovedTestName);
+      // printf("Buffer: %s\n", buffer);
       addSingleTestCaseToList(argList->args);
    }
 
