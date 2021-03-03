@@ -136,7 +136,9 @@ bool lineHasSpecialCharacters(const LineMetrics metrics, const char* line)
 {
    for (int i = 0; i < metrics.length; i++)
    {
-      if (isSpecialCharacter(line[i]))
+      bool startMultiLineComment = (line[i] == '/') && line[i + 1] == '*';
+      bool endMultiLineComment = (line[i] == '*') && line[i + 1] == '/';
+      if (isSpecialCharacter(line[i]) && !(startMultiLineComment || endMultiLineComment))
       {
          printf(
              "\nGregTest does not accept test cases with special characters in "
