@@ -53,7 +53,7 @@ bool lineHasSpecialCharacters(const LineMetrics metrics, const char *line);
 LineMetrics initLineMetrics();
 LineAnalysisResults initLineAnalysisResults();
 TestCaseCheckStruct isTestCaseDefinition(const char *line);
-int testNameEndOffset(const char *testName);
+void trimTestName(char* testName, bool hadComments);
 bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
                                                int initialLength);
 bool isSpecialCharacter(const char c);

@@ -48,19 +48,13 @@ TestCaseCheckStruct isTestCaseDefinition(const char* line)
 
    bool testCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
 
-   // if (strstr(line, "test"))
-   // {
-   //    printf("Line: %s\n", line);
-   //    printf("results.correctStartOfLine : %d\n", results.correctStartOfLine);
-   //    printf("results.correctSpaces : %d\n", results.correctSpaces);
-   //    printf("results.correctBrackets : %d\n", results.correctBrackets);
-   //    printf("metrics.leftBracketIndex : %d\n", metrics.leftBracketIndex);
-   //    printf("metrics.expectedLeftBracketIndex: %d\n", metrics.expectedLeftBracketIndex);
-   // }
-
    TestCaseCheckStruct check;
    check.isTestCase = testCase;
    strcpy(check.commentsRemovedTestName, metrics.commentsRemovedTestName);
+   if (testCase)
+   {
+      trimTestName(check.commentsRemovedTestName, !stringsAreEqual(line, metrics.commentsRemovedTestName));
+   }
 
    return check;
 }
@@ -117,7 +111,11 @@ LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line)
    metrics.expectedLeftBracketIndex = metrics.length - 2;
    if (theCurlyBraceIsOnTheSameLineAsTheTestName(metrics.commentsRemovedTestName, metrics.length))
    {
-      metrics.expectedLeftBracketIndex = metrics.length - 3;
+      metrics.expectedLeftBracketIndex--;
+   }
+   else if (!stringsAreEqual(line, metrics.commentsRemovedTestName))
+   {
+      metrics.expectedLeftBracketIndex--;
    }
    metrics.expectedRightBracketIndex = metrics.expectedLeftBracketIndex + 1;
    return metrics;
@@ -134,6 +132,12 @@ LineAnalysisResults determineResults(const LineMetrics metrics, const char* line
    results.correctBracketCount = metrics.numLeftBrackets == 1 && metrics.numRightBrackets == 1;
    results.correctBracketPosition = metrics.leftBracketIndex == metrics.expectedLeftBracketIndex && metrics.rightBracketIndex == metrics.expectedRightBracketIndex;
    results.correctBrackets = results.correctBracketCount && results.correctBracketPosition;
+
+   if (strstr(line, "testMySt456uff"))
+   {
+      printf("metrics.leftBracketIndex: %d\n", metrics.leftBracketIndex);
+      printf("metrics.expectedLeftBracketIndex: %d\n", metrics.expectedLeftBracketIndex);
+   }
 
    if (results.correctStartOfLine && results.correctSpaces && results.correctBrackets)
    {
@@ -188,7 +192,7 @@ LineAnalysisResults initLineAnalysisResults()
    return results;
 }
 
-void trimTestName(char* testName)
+void trimTestName(char* testName, bool hadComments)
 {
    int endOffset = 0;
    if (theCurlyBraceIsOnTheSameLineAsTheTestName(testName, strlen(testName)))
@@ -198,7 +202,12 @@ void trimTestName(char* testName)
    else
    {
       endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
+      if (hadComments)
+      {
+         endOffset++;
+      }
    }
+
    char temp[WINDOWS_MAX_PATH_LENGTH] = "";
    clearString(temp);
    for (int i = TEST_NAME_TRIM_FRONT_OFFSET; i < strlen(testName) - endOffset; i++)

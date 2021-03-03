@@ -118,7 +118,7 @@ void addSingleTestCaseToList(void* args[])
    TestFileList* testFileList = (TestFileList*)args[0];
    char buffer[WINDOWS_MAX_PATH_LENGTH] = "";
    strcpy(buffer, (char*)args[1]);
-   trimTestName(buffer);
+   // trimTestName(buffer);
 
    TestFile* testFile = &testFileList->files[testFileList->size];
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
