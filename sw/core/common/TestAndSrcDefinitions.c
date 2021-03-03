@@ -42,115 +42,72 @@ bool isObjectFileFromSourceFile(const char* filename)
 
 bool isTestCaseDefinition(const char* line)
 {
-   LineMetrics metrics = gatherLineMetrics(line);
-   metrics = analyzeLineMetrics(metrics, line);
-   LineAnalysisResults results = determineResults(metrics, line);
+   char* temp = strdup(line);
+   char* token;
+   strcpy(temp, line);
 
-   bool isTestCase = results.correctStartOfLine && results.correctSpaces && results.correctBrackets && !results.hasSpecialCharacters;
-
-   return isTestCase;
-}
-
-LineMetrics gatherLineMetrics(const char* line)
-{
-   LineMetrics metrics = initLineMetrics();
-   const char* currentPtr = line;
-   while (*currentPtr != '\0' && *currentPtr != '\n')
+   int tokenCount = 0;
+   bool correctFirstToken = false;
+   bool correctSecondToken = false;
+   while (token = strtok_r(temp, " \r\t\n", &temp))
    {
-      if (*currentPtr == ' ')
+      if (tokenCount == 0 && stringsAreEqual(token, "void"))
       {
-         metrics.numSpaces++;
+         correctFirstToken = true;
       }
-      else if (*currentPtr == '(')
+      else if (tokenCount == 1)
       {
-         metrics.numLeftBrackets++;
-         metrics.leftBracketIndex = metrics.length;
+         bool hasBrackets = false;
+         bool hasLeftBrace = false;
+         bool hasRightBrace = false;
+         bool hasSingleLineComment = false;
+         bool hasMultiLineCommentStart = false;
+         bool hasMultiLineCommentEnd = false;
+
+         if (strstr(token, "{"))
+         {
+            hasLeftBrace = true;
+         }
+
+         if (strstr(token, "}"))
+         {
+            hasRightBrace = true;
+         }
+
+         if (strstr(token, "//"))
+         {
+            hasSingleLineComment = true;
+         }
+
+         if (strstr(token, "/*"))
+         {
+            hasMultiLineCommentStart = true;
+         }
+
+         if (strstr(token, "*/"))
+         {
+            hasMultiLineCommentEnd = true;
+         }
+
+         char* brackets;
+         if (brackets = strstr(token, "()"))
+         {
+            if (!hasLeftBrace && !hasRightBrace && !hasSingleLineComment && !hasMultiLineCommentStart && !hasMultiLineCommentEnd)
+            {
+               char* secondLast = token + strlen(token) - 2;
+               correctSecondToken = secondLast == brackets;
+            }
+            else if (hasLeftBrace)
+            {
+               char* thirdLast = token + strlen(token) - 3;
+               correctSecondToken = thirdLast == brackets;
+            }
+         }
       }
-      else if (*currentPtr == ')')
-      {
-         metrics.numRightBrackets++;
-         metrics.rightBracketIndex = metrics.length;
-      }
-      metrics.length++;
-      currentPtr++;
-   }
-   return metrics;
-}
-
-LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line)
-{
-   // Line will have form:
-   // testSomething() or testSomthing(){
-   metrics.expectedLeftBracketIndex = metrics.length - 3;
-   if (theCurlyBraceIsOnTheSameLineAsTheTestName(line, metrics.length))
-   {
-      metrics.expectedLeftBracketIndex--;
-   }
-   metrics.expectedRightBracketIndex = metrics.expectedLeftBracketIndex + 1;
-   return metrics;
-}
-
-LineAnalysisResults determineResults(const LineMetrics metrics, const char* line)
-{
-   LineAnalysisResults results = initLineAnalysisResults();
-
-   results.correctStartOfLine = strncmp(line, "void test", 9) == 0;
-   results.singleSpaceBetweenBoolAndTestName = (strstr(line, " ") == &line[4]);
-   results.correctSpaces = results.singleSpaceBetweenBoolAndTestName && metrics.numSpaces == 1;
-
-   results.correctBracketCount = metrics.numLeftBrackets == 1 && metrics.numRightBrackets == 1;
-   results.correctBracketPosition = metrics.leftBracketIndex == metrics.expectedLeftBracketIndex && metrics.rightBracketIndex == metrics.expectedRightBracketIndex;
-   results.correctBrackets = results.correctBracketCount && results.correctBracketPosition;
-
-   if (results.correctStartOfLine && results.correctSpaces && results.correctBrackets)
-   {
-      results.hasSpecialCharacters = lineHasSpecialCharacters(metrics, line);
-   }
-   return results;
-}
-
-bool lineHasSpecialCharacters(const LineMetrics metrics, const char* line)
-{
-   for (int i = 0; i < metrics.length; i++)
-   {
-      if (isSpecialCharacter(line[i]))
-      {
-         printf(
-             "\nGregTest does not accept test cases with special characters in "
-             "the name of the test.\n");
-         printf("%s\n\n", line);
-         return true;
-      }
+      tokenCount++;
    }
 
-   return false;
-}
-
-LineMetrics initLineMetrics()
-{
-   LineMetrics metrics;
-   metrics.numSpaces = 0;
-   metrics.numLeftBrackets = 0;
-   metrics.numRightBrackets = 0;
-   metrics.leftBracketIndex = 0;
-   metrics.rightBracketIndex = 0;
-   metrics.length = 0;
-   metrics.expectedLeftBracketIndex = 0;
-   metrics.expectedRightBracketIndex = 0;
-   return metrics;
-}
-
-LineAnalysisResults initLineAnalysisResults()
-{
-   LineAnalysisResults results;
-   results.correctStartOfLine = false;
-   results.singleSpaceBetweenBoolAndTestName = false;
-   results.hasSpecialCharacters = false;
-   results.correctSpaces = false;
-   results.correctBracketCount = false;
-   results.correctBracketPosition = false;
-   results.correctBrackets = false;
-   return results;
+   return correctFirstToken && correctSecondToken;
 }
 
 void trimTestName(char* testName)
