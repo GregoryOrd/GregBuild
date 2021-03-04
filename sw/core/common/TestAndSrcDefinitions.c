@@ -12,8 +12,26 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
+typedef struct
+{
+   char* brackets;
+   char* leftBrace;
+   char* rightBrace;
+   char* singleLineComment;
+   char* multilineCommentStart;
+   char* mulitilineCommentEnd;
+} SecondTokenMetrics;
+
 bool firstTokenIsCorrect(const char* token);
 bool secondTokenIsCorrect(const char* token);
+void populateSecondTokenMetrics(SecondTokenMetrics* metrics, char* token);
+bool metricsPointerFound(char* pointer);
+void initSecondTokenMetrics(SecondTokenMetrics* metrics);
+bool nothingAfterBracketsInSecondToken(SecondTokenMetrics* metrics);
+bool bracketsFound(SecondTokenMetrics* metrics);
+bool correctSecondTokenAfterBrackets(SecondTokenMetrics* metrics, char* token);
+bool correctToken(int tokenCount, const char* token);
+bool allTokensAreCorrectTestFormat(char* token, char* temp);
 
 //////////////////////////////////////////////////////////////////////
 //                     Function Implementations                     //
@@ -53,81 +71,103 @@ bool isObjectFileFromSourceFile(const char* filename)
 
 bool isTestCaseDefinition(const char* line)
 {
-   char* temp = strdup(line);
    char* token;
+   char* temp = strdup(line);
    strcpy(temp, line);
 
-   bool correctFirstToken = false;
-   bool correctSecondToken = false;
+   bool result = allTokensAreCorrectTestFormat(token, temp);
+   free(temp);
+   return result;
+}
 
+bool allTokensAreCorrectTestFormat(char* token, char* temp)
+{
+   bool result = false;
    int tokenCount = 0;
    while (token = strtok_r(temp, " \r\t\n", &temp))
    {
-      if (tokenCount == 0)
-      {
-         correctFirstToken = firstTokenIsCorrect(token);
-      }
-      else if (tokenCount == 1)
-      {
-         correctSecondToken = secondTokenIsCorrect(token);
-      }
+      result = correctToken(tokenCount, token);
+      if (!result) break;
       tokenCount++;
    }
 
-   return correctFirstToken && correctSecondToken;
+   return result;
+}
+
+bool correctToken(int tokenCount, const char* token)
+{
+   switch (tokenCount)
+   {
+      case 0:
+         return firstTokenIsCorrect(token);
+         break;
+      case 1:
+         return secondTokenIsCorrect(token);
+      default:
+         return false;
+   }
 }
 
 bool firstTokenIsCorrect(const char* token) { return stringsAreEqual(token, "void"); }
 
 bool secondTokenIsCorrect(const char* token)
 {
-   bool hasBrackets = false;
-   bool hasLeftBrace = false;
-   bool hasRightBrace = false;
-   bool hasSingleLineComment = false;
-   bool hasMultiLineCommentStart = false;
-   bool hasMultiLineCommentEnd = false;
+   SecondTokenMetrics* metrics = malloc(sizeof(SecondTokenMetrics));
+   initSecondTokenMetrics(metrics);
+   populateSecondTokenMetrics(metrics, (char*)token);
+   bool result = false;
 
-   if (strstr(token, "{"))
+   if (bracketsFound(metrics))
    {
-      hasLeftBrace = true;
+      result = correctSecondTokenAfterBrackets(metrics, (char*)token);
    }
+   free(metrics);
+   return result;
+}
 
-   if (strstr(token, "}"))
+bool correctSecondTokenAfterBrackets(SecondTokenMetrics* metrics, char* token)
+{
+   if (nothingAfterBracketsInSecondToken(metrics))
    {
-      hasRightBrace = true;
+      char* secondLast = token + strlen(token) - 2;
+      return secondLast == metrics->brackets;
    }
+   else if (metrics->leftBrace)
+   {
+      char* thirdLast = token + strlen(token) - 3;
+      return thirdLast == metrics->brackets;
+   }
+}
 
-   if (strstr(token, "//"))
-   {
-      hasSingleLineComment = true;
-   }
+bool bracketsFound(SecondTokenMetrics* metrics) { return metricsPointerFound(metrics->brackets); }
 
-   if (strstr(token, "/*"))
-   {
-      hasMultiLineCommentStart = true;
-   }
+bool nothingAfterBracketsInSecondToken(SecondTokenMetrics* metrics)
+{
+   return (
+       !metricsPointerFound(metrics->leftBrace) && !metricsPointerFound(metrics->rightBrace) && !metricsPointerFound(metrics->singleLineComment) &&
+       !metricsPointerFound(metrics->multilineCommentStart) && !metricsPointerFound(metrics->mulitilineCommentEnd));
+}
 
-   if (strstr(token, "*/"))
-   {
-      hasMultiLineCommentEnd = true;
-   }
+void initSecondTokenMetrics(SecondTokenMetrics* metrics)
+{
+   metrics->brackets = NULL;
+   metrics->leftBrace = NULL;
+   metrics->rightBrace = NULL;
+   metrics->singleLineComment = NULL;
+   metrics->multilineCommentStart = NULL;
+   metrics->multilineCommentStart = NULL;
+}
 
-   char* brackets;
-   if (brackets = strstr(token, "()"))
-   {
-      if (!hasLeftBrace && !hasRightBrace && !hasSingleLineComment && !hasMultiLineCommentStart && !hasMultiLineCommentEnd)
-      {
-         char* secondLast = (char*)token + strlen(token) - 2;
-         return secondLast == brackets;
-      }
-      else if (hasLeftBrace)
-      {
-         char* thirdLast = (char*)token + strlen(token) - 3;
-         return thirdLast == brackets;
-      }
-   }
-   return false;
+bool metricsPointerFound(char* pointer) { return pointer != NULL; }
+
+void populateSecondTokenMetrics(SecondTokenMetrics* metrics, char* token)
+{
+   metrics->brackets = strstr(token, "()");
+   metrics->leftBrace = strstr(token, "{");
+   metrics->rightBrace = strstr(token, "}");
+   metrics->singleLineComment = strstr(token, "//");
+   metrics->multilineCommentStart = strstr(token, "/*");
+   metrics->mulitilineCommentEnd = strstr(token, "*/");
 }
 
 void trimTestName(char* testName)
