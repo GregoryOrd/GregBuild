@@ -2,11 +2,24 @@
 
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/TestAndSrcDefinitions.h"
+#include "../common/global/GlobalVariables.h"
+#include "../compiler/CompileAndLinkHelpers.h"
 
 int writeTestsToTestMain(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
+
+   printf("Writing to TestMain\n");
+   for (int i = 0; i < testFiles->size; i++)
+   {
+      TestFile file = testFiles->files[1];
+      char objectFileName[WINDOWS_MAX_PATH_LENGTH];
+      determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, i);
+      printf("Object File: %s\n", objectFileName);
+   }
+
    if (tempObjectFiles->size > 0)
    {
       writeToTestMainC(testFiles);

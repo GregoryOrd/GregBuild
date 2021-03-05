@@ -7,6 +7,8 @@
 
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileStructureDefs.h"
+#include "../common/global/GlobalVariables.h"
+#include "GregBuildConstants.h"
 
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
@@ -32,6 +34,7 @@ bool bracketsFound(SecondTokenMetrics* metrics);
 bool correctSecondTokenAfterBrackets(SecondTokenMetrics* metrics, char* token);
 bool correctToken(int tokenCount, const char* token);
 bool allTokensAreCorrectTestFormat(char* token, char* temp);
+bool oneOfTheTokensIsFromSource(char* token, char* temp);
 
 //////////////////////////////////////////////////////////////////////
 //                     Function Implementations                     //
@@ -60,12 +63,31 @@ bool isSourceFile(const char* filename)
    return result;
 }
 
+bool oneOfTheTokensIsFromSource(char* token, char* temp)
+{
+   bool retval = false;
+   while (token = strtok_r(temp, "/", &temp))
+   {
+      char lower[WINDOWS_MAX_PATH_LENGTH];
+      lowerString(lower, token);
+      bool isOFile = (token[strlen(token) - 2] == '.') && (token[strlen(token) - 1] == 'o');
+      bool result = (strncmp(lower, "test", 4) != 0 && isOFile);
+      if (result)
+      {
+         return true;
+      }
+   }
+   return retval;
+}
+
 bool isObjectFileFromSourceFile(const char* filename)
 {
-   char lower[WINDOWS_MAX_PATH_LENGTH];
-   lowerString(lower, filename);
-   bool isOFile = (filename[strlen(filename) - 2] == '.') && (filename[strlen(filename) - 1] == 'o');
-   bool result = (strncmp(lower, "test", 4) != 0 && isOFile);
+   char* token;
+   char* temp = strdup(filename);
+
+   bool result = oneOfTheTokensIsFromSource(token, temp);
+
+   free(temp);
    return result;
 }
 
@@ -226,4 +248,76 @@ bool isSpecialCharacter(const char c)
       return false;
    }
    return true;
+}
+
+void determineObjectFilePathUsingListType(int listType, char* objectFileName, const char* compiler, const void* fileList, int index)
+{
+   if (listType == TEST_FILE_LIST_TYPE)
+   {
+      determineObjectFileName(objectFileName, ((TestFileList*)fileList)->files[index].name);
+   }
+   else
+   {
+      determineObjectFileName(objectFileName, ((SourceFileList*)fileList)->files[index].name);
+   }
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
+   tempDirPathFromCompiler(tempObjectFile, compiler);
+   strcat(tempObjectFile, DELIMITER);
+   strcat(tempObjectFile, objectFileName);
+   strcpy(objectFileName, tempObjectFile);
+}
+
+void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index)
+{
+   if (listType == TEST_FILE_LIST_TYPE)
+   {
+      determineObjectFileName(objectFileName, ((TestFileList*)fileList)->files[index].name);
+   }
+   else
+   {
+      determineObjectFileName(objectFileName, ((SourceFileList*)fileList)->files[index].name);
+   }
+}
+
+void determineObjectFileName(char* objectFileName, const char* filePath)
+{
+   int length = strlen(filePath) - 1;
+   int offset = 2;
+   char reversedObjectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
+   reversedObjectFileName[0] = 'o';
+   reversedObjectFileName[1] = '.';
+   bool pastExtension = false;
+
+   for (int i = length - 1; i > 0; i--)
+   {
+      if (filePath[i] == '\\' || filePath[i] == '/')
+      {
+         break;
+      }
+      else if (filePath[i] != '.')
+      {
+         reversedObjectFileName[offset] = filePath[i];
+         reversedObjectFileName[offset + 1] = '\0';
+         offset++;
+      }
+      else if (filePath[i] == '.')
+      {
+         pastExtension = true;
+      }
+   }
+   reverseString(objectFileName, reversedObjectFileName);
+}
+
+void tempDirPathFromCompiler(char* dest, const char* compiler)
+{
+   char hardwarePlatform[7] = "target";
+   if (stringsAreEqual(compiler, hostCompiler()))
+   {
+      strcpy(hardwarePlatform, "host");
+   }
+
+   clearString(dest);
+   strcpy(dest, TEMP_DIR);
+   strcat(dest, DELIMITER);
+   strcat(dest, hardwarePlatform);
 }

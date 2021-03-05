@@ -10,6 +10,7 @@
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileOperations.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
 #include "CompileAndLinkHelpers.h"
 

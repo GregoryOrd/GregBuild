@@ -10,47 +10,6 @@
 #include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
 
-void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index)
-{
-   if (listType == TEST_FILE_LIST_TYPE)
-   {
-      determineObjectFileName(objectFileName, ((TestFileList*)fileList)->files[index].name);
-   }
-   else
-   {
-      determineObjectFileName(objectFileName, ((SourceFileList*)fileList)->files[index].name);
-   }
-}
-
-void determineObjectFileName(char* objectFileName, const char* filePath)
-{
-   int length = strlen(filePath) - 1;
-   int offset = 2;
-   char reversedObjectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
-   reversedObjectFileName[0] = 'o';
-   reversedObjectFileName[1] = '.';
-   bool pastExtension = false;
-
-   for (int i = length - 1; i > 0; i--)
-   {
-      if (filePath[i] == '\\' || filePath[i] == '/')
-      {
-         break;
-      }
-      else if (filePath[i] != '.')
-      {
-         reversedObjectFileName[offset] = filePath[i];
-         reversedObjectFileName[offset + 1] = '\0';
-         offset++;
-      }
-      else if (filePath[i] == '.')
-      {
-         pastExtension = true;
-      }
-   }
-   reverseString(objectFileName, reversedObjectFileName);
-}
-
 void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler)
 {
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
@@ -223,20 +182,6 @@ void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const Sour
    makeDir(tempFilePath);
    strcpy(mvArgs->args[mvArgs->size - 2], tempFilePath);
    mvArgs->args[mvArgs->size - 1] = NULL;
-}
-
-void tempDirPathFromCompiler(char* dest, const char* compiler)
-{
-   char hardwarePlatform[7] = "target";
-   if (stringsAreEqual(compiler, hostCompiler()))
-   {
-      strcpy(hardwarePlatform, "host");
-   }
-
-   clearString(dest);
-   strcpy(dest, TEMP_DIR);
-   strcat(dest, DELIMITER);
-   strcat(dest, hardwarePlatform);
 }
 
 int listSize(const void* fileList, int listType)

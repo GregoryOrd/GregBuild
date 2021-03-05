@@ -48,6 +48,10 @@ int testNameEndOffset(const char *testName);
 bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
                                                int initialLength);
 bool isSpecialCharacter(const char c);
+void determineObjectFilePathUsingListType(int listType, char* objectFileName, const char* compiler, const void* fileList, int index);
+void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
+void determineObjectFileName(char* objectFileName, const char* filePath);
+void tempDirPathFromCompiler(char* dest, const char* compiler);
 
 #ifdef __cplusplus
 }

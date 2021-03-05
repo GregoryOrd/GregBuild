@@ -7,6 +7,11 @@ Refactoring and Minor Improvements
 0b) Make plugin loader parsing more robust
     - handle whitespace before and after the contents of the param and value strings
 0c) Get more memory leaks from valgrind report
+0d) Move out of TestAndSrcDefinitions.h and into ObjAndTempDefs.h:
+    void determineObjectFilePathUsingListType(int listType, char* objectFileName, const char* compiler, const void* fileList, int index);
+    void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
+    void determineObjectFileName(char* objectFileName, const char* filePath);
+    void tempDirPathFromCompiler(char* dest, const char* compiler);
 
 Major Improvements
 ---------------------

@@ -11,8 +11,6 @@
 extern "C" {
 #endif
 
-void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
-void determineObjectFileName(char* objectFileName, const char* filePath);
 void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler);
 int numObjectFilesFromSource(const ObjectFileList* tempObjectFiles);
 int testFilesSize(const TestFileList* testFiles);
@@ -22,7 +20,6 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
 void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
 void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler);
 void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler);
-void tempDirPathFromCompiler(char* dest, const char* compiler);
 int listSize(const void* fileList, int listType);
 void copyTempObjectOrCFileNameIntoArgList(ArgList* argList, int* argIndex, int offset, int optionsOffset, const void* fileList, int index, char* objectFileName, int listType);
 void strCopyUsingListType(int listType, char* dest, const void* fileList, int index);
