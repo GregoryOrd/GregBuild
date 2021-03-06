@@ -4,6 +4,7 @@
 #include "../common/FileOperations.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/global/GlobalVariables.h"
 #include "../compiler/CompileAndLinkCommands.h"
 #include "../fileSystemRecursion/FileAndTestCaseGatherer.h"
 #include "../pluginLoader/PluginLoader.h"
@@ -34,10 +35,11 @@ int main(int argc, const char* argv[])
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   free(optionList);
+   freeCommandLineOptions_ll(optionList);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
    freePluginModules(pluginModules);
    freeBuildSequence(buildSequence);
+   freeGlobalOptionsLists();
    return error;
 }

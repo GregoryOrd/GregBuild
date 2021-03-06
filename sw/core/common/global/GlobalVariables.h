@@ -26,6 +26,8 @@ extern "C"
    LinkedList* hostLinkerOptions();
    LinkedList* targetLinkerOptions();
 
+   void freeGlobalOptionsLists();
+
 #ifdef __cplusplus
 }
 #endif

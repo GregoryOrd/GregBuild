@@ -40,6 +40,7 @@ static void setConfigurations(const char* param, const char* value);
 static void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
 static void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
 static void initOptionLists();
+static void freeStringData(void* data);
 
 static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",    "hostCompilerOption", "targetCompilerOption",
                                                                        "linkerOption", "hostLinkerOption", "targetLinkerOption"};
@@ -222,6 +223,16 @@ void initOptionLists()
    initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
    initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
 }
+
+void freeGlobalOptionsLists()
+{
+   freeLinkedList(hostCompilerOptions_, freeStringData);
+   freeLinkedList(targetCompilerOptions_, freeStringData);
+   freeLinkedList(hostLinkerOptions_, freeStringData);
+   freeLinkedList(targetLinkerOptions_, freeStringData);
+}
+
+void freeStringData(void* data) { free(data); }
 
 char* hostCompiler() { return hostCompiler_; }
 
