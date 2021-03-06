@@ -18,13 +18,12 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
 {
    exitIfError(errorOnPreviousStep);
 
-   int numArgs = 3;
+   int numArgs = 2;
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = numArgs;
    argList->args = calloc(numArgs, sizeof(void*));
    argList->args[0] = testFiles;
    argList->args[1] = sourceFiles;
-   argList->args[2] = tempObjectFiles;
    recurseAndAddFilesToList(basePath, addToTestOrSourceList, argList);
    freeArgList(argList, false);
 
@@ -35,7 +34,6 @@ bool addToTestOrSourceList(ArgList* list, const char* basePath, const struct dir
 {
    TestFileList* testFiles = (TestFileList*)list->args[0];
    SourceFileList* sourceFiles = (SourceFileList*)list->args[1];
-   ObjectFileList* tempObjectFiles = (ObjectFileList*)list->args[2];
 
    bool testDir = isTestDir(basePath);
    bool testFile = isTestFile(fileOrSubDirectory);

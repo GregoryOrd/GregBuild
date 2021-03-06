@@ -34,8 +34,6 @@ int main(int argc, const char* argv[])
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   // Since each of the CommandLineOptions in optionList is part of a BuildSequenceStep
-   // in buildSequence, we do not need a call to freeCommandLineOptions(optionList).
    free(optionList);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
