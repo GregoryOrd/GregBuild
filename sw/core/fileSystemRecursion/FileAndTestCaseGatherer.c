@@ -81,45 +81,6 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
       testFileList->files[testFileList->size].cases = malloc(sizeof(TestCase));
       strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
 
-      // addTestCasesToList(testFileList, pathToTestFile);
-
       testFileList->size++;
    }
-}
-
-void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile)
-{
-   ArgList* argsList = malloc(sizeof(ArgList));
-   argsList->size = 1;
-   argsList->args = calloc(argsList->size, sizeof(char*));
-   argsList->args[0] = (void*)testFileList;
-
-   readFileWithActionAfterEachLine(pathToTestFile, argsList, addIfIsSingleTestCase);
-
-   freeArgList(argsList, false);
-}
-
-int addIfIsSingleTestCase(ArgList* argList)
-{
-   char* buffer = (char*)argList->args[argList->size - 1];
-   if (isTestCaseDefinition(buffer))
-   {
-      addSingleTestCaseToList(argList->args);
-   }
-
-   return 0;
-}
-
-void addSingleTestCaseToList(void* args[])
-{
-   TestFileList* testFileList = (TestFileList*)args[0];
-   char buffer[WINDOWS_MAX_PATH_LENGTH] = "";
-   strcpy(buffer, (char*)args[1]);
-   trimTestName(buffer);
-
-   TestFile* testFile = &testFileList->files[testFileList->size];
-   testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
-   testFile->cases[testFile->numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-
-   testFile->numTestCases++;
 }

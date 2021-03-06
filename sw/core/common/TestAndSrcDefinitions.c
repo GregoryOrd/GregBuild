@@ -192,29 +192,6 @@ void populateSecondTokenMetrics(SecondTokenMetrics* metrics, char* token)
    metrics->mulitilineCommentEnd = strstr(token, "*/");
 }
 
-void trimTestName(char* testName)
-{
-   int endOffset = 0;
-   if (theCurlyBraceIsOnTheSameLineAsTheTestName(testName, strlen(testName)))
-   {
-      endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_SAME_LINE;
-   }
-   else
-   {
-      endOffset = TEST_NAME_TRIM_BACK_OFFSET_CURLY_BRACE_NEXT_LINE;
-   }
-   char temp[WINDOWS_MAX_PATH_LENGTH] = "";
-   clearString(temp);
-   for (int i = TEST_NAME_TRIM_FRONT_OFFSET; i < strlen(testName) - endOffset; i++)
-   {
-      temp[i - TEST_NAME_TRIM_FRONT_OFFSET] = testName[i];
-      temp[i - TEST_NAME_TRIM_FRONT_OFFSET + 1] = '\0';
-   }
-   clearString(testName);
-
-   strcpy(testName, temp);
-}
-
 int testNameEndOffset(const char* testName)
 {
    if (theCurlyBraceIsOnTheSameLineAsTheTestName(testName, strlen(testName) - 1))

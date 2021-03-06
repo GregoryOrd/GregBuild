@@ -59,9 +59,7 @@ Plan for Release 1.1:
     - Might also be good idea to rename temp dir to build or something
     - Will need to rename and after the functions in the build sequence and
     the functions in PluginFunctions.h
-5) Add a verbose output option
-    - Add attributes to BuildSequenceStep that can be used to influence how
-    to execution of the step is displayed to the user on the console interface
+5) Tell the file name as well as the test case name on test failure
 6) Change compileIntoTempObjectFiles to compile .c files one at a time
 instead of all at once
 
@@ -77,6 +75,9 @@ Plan for Release 1.2:
     tests being run on the host, as it currently does.
 4) Add a debug build ability
     - Can this be achieved by simply using -g in the compiler options in the config file?
+5) Add a verbose output option
+    - Add attributes to BuildSequenceStep that can be used to influence how
+    to execution of the step is displayed to the user on the console interface
 
 
 

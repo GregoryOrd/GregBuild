@@ -20,10 +20,6 @@ void copyFileOrSubDirectoryNameIntoPath(char *path, const char *basePath,
                                         const char *fileOrSubDirectoryName);
 void addTestFileToList(TestFileList *testFileList, const char *pathToTestFile);
 void addSourceFileToList(SourceFileList *list, const char *pathToSourceFile);
-void addTestCasesToList(TestFileList* testFileList, const char* pathToTestFile);
-int addIfIsSingleTestCase(ArgList* argList);
-void addSingleTestCaseToList(void* args[]);
-void trimTestName(char *testName);
 
 #ifdef __cplusplus
 }
