@@ -26,6 +26,7 @@ int loadTestsAndSourceFiles(TestFileList* testFiles, SourceFileList* sourceFiles
    argList->args[1] = sourceFiles;
    argList->args[2] = tempObjectFiles;
    recurseAndAddFilesToList(basePath, addToTestOrSourceList, argList);
+   free(argList->args);
    freeArgList(argList, false);
 
    return 0;
