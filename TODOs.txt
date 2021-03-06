@@ -12,6 +12,8 @@ Refactoring and Minor Improvements
     void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
     void determineObjectFileName(char* objectFileName, const char* filePath);
     void tempDirPathFromCompiler(char* dest, const char* compiler);
+0e) Should all of the "private" functions that have prototype declarations 
+    in the .c file be given the "static" keyword?
 
 Major Improvements
 ---------------------

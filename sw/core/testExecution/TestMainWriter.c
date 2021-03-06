@@ -1,5 +1,6 @@
 #include "TestMainWriter.h"
 
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
@@ -7,15 +8,24 @@
 #include "../common/global/GlobalVariables.h"
 #include "../compiler/CompileAndLinkHelpers.h"
 
+//////////////////////////////////////////////////////////////////////
+//              Private Data and Function Prototypes                //
+//////////////////////////////////////////////////////////////////////
+
 const int BUFFER_SIZE = 4096;
 
-// Private functions
 int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName);
-void getThirdToken(char* token, char* temp, char* thirdToken);
-int readLineFromPipeBuffer(TestFile* testFile, FILE* pipe);
+void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken);
+int readFileFromPipeBuffer(TestFile* testFile, FILE* pipe);
 void populateTestCases(TestFileList* testFiles, int index);
+void nmAndGrepCommand(char* command, const char* objectFileName);
+bool addTestCase(char* thirdToken, int* numTestCases, TestFile* testFile);
+void reallocTestCasesList(int numTestCases, TestFile* testFile);
+void allocateAndCopyTestCaseNameIntoTestCaseList(int numTestCases, char* thirdToken, TestFile* testFile);
 
-// Function Implementations
+//////////////////////////////////////////////////////////////////////
+//              Function Implementation Section                     //
+//////////////////////////////////////////////////////////////////////
 
 int writeTestsToTestMain(TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
@@ -46,47 +56,74 @@ void populateTestCases(TestFileList* testFiles, int index)
 int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
-   strcat(command, "nm ");
-   strcat(command, objectFileName);
-   strcat(command, " | grep T");
+   nmAndGrepCommand(command, objectFileName);
 
    FILE* pipe = popen(command, "r");
-   int numTestCasesFound = readLineFromPipeBuffer(testFile, pipe);
+   int numTestCasesFound = readFileFromPipeBuffer(testFile, pipe);
    testFile->numTestCases = numTestCasesFound;
    pclose(pipe);
    return numTestCasesFound;
 }
 
-int readLineFromPipeBuffer(TestFile* testFile, FILE* pipe)
+void nmAndGrepCommand(char* command, const char* objectFileName)
+{
+   strcat(command, nm);
+   strcat(command, " ");
+   strcat(command, objectFileName);
+   strcat(command, " | ");
+   strcat(command, grep);
+   strcat(command, " ");
+   strcat(command, "T");
+}
+
+int readFileFromPipeBuffer(TestFile* testFile, FILE* pipe)
 {
    char buffer[BUFFER_SIZE];
    int numTestCases = 0;
    while (fgets(buffer, BUFFER_SIZE, pipe))
    {
-      char* temp = strdup(buffer);
       char* token;
-      char* thirdToken = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-      getThirdToken(token, temp, thirdToken);
-      if (!stringsAreEqual(thirdToken, ""))
-      {
-         if (numTestCases >= 1)
-         {
-            testFile->cases = realloc(testFile->cases, (testFile->numTestCases + 1) * sizeof(TestCase*));
-         }
-         if (testFile->cases[numTestCases].testName == NULL)
-         {
-            testFile->cases[numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-         }
-         strcpy(testFile->cases[numTestCases].testName, thirdToken);
-         numTestCases++;
-      }
-      free(thirdToken);
+      char* temp = strdup(buffer);
+      char* testCaseName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+      getTestNameFromThirdToken(token, temp, testCaseName);
+      addTestCase(testCaseName, &numTestCases, testFile);
+
+      free(testCaseName);
       free(temp);
    }
    return numTestCases;
 }
 
-void getThirdToken(char* token, char* temp, char* thirdToken)
+bool addTestCase(char* testCaseName, int* numTestCases, TestFile* testFile)
+{
+   if (!stringsAreEqual(testCaseName, ""))
+   {
+      reallocTestCasesList(*numTestCases, testFile);
+      allocateAndCopyTestCaseNameIntoTestCaseList(*numTestCases, testCaseName, testFile);
+      *numTestCases = *numTestCases + 1;
+      return true;
+   }
+   return false;
+}
+
+void reallocTestCasesList(int numTestCases, TestFile* testFile)
+{
+   if (numTestCases >= 1)
+   {
+      testFile->cases = realloc(testFile->cases, (testFile->numTestCases + 1) * sizeof(TestCase*));
+   }
+}
+
+void allocateAndCopyTestCaseNameIntoTestCaseList(int numTestCases, char* testCaseName, TestFile* testFile)
+{
+   if (testFile->cases[numTestCases].testName == NULL)
+   {
+      testFile->cases[numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   }
+   strcpy(testFile->cases[numTestCases].testName, testCaseName);
+}
+
+void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
 {
    bool secondTokenIsUpperT = false;
    int tokenCount = 0;
@@ -96,9 +133,9 @@ void getThirdToken(char* token, char* temp, char* thirdToken)
       {
          secondTokenIsUpperT = stringsAreEqual(token, "T");
       }
-      if (tokenCount == 2 && secondTokenIsUpperT)
+      else if (tokenCount == 2 && secondTokenIsUpperT)
       {
-         strcpy(thirdToken, token);
+         strcpy(testCaseName, token);
       }
       tokenCount++;
    }
@@ -125,8 +162,7 @@ void populateTestMainCContents(char* contents, const TestFileList* testFiles)
    strcat(contents, "int main()\n{\n");
 
    // The Function Pointer Definitions and Calls are added seperately so that all
-   // definitions
-   // are written to the file before the first call
+   // definitions are written to the file before the first call
    addTestMainCFunctionPointerDefinitions(contents, testFiles);
    addTestMainCFunctionPointerCalls(contents, testFiles);
 
