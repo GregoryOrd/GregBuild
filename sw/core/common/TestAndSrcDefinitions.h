@@ -37,17 +37,6 @@ bool isTestDir(const char *dirName);
 bool isTestFile(const struct dirent *fileOrSubDirectory);
 bool isSourceFile(const char *fileOrSubDirectory);
 bool isObjectFileFromSourceFile(const char* filename);
-LineMetrics gatherLineMetrics(const char* line);
-LineMetrics analyzeLineMetrics(LineMetrics metrics, const char* line);
-LineAnalysisResults determineResults(const LineMetrics metrics, const char *line);
-bool lineHasSpecialCharacters(const LineMetrics metrics, const char *line);
-LineMetrics initLineMetrics();
-LineAnalysisResults initLineAnalysisResults();
-bool isTestCaseDefinition(const char *line);
-int testNameEndOffset(const char *testName);
-bool theCurlyBraceIsOnTheSameLineAsTheTestName(const char *testName,
-                                               int initialLength);
-bool isSpecialCharacter(const char c);
 
 #ifdef __cplusplus
 }
