@@ -1,6 +1,9 @@
 Refactoring and Minor Improvements
 -----------------------------------
 0a) Get more memory leaks from valgrind report
+    -> Looks like most of this is comming from the CoreCommandLineOptions
+    -> These are known ahead of time, so we might not need to allocate memory as 
+    dynamically as we would for other things
 
 Major Improvements
 ---------------------

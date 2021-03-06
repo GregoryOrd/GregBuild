@@ -35,7 +35,8 @@ int main(int argc, const char* argv[])
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   freeCommandLineOptions_ll(optionList);
+   free((void*)at_ll(optionList, COMMAND_LINE_OPTION_TYPE, 0));
+   free(optionList);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
    freePluginModules(pluginModules);
