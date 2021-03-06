@@ -1,10 +1,20 @@
 #include "TestMainWriter.h"
 
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
+#include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
 #include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
 #include "../compiler/CompileAndLinkHelpers.h"
+
+const int BUFFER_SIZE = 4096;
+
+// Private functions
+void getTestNamesFromTestObjectFile(const char* objectFileName);
+void getThirdToken(char* token, char* temp, char* thirdToken);
+void readLineFromPipeBuffer(FILE* pipe);
+
+// Function Implementations
 
 int writeTestsToTestMain(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
@@ -17,7 +27,7 @@ int writeTestsToTestMain(
       TestFile file = testFiles->files[1];
       char objectFileName[WINDOWS_MAX_PATH_LENGTH];
       determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, i);
-      printf("Object File: %s\n", objectFileName);
+      getTestNamesFromTestObjectFile(objectFileName);
    }
 
    if (tempObjectFiles->size > 0)
@@ -26,6 +36,54 @@ int writeTestsToTestMain(
       writeToTestMainH(testFiles);
    }
    return 0;
+}
+
+void getTestNamesFromTestObjectFile(const char* objectFileName)
+{
+   char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
+   strcat(command, "nm ");
+   strcat(command, objectFileName);
+   strcat(command, " | grep T");
+
+   FILE* pipe = popen(command, "r");
+   readLineFromPipeBuffer(pipe);
+   pclose(pipe);
+}
+
+void readLineFromPipeBuffer(FILE* pipe)
+{
+   char buffer[BUFFER_SIZE];
+   while (fgets(buffer, BUFFER_SIZE, pipe))
+   {
+      char* temp = strdup(buffer);
+      char* token;
+      char* thirdToken = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+      getThirdToken(token, temp, thirdToken);
+      if (!stringsAreEqual(thirdToken, ""))
+      {
+         printf("Third Token: %s\n", thirdToken);
+      }
+      free(thirdToken);
+      free(temp);
+   }
+}
+
+void getThirdToken(char* token, char* temp, char* thirdToken)
+{
+   bool secondTokenIsUpperT = false;
+   int tokenCount = 0;
+   while (token = strtok_r(temp, " ", &temp))
+   {
+      if (tokenCount == 1)
+      {
+         secondTokenIsUpperT = stringsAreEqual(token, "T");
+      }
+      if (tokenCount == 2 && secondTokenIsUpperT)
+      {
+         strcpy(thirdToken, token);
+      }
+      tokenCount++;
+   }
 }
 
 void writeToTestMainC(const TestFileList* testFiles)
