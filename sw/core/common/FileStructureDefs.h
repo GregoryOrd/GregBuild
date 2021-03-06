@@ -10,7 +10,7 @@
 
 typedef struct ObjectFile
 {
-    char* name;
+    char name[WINDOWS_MAX_PATH_LENGTH];
     bool isFromSource;
 } ObjectFile;
 

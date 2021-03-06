@@ -1,6 +1,7 @@
 #include "FileOperations.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/GregBuildConstants.h"
@@ -36,15 +37,11 @@ void initObjectFileList(ObjectFileList* objectFiles)
 {
    objectFiles->size = 0;
    objectFiles->files = malloc(sizeof(ObjectFile));
-   objectFiles->files[0].name = NULL;
+   strcpy(objectFiles->files[0].name, "");
 }
 
 void freeObjectFileList(ObjectFileList* list)
 {
-   for (int i = 0; i < list->size; i++)
-   {
-      free(list->files[i].name);
-   }
    free(list->files);
    free(list);
 }
@@ -53,7 +50,7 @@ void resetObjectFileList(ObjectFileList* list)
 {
    for (int i = 0; i < list->size; i++)
    {
-      list->files[i].name = "";
+      strcpy(list->files[0].name, "");
       list->files[i].isFromSource = false;
    }
    list->size = 0;

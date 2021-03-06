@@ -19,7 +19,6 @@ void addTempObjectFileToList(ObjectFileList* list, const char* filename, const c
    strcat(tempObjectFile, filename);
 
    list->files = (ObjectFile*)realloc(list->files, ((list->size + 1) * sizeof(ObjectFile)));
-   list->files[list->size].name = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    strcpy(list->files[list->size].name, tempObjectFile);
    list->files[list->size].isFromSource = isObjectFileFromSourceFile(filename);
    list->size++;
