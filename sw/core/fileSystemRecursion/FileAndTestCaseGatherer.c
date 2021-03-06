@@ -63,7 +63,6 @@ void addSourceFileToList(SourceFileList* list, const char* pathToSourceFile)
    if (list != NULL)
    {
       list->files = (SourceFile*)realloc(list->files, ((list->size + 1) * sizeof(SourceFile)));
-      list->files[list->size].name = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
       strcpy(list->files[list->size].name, pathToSourceFile);
       list->size++;
    }
@@ -74,7 +73,6 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
    if (testFileList != NULL)
    {
       testFileList->files = (TestFile*)realloc(testFileList->files, (testFileList->size + 1) * sizeof(TestFile));
-      testFileList->files[testFileList->size].name = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
       testFileList->files[testFileList->size].numTestCases = 0;
       testFileList->files[testFileList->size].cases = malloc(sizeof(TestCase));
       strcpy(testFileList->files[testFileList->size].name, pathToTestFile);

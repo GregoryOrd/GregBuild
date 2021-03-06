@@ -22,7 +22,7 @@ typedef struct ObjectFileList
 
 typedef struct SourceFile
 {
-    char* name;
+    char name[WINDOWS_MAX_PATH_LENGTH];
 } SourceFile;
 
 typedef struct SourceFileList
@@ -33,12 +33,12 @@ typedef struct SourceFileList
 
 typedef struct TestCase
 {
-    char* testName;
+    char testName[WINDOWS_MAX_PATH_LENGTH];
 } TestCase;
 
 typedef struct TestFile
 {
-    char* name;
+    char name[WINDOWS_MAX_PATH_LENGTH];
     int numTestCases;
     TestCase* cases;
 } TestFile;

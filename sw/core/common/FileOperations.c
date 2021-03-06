@@ -20,7 +20,7 @@ void initTestFiles(TestFileList* testFiles)
    {
       testFiles->size = 0;
       testFiles->files = malloc(sizeof(TestFile));
-      testFiles->files[0].name = NULL;
+      strcpy(testFiles->files[0].name, "");
       testFiles->files[0].numTestCases = 0;
       testFiles->totalNumTestCases = 0;
    }
@@ -30,7 +30,7 @@ void initSourceFiles(SourceFileList* sourceFiles)
 {
    sourceFiles->size = 0;
    sourceFiles->files = malloc(sizeof(SourceFile));
-   sourceFiles->files[0].name = NULL;
+   strcpy(sourceFiles->files[0].name, "");
 }
 
 void initObjectFileList(ObjectFileList* objectFiles)
@@ -68,10 +68,6 @@ void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectF
 
 void freeSourceFileList(SourceFileList* list)
 {
-   for (int i = 0; i < list->size; i++)
-   {
-      free(list->files[i].name);
-   }
    free(list->files);
    free(list);
 }
@@ -81,12 +77,6 @@ void freeTestFileList(TestFileList* testFileList)
    for (int fileIndex = 0; fileIndex < testFileList->size; fileIndex++)
    {
       TestFile* testFile = &testFileList->files[fileIndex];
-      free(testFile->name);
-      for (int testCaseIndex = 0; testCaseIndex < testFile->numTestCases; testCaseIndex++)
-      {
-         TestCase* testCase = &testFile->cases[testCaseIndex];
-         free(testCase->testName);
-      }
       free(testFile->cases);
    }
    free(testFileList->files);

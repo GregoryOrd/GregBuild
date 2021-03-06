@@ -20,7 +20,6 @@ static void populateTestCases(TestFileList* testFiles, int index);
 static void nmAndGrepCommand(char* command, const char* objectFileName);
 static void addTestCase(char* testCaseName, TestFileList* testFile, int index);
 static void reallocTestCasesList(TestFileList* testFiles, int index);
-static void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
@@ -93,7 +92,8 @@ void addTestCase(char* testCaseName, TestFileList* testFiles, int index)
    if (!stringsAreEqual(testCaseName, ""))
    {
       reallocTestCasesList(testFiles, index);
-      allocateAndCopyTestCaseNameIntoTestCaseList(testCaseName, testFiles, index);
+      int testCaseIndex = testFiles->files[index].numTestCases - 1;
+      strcpy(testFiles->files[index].cases[testCaseIndex].testName, testCaseName);
       testFiles->totalNumTestCases++;
    }
 }
@@ -102,13 +102,6 @@ void reallocTestCasesList(TestFileList* testFiles, int index)
 {
    testFiles->files[index].cases = realloc(testFiles->files[index].cases, ((testFiles->files[index].numTestCases + 1) * sizeof(TestCase)));
    testFiles->files[index].numTestCases++;
-}
-
-void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index)
-{
-   int testCaseIndex = testFiles->files[index].numTestCases - 1;
-   testFiles->files[index].cases[testCaseIndex].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-   strcpy(testFiles->files[index].cases[testCaseIndex].testName, testCaseName);
 }
 
 void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
