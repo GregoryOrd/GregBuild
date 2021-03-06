@@ -7,6 +7,7 @@
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/ObjAndTempDefs.h"
 #include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
 

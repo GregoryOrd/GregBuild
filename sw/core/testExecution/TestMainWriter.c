@@ -4,7 +4,7 @@
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/GregBuildConstants.h"
-#include "../common/TestAndSrcDefinitions.h"
+#include "../common/ObjAndTempDefs.h"
 #include "../common/global/GlobalVariables.h"
 #include "../compiler/CompileAndLinkHelpers.h"
 
