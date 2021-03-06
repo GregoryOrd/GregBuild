@@ -21,16 +21,17 @@
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
-bool addIfIsPlugin(ArgList* argList, const char* basePath, const struct dirent* fileOrSubDirectory, const char* pluginPath);
-void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
-void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pluginPath);
-void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
-void freeModuleNode(void* data);
-void initPluginList(PluginList* list);
-bool isPlugin(const struct dirent* fileOrSubDirectory);
-void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules);
-int processOrderConfigEntry(ArgList* argsList);
-int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules);
+static bool addIfIsPlugin(ArgList* argList, const char* basePath, const struct dirent* fileOrSubDirectory, const char* pluginPath);
+static void addPluginsNotListedInTheOrderConfigFileToTheEndOfTheTempLists(
+    PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
+static void addPluginToList(PluginList* list, LinkedList* pluginModules, const char* pluginPath);
+static void copyTempListsIntoActualLists(PluginList* list, PluginList* tempPluginList, LinkedList* pluginModules, LinkedList* tempPluginModules);
+static void freeModuleNode(void* data);
+static void initPluginList(PluginList* list);
+static bool isPlugin(const struct dirent* fileOrSubDirectory);
+static void orderPluginsToMatchConfigFile(PluginList* list, LinkedList* pluginModules);
+static int processOrderConfigEntry(ArgList* argsList);
+static int readPluginsFromOrderConfigFileIntoTempLists(const char* pathToTestFile, PluginList* list, PluginList* tempPluginList, LinkedList* tempPluginModules);
 
 //////////////////////////////////////////////////////////////////////
 //                     Function Implementations                     //

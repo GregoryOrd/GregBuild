@@ -24,17 +24,17 @@ typedef struct
    char* mulitilineCommentEnd;
 } SecondTokenMetrics;
 
-bool firstTokenIsCorrect(const char* token);
-bool secondTokenIsCorrect(const char* token);
-void populateSecondTokenMetrics(SecondTokenMetrics* metrics, char* token);
-bool metricsPointerFound(char* pointer);
-void initSecondTokenMetrics(SecondTokenMetrics* metrics);
-bool nothingAfterBracketsInSecondToken(SecondTokenMetrics* metrics);
-bool bracketsFound(SecondTokenMetrics* metrics);
-bool correctSecondTokenAfterBrackets(SecondTokenMetrics* metrics, char* token);
-bool correctToken(int tokenCount, const char* token);
-bool allTokensAreCorrectTestFormat(char* token, char* temp);
-bool oneOfTheTokensIsFromSource(char* token, char* temp);
+static bool firstTokenIsCorrect(const char* token);
+static bool secondTokenIsCorrect(const char* token);
+static void populateSecondTokenMetrics(SecondTokenMetrics* metrics, char* token);
+static bool metricsPointerFound(char* pointer);
+static void initSecondTokenMetrics(SecondTokenMetrics* metrics);
+static bool nothingAfterBracketsInSecondToken(SecondTokenMetrics* metrics);
+static bool bracketsFound(SecondTokenMetrics* metrics);
+static bool correctSecondTokenAfterBrackets(SecondTokenMetrics* metrics, char* token);
+static bool correctToken(int tokenCount, const char* token);
+static bool allTokensAreCorrectTestFormat(char* token, char* temp);
+static bool oneOfTheTokensIsFromSource(char* token, char* temp);
 
 //////////////////////////////////////////////////////////////////////
 //                     Function Implementations                     //

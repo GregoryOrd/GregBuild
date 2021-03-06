@@ -28,23 +28,23 @@ typedef struct SetConfiguration
 
 } SetConfiguration;
 
-void setDataToActOn(int i);
-HashTable* setupConfigurationsHashTable();
-int string_copy(void** args);
-void freeSetupConfigurations();
-int parseConfigurationFileLine(ArgList* argList);
-void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer);
-void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter);
-void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool delimiterReached, int indexOfDelimiter);
-void setConfigurations(const char* param, const char* value);
-void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
-void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
-void initOptionLists();
+static void setDataToActOn(int i);
+static HashTable* setupConfigurationsHashTable();
+static int string_copy(void** args);
+static void freeSetupConfigurations();
+static int parseConfigurationFileLine(ArgList* argList);
+static void parseParamAndValueFromBuffer(char* param, char* value, const char* buffer);
+static void addCharToParamIfBeforeDelimiter(int i, char* param, const char* buffer, bool* delimiterReached, int* indexOfDelimiter);
+static void addCharToValueIfAfterDelimiter(int i, char* value, const char* buffer, bool delimiterReached, int indexOfDelimiter);
+static void setConfigurations(const char* param, const char* value);
+static void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
+static void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
+static void initOptionLists();
 
-const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",    "hostCompilerOption", "targetCompilerOption",
-                                                                "linkerOption", "hostLinkerOption", "targetLinkerOption"};
+static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",    "hostCompilerOption", "targetCompilerOption",
+                                                                       "linkerOption", "hostLinkerOption", "targetLinkerOption"};
 
-SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
+static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
     {.actions = {string_copy, NULL}, .dataToActOn = {targetCompiler_, NULL}},                          // target
     {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // compilerOption

@@ -12,8 +12,6 @@ Refactoring and Minor Improvements
     void determineObjectFileNameUsingListType(int listType, char* objectFileName, const void* fileList, int index);
     void determineObjectFileName(char* objectFileName, const char* filePath);
     void tempDirPathFromCompiler(char* dest, const char* compiler);
-0e) Should all of the "private" functions that have prototype declarations 
-    in the .c file be given the "static" keyword?
 
 Major Improvements
 ---------------------
@@ -62,6 +60,8 @@ Plan for Release 1.1:
 5) Tell the file name as well as the test case name on test failure
 6) Change compileIntoTempObjectFiles to compile .c files one at a time
 instead of all at once
+    -> Does this actually give us any benefits?
+    -> Make change if we think it will have benefits
 
 
 

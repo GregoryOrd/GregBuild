@@ -12,16 +12,15 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-const int BUFFER_SIZE = 4096;
-
-void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index);
-void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken);
-void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index);
-void populateTestCases(TestFileList* testFiles, int index);
-void nmAndGrepCommand(char* command, const char* objectFileName);
-void addTestCase(char* testCaseName, TestFileList* testFile, int index);
-void reallocTestCasesList(TestFileList* testFiles, int index);
-void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index);
+static const int BUFFER_SIZE = 4096;
+static void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index);
+static void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken);
+static void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index);
+static void populateTestCases(TestFileList* testFiles, int index);
+static void nmAndGrepCommand(char* command, const char* objectFileName);
+static void addTestCase(char* testCaseName, TestFileList* testFile, int index);
+static void reallocTestCasesList(TestFileList* testFiles, int index);
+static void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
