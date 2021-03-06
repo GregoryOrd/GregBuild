@@ -11,7 +11,7 @@ typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileLis
 typedef struct BuildSequenceStep {
   CommandLineOption *option; // To run the function, the flagValue in here needs to be true
   STEP_FUNCTION function_ptr;
-  char* functionName;
+  char functionName[WINDOWS_MAX_PATH_LENGTH];
 } BuildSequenceStep;
 
 #ifdef __cplusplus

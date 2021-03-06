@@ -16,7 +16,7 @@
 #include <stdbool.h>
 
 typedef struct ObjectFile {
-  char *name;
+  char name[WINDOWS_MAX_PATH_LENGTH];
   bool isFromSource;
 } ObjectFile;
 
@@ -25,17 +25,17 @@ typedef struct ObjectFileList {
   ObjectFile *files;
 } ObjectFileList;
 
-typedef struct SourceFile { char *name; } SourceFile;
+typedef struct SourceFile { char name[WINDOWS_MAX_PATH_LENGTH]; } SourceFile;
 
 typedef struct SourceFileList {
   int size;
   SourceFile *files;
 } SourceFileList;
 
-typedef struct TestCase { char *testName; } TestCase;
+typedef struct TestCase { char testName[WINDOWS_MAX_PATH_LENGTH]; } TestCase;
 
 typedef struct TestFile {
-  char *name;
+  char name[WINDOWS_MAX_PATH_LENGTH];
   int numTestCases;
   TestCase *cases;
 } TestFile;
@@ -47,8 +47,8 @@ typedef struct TestFileList {
 } TestFileList;
 
 struct CommandLineOption {
-  char *optionText;
-  char *description;
+  char optionText[WINDOWS_MAX_PATH_LENGTH];
+  char description[WINDOWS_MAX_PATH_LENGTH];
   bool flagValue;
 } typedef CommandLineOption;
 
@@ -57,7 +57,7 @@ typedef struct BuildSequenceStep {
   int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
                       ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
                       char *basePath);
-  char * functionName;
+  char functionName[WINDOWS_MAX_PATH_LENGTH];
 } BuildSequenceStep;
 
 // The core GregBuild BuildSequence is as follows
@@ -108,9 +108,6 @@ BuildSequenceStep* beforeLoadingTestAndSourceFiles()
    BuildSequenceStep* step =
    malloc(sizeof(BuildSequenceStep));
    step->option = malloc(sizeof(CommandLineOption));
-   step->option->optionText = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-   step->option->description = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-   step->functionName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
 
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name

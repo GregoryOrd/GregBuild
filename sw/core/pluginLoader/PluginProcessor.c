@@ -104,10 +104,7 @@ void freeCoreBuildSequenceList(BuildSequenceStep* coreBuildSequence, int numCore
 {
    for (int i = 0; i < numCoreBuildSequenceSteps; i++)
    {
-      free(coreBuildSequence[i].option->optionText);
-      free(coreBuildSequence[i].option->description);
       free(coreBuildSequence[i].option);
-      free(coreBuildSequence[i].functionName);
    }
    free(coreBuildSequence);
 }
