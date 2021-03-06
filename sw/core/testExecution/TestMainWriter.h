@@ -20,7 +20,7 @@
 extern "C" {
 #endif  
 
-int writeTestsToTestMain(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
+int writeTestsToTestMain(TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
 void writeToTestMainC(const TestFileList* testFiles);
 void populateTestMainCContents(char* contents, const TestFileList* testFiles);
 void addTestMainCIncludes(char* main);

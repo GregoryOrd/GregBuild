@@ -10,24 +10,21 @@
 const int BUFFER_SIZE = 4096;
 
 // Private functions
-void getTestNamesFromTestObjectFile(const char* objectFileName);
+int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName);
 void getThirdToken(char* token, char* temp, char* thirdToken);
-void readLineFromPipeBuffer(FILE* pipe);
+int readLineFromPipeBuffer(TestFile* testFile, FILE* pipe);
+void populateTestCases(TestFileList* testFiles, int index);
 
 // Function Implementations
 
-int writeTestsToTestMain(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
+int writeTestsToTestMain(TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
    exitIfError(errorOnPreviousStep);
 
    printf("Writing to TestMain\n");
    for (int i = 0; i < testFiles->size; i++)
    {
-      TestFile file = testFiles->files[1];
-      char objectFileName[WINDOWS_MAX_PATH_LENGTH];
-      determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, i);
-      getTestNamesFromTestObjectFile(objectFileName);
+      populateTestCases(testFiles, i);
    }
 
    if (tempObjectFiles->size > 0)
@@ -38,7 +35,15 @@ int writeTestsToTestMain(
    return 0;
 }
 
-void getTestNamesFromTestObjectFile(const char* objectFileName)
+void populateTestCases(TestFileList* testFiles, int index)
+{
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH];
+   determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, index);
+   int numTestCasesFound = getTestNamesFromTestObjectFile(&testFiles->files[index], objectFileName);
+   testFiles->totalNumTestCases = numTestCasesFound;
+}
+
+int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    strcat(command, "nm ");
@@ -46,13 +51,16 @@ void getTestNamesFromTestObjectFile(const char* objectFileName)
    strcat(command, " | grep T");
 
    FILE* pipe = popen(command, "r");
-   readLineFromPipeBuffer(pipe);
+   int numTestCasesFound = readLineFromPipeBuffer(testFile, pipe);
+   testFile->numTestCases = numTestCasesFound;
    pclose(pipe);
+   return numTestCasesFound;
 }
 
-void readLineFromPipeBuffer(FILE* pipe)
+int readLineFromPipeBuffer(TestFile* testFile, FILE* pipe)
 {
    char buffer[BUFFER_SIZE];
+   int numTestCases = 0;
    while (fgets(buffer, BUFFER_SIZE, pipe))
    {
       char* temp = strdup(buffer);
@@ -61,18 +69,28 @@ void readLineFromPipeBuffer(FILE* pipe)
       getThirdToken(token, temp, thirdToken);
       if (!stringsAreEqual(thirdToken, ""))
       {
-         printf("Third Token: %s\n", thirdToken);
+         if (numTestCases >= 1)
+         {
+            testFile->cases = realloc(testFile->cases, (testFile->numTestCases + 1) * sizeof(TestCase*));
+         }
+         if (testFile->cases[numTestCases].testName == NULL)
+         {
+            testFile->cases[numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+         }
+         strcpy(testFile->cases[numTestCases].testName, thirdToken);
+         numTestCases++;
       }
       free(thirdToken);
       free(temp);
    }
+   return numTestCases;
 }
 
 void getThirdToken(char* token, char* temp, char* thirdToken)
 {
    bool secondTokenIsUpperT = false;
    int tokenCount = 0;
-   while (token = strtok_r(temp, " ", &temp))
+   while (token = strtok_r(temp, " \n", &temp))
    {
       if (tokenCount == 1)
       {
