@@ -81,7 +81,7 @@ void addTestFileToList(TestFileList* testFileList, const char* pathToTestFile)
       testFileList->files[testFileList->size].cases = malloc(sizeof(TestCase));
       strcpy(testFileList->files[testFileList->size].name, pathToTestFile);
 
-      addTestCasesToList(testFileList, pathToTestFile);
+      // addTestCasesToList(testFileList, pathToTestFile);
 
       testFileList->size++;
    }
@@ -121,7 +121,5 @@ void addSingleTestCaseToList(void* args[])
    testFile->cases = (TestCase*)realloc(testFile->cases, ((testFile->numTestCases + 1) * sizeof(TestCase)));
    testFile->cases[testFile->numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
 
-   strcpy(testFile->cases[testFile->numTestCases].testName, buffer);
    testFile->numTestCases++;
-   testFileList->totalNumTestCases++;
 }

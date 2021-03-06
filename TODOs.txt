@@ -62,6 +62,8 @@ Plan for Release 1.1:
 5) Add a verbose output option
     - Add attributes to BuildSequenceStep that can be used to influence how
     to execution of the step is displayed to the user on the console interface
+6) Change compileIntoTempObjectFiles to compile .c files one at a time
+instead of all at once
 
 
 

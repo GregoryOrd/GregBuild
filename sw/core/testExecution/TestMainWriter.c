@@ -14,14 +14,14 @@
 
 const int BUFFER_SIZE = 4096;
 
-int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName);
+void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index);
 void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken);
-int readFileFromPipeBuffer(TestFile* testFile, FILE* pipe);
+void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index);
 void populateTestCases(TestFileList* testFiles, int index);
 void nmAndGrepCommand(char* command, const char* objectFileName);
-bool addTestCase(char* thirdToken, int* numTestCases, TestFile* testFile);
-void reallocTestCasesList(int numTestCases, TestFile* testFile);
-void allocateAndCopyTestCaseNameIntoTestCaseList(int numTestCases, char* thirdToken, TestFile* testFile);
+void addTestCase(char* testCaseName, TestFileList* testFile, int index);
+void reallocTestCasesList(TestFileList* testFiles, int index);
+void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
@@ -49,20 +49,17 @@ void populateTestCases(TestFileList* testFiles, int index)
 {
    char objectFileName[WINDOWS_MAX_PATH_LENGTH];
    determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, index);
-   int numTestCasesFound = getTestNamesFromTestObjectFile(&testFiles->files[index], objectFileName);
-   testFiles->totalNumTestCases = numTestCasesFound;
+   getTestNamesFromTestObjectFile(testFiles, objectFileName, index);
 }
 
-int getTestNamesFromTestObjectFile(TestFile* testFile, const char* objectFileName)
+void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    nmAndGrepCommand(command, objectFileName);
 
    FILE* pipe = popen(command, "r");
-   int numTestCasesFound = readFileFromPipeBuffer(testFile, pipe);
-   testFile->numTestCases = numTestCasesFound;
+   readFileFromPipeBuffer(testFiles, pipe, index);
    pclose(pipe);
-   return numTestCasesFound;
 }
 
 void nmAndGrepCommand(char* command, const char* objectFileName)
@@ -76,51 +73,43 @@ void nmAndGrepCommand(char* command, const char* objectFileName)
    strcat(command, "T");
 }
 
-int readFileFromPipeBuffer(TestFile* testFile, FILE* pipe)
+void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index)
 {
    char buffer[BUFFER_SIZE];
-   int numTestCases = 0;
    while (fgets(buffer, BUFFER_SIZE, pipe))
    {
       char* token;
       char* temp = strdup(buffer);
       char* testCaseName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
       getTestNameFromThirdToken(token, temp, testCaseName);
-      addTestCase(testCaseName, &numTestCases, testFile);
+      addTestCase(testCaseName, testFiles, index);
 
       free(testCaseName);
       free(temp);
    }
-   return numTestCases;
 }
 
-bool addTestCase(char* testCaseName, int* numTestCases, TestFile* testFile)
+void addTestCase(char* testCaseName, TestFileList* testFiles, int index)
 {
    if (!stringsAreEqual(testCaseName, ""))
    {
-      reallocTestCasesList(*numTestCases, testFile);
-      allocateAndCopyTestCaseNameIntoTestCaseList(*numTestCases, testCaseName, testFile);
-      *numTestCases = *numTestCases + 1;
-      return true;
-   }
-   return false;
-}
-
-void reallocTestCasesList(int numTestCases, TestFile* testFile)
-{
-   if (numTestCases >= 1)
-   {
-      testFile->cases = realloc(testFile->cases, (testFile->numTestCases + 1) * sizeof(TestCase*));
+      reallocTestCasesList(testFiles, index);
+      allocateAndCopyTestCaseNameIntoTestCaseList(testCaseName, testFiles, index);
+      testFiles->totalNumTestCases++;
    }
 }
 
-void allocateAndCopyTestCaseNameIntoTestCaseList(int numTestCases, char* testCaseName, TestFile* testFile)
+void reallocTestCasesList(TestFileList* testFiles, int index)
 {
-   if (testFile->cases[numTestCases].testName == NULL)
-   {
-      testFile->cases[numTestCases].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-   }
-   strcpy(testFile->cases[numTestCases].testName, testCaseName);
+   testFiles->files[index].cases = realloc(testFiles->files[index].cases, ((testFiles->files[index].numTestCases + 1) * sizeof(TestCase)));
+   testFiles->files[index].numTestCases++;
+}
+
+void allocateAndCopyTestCaseNameIntoTestCaseList(char* testCaseName, TestFileList* testFiles, int index)
+{
+   int testCaseIndex = testFiles->files[index].numTestCases - 1;
+   testFiles->files[index].cases[testCaseIndex].testName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   strcpy(testFiles->files[index].cases[testCaseIndex].testName, testCaseName);
 }
 
 void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
