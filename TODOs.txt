@@ -1,5 +1,8 @@
 Refactoring and Minor Improvements
 -----------------------------------
+ - Currently there are no items in this category
+
+ 
 
 Major Improvements
 ---------------------
