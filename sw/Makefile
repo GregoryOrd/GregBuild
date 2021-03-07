@@ -217,5 +217,5 @@ clean:
 cleanPlugins:
 	rm ../lib/plugins/TimeTrackingPlugin.so
 	rm ../lib/plugins/TheBestPlugin.so
-	rm ~/ExampleSrcRepo/lib/plugins
-	rm ~/Blink/lib/plugins
+	rm ~/ExampleSrcRepo/lib/plugins -r
+	rm ~/Blink/lib/plugins -r

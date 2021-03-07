@@ -29,7 +29,6 @@ int writeTestsToTestMain(TestFileList* testFiles, const SourceFileList* sourceFi
 {
    exitIfError(errorOnPreviousStep);
 
-   printf("Writing to TestMain\n");
    for (int i = 0; i < testFiles->size; i++)
    {
       populateTestCases(testFiles, i);
