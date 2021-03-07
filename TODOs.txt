@@ -24,10 +24,8 @@ Major Improvements
         avrdude
 4) Add asserts to GregTest for all standard types (int, double, float) and custom structs when provided with
    a "comparator" function pointer for the customer struct
-5) Verify support for different platforms
-    - Different make files. One for windows, one for linux
-6) Documentation Review and Improvements
-7) Explore git tags and prep to make a formal release
+5) Documentation Review and Improvements
+6) Explore git tags and prep to make a formal release
 
 
 //////////////////////////////////////////////////////////////////////
@@ -83,7 +81,8 @@ Plan for Release 1.3:
         c0) Would need to improve the hash table implementation to dynamically scale to a table of any size
             -> Could probably acheive this with external chaining rather than the current collision handling method
             of linear probing
-
+2) Verify support for different platforms
+    - Different make files. One for windows, one for linux
 
 
 Plan for Release 1.4:
