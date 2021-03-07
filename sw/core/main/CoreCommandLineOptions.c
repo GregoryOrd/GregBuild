@@ -4,43 +4,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
 
-void initCoreCommandLineOptions(LinkedList* options)
+void initCoreCommandLineOptions(CommandLineOptionList* list)
 {
-   initEmptyLinkedList(options, COMMAND_LINE_OPTION_TYPE);
-   setCoreCommandLineOptions(options);
+   list->size = 2;
+   list->options = calloc(sizeof(CommandLineOption), list->size);
+
+   strcpy(list->options[0].description, NO_TEST_DESCRIPTION);
+   strcpy(list->options[0].optionText, NO_TEST_OPTION_TEXT);
+   list->options[0].flagValue = NO_TEST_FLAG_VALUE;
+
+   strcpy(list->options[1].description, DELETE_TEMP_DIR_DESCRIPTION);
+   strcpy(list->options[1].optionText, DELETE_TEMP_DIR_OPTION_TEXT);
+   list->options[1].flagValue = DELETE_TEMP_DIR_FLAG_VALUE;
 }
 
-void processCommandLineOptions(LinkedList* options, int argc, const char* argv[])
+void processCommandLineOptions(CommandLineOptionList* options, int argc, const char* argv[])
 {
-   processCommandLineArgs_ll(argc, argv, options, COMMAND_LINE_OPTION_TYPE);
+   processCommandLineArgs(argc, argv, options);
    coreCommandLineAcknowldegmentPrintouts(options);
 }
 
-void setCoreCommandLineOptions(LinkedList* list)
+void coreCommandLineAcknowldegmentPrintouts(const CommandLineOptionList* list)
 {
-   CommandLineOption* noTestOption = malloc(sizeof(CommandLineOption));
-   allocateAndSetCommandLineOption(noTestOption, NO_TEST_DESCRIPTION, NO_TEST_OPTION_TEXT, NO_TEST_FLAG_VALUE);
-   append_ll(list, noTestOption, COMMAND_LINE_OPTION_TYPE);
-
-   CommandLineOption* deleteTempOption = malloc(sizeof(CommandLineOption));
-   allocateAndSetCommandLineOption(deleteTempOption, DELETE_TEMP_DIR_DESCRIPTION, DELETE_TEMP_DIR_OPTION_TEXT, DELETE_TEMP_DIR_FLAG_VALUE);
-   append_ll(list, deleteTempOption, COMMAND_LINE_OPTION_TYPE);
-}
-
-void allocateAndSetCommandLineOption(CommandLineOption* option, const char* description, const char* optionText, bool flagValue)
-{
-   strcpy(option->optionText, optionText);
-   strcpy(option->description, description);
-   option->flagValue = flagValue;
-}
-
-void coreCommandLineAcknowldegmentPrintouts(const LinkedList* list)
-{
-   bool flag = flagValueForOption_ll(list, NO_TEST_OPTION_TEXT, COMMAND_LINE_OPTION_TYPE);
+   bool flag = flagValueForOption(list, NO_TEST_OPTION_TEXT);
    if (!flag)
    {
       printf("No Test Build\n");

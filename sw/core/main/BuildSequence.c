@@ -1,6 +1,6 @@
 #include "BuildSequence.h"
 
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/BuildSequenceStep.h"
 #include "../common/GregBuildConstants.h"
@@ -19,12 +19,13 @@ void setCoreBuildSequenceSteps(LinkedList* sequence)
    {
       BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
       BuildSequenceStepInfo info = coreBuildSequenceInfo[i];
-      allocateAndSetBuildSequenceStep(step, info.description, info.optionText, info.flagValue, info.function_ptr, info.functionName);
+      setBuildSequenceStep(step, info.description, info.optionText, info.flagValue, info.function_ptr, info.functionName);
       append_ll(sequence, step, BUILD_SEQUENCE_STEP_TYPE);
    }
 }
 
-int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+int executeBuildSequence(
+    const LinkedList* buildSequence, const CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
    int error = 0;
    char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
@@ -33,7 +34,7 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
    {
       BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
 
-      bool flagVal = flagValueForOption_ll(options, step->option->optionText, COMMAND_LINE_OPTION_TYPE);
+      bool flagVal = flagValueForOption(options, step->option.optionText);
       if (!error && flagVal)
       {
          printBuildSequenceExecutionMessage(step);
@@ -46,7 +47,7 @@ int executeBuildSequence(const LinkedList* buildSequence, LinkedList* options, T
 
 void printBuildSequenceExecutionMessage(BuildSequenceStep* step)
 {
-   bool skippedTestStep = (stringsAreEqual(step->option->optionText, NO_TEST_OPTION_TEXT) && hostCompileFailed());
+   bool skippedTestStep = (stringsAreEqual(step->option.optionText, NO_TEST_OPTION_TEXT) && hostCompileFailed());
    if (!skippedTestStep)
    {
       printf("\n===================================================================\n");
@@ -57,11 +58,4 @@ void printBuildSequenceExecutionMessage(BuildSequenceStep* step)
 
 void freeBuildSequence(LinkedList* sequence) { freeLinkedList(sequence, &freeBuildSequenceStep); }
 
-void freeBuildSequenceStep(void* data)
-{
-   // Don't free step->function_ptr because it points to a code instruction
-   // not malloced memory
-   BuildSequenceStep* step = (BuildSequenceStep*)data;
-   free(step->option);
-   free(step);
-}
+void freeBuildSequenceStep(void* buildSequenceStep) { free(buildSequenceStep); }

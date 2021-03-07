@@ -9,7 +9,7 @@ typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileLis
                       const char *basePath);
 
 typedef struct BuildSequenceStep {
-  CommandLineOption *option; // To run the function, the flagValue in here needs to be true
+  CommandLineOption option; // To run the function, the flagValue in here needs to be true
   STEP_FUNCTION function_ptr;
   char functionName[WINDOWS_MAX_PATH_LENGTH];
 } BuildSequenceStep;
@@ -18,8 +18,8 @@ typedef struct BuildSequenceStep {
 extern "C" {
 #endif  
 
-void allocateAndCopyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src);
-void allocateAndSetBuildSequenceStep(
+void copyBuildSequenceStep(BuildSequenceStep* dest, const BuildSequenceStep* src);
+void setBuildSequenceStep(
     BuildSequenceStep* dest, const char* description, const char* optionText, bool flagValue, const STEP_FUNCTION function_ptr, const char* functionName);
 
 #ifdef __cplusplus

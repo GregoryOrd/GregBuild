@@ -4,6 +4,8 @@ Refactoring and Minor Improvements
     -> Looks like most of this is comming from the CoreCommandLineOptions
     -> These are known ahead of time, so we might not need to allocate memory as 
     dynamically as we would for other things
+0b) Get make cleanPlugins working without any error messages in the current development
+    environment
 
 Major Improvements
 ---------------------
@@ -81,7 +83,12 @@ Plan for Release 1.3:
         c0) Would need to improve the hash table implementation to dynamically scale to a table of any size
             -> Could probably acheive this with external chaining rather than the current collision handling method
             of linear probing
-2) Verify support for different platforms
+2) Sort alphabetically when printing the list of supported command line options in the
+   printSupportedOptions() functions for both CommandLineOptions.h and CommandLineOptions_ll.h
+    - Only need CommandLineOptions.h for this project, but might as well do the linked list
+    version as well.
+    - Both of these header files, along with their implementations, are in the toolkit
+3) Verify support for different platforms
     - Different make files. One for windows, one for linux
 
 

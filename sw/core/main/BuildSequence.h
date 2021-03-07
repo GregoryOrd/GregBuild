@@ -4,6 +4,7 @@
 #include "../common/BuildSequenceStep.h"
 #include "../common/FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,7 +12,7 @@ extern "C" {
 
 void initBuildSequence(LinkedList *sequence);
 void setCoreBuildSequenceSteps(LinkedList *sequence);
-int executeBuildSequence(const LinkedList *buildSequence, LinkedList *options,
+int executeBuildSequence(const LinkedList *buildSequence, const CommandLineOptionList *options,
                          TestFileList *testFiles, SourceFileList *sourceFiles,
                          ObjectFileList *tempObjectFiles);
 void printBuildSequenceExecutionMessage(BuildSequenceStep* step);

@@ -1,5 +1,5 @@
 #include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
-#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions_ll.h"
+#include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/FileOperations.h"
 #include "../common/FileStructureDefs.h"
@@ -17,7 +17,7 @@
 int main(int argc, const char* argv[])
 {
    printf("Starting GregBuild\n");
-   LinkedList* optionList = malloc(sizeof(LinkedList));
+   CommandLineOptionList* optionList = malloc(sizeof(CommandLineOptionList));
    TestFileList* testFiles = malloc(sizeof(TestFileList));
    SourceFileList* sourceFiles = malloc(sizeof(SourceFileList));
    ObjectFileList* tempObjectFiles = malloc(sizeof(ObjectFileList));
@@ -35,8 +35,7 @@ int main(int argc, const char* argv[])
 
    int error = executeBuildSequence(buildSequence, optionList, testFiles, sourceFiles, tempObjectFiles);
 
-   free((void*)at_ll(optionList, COMMAND_LINE_OPTION_TYPE, 0));
-   free(optionList);
+   freeCommandLineOptions(optionList);
    freeFileLists(testFiles, sourceFiles, tempObjectFiles);
    freePluginList(plugins);
    freePluginModules(pluginModules);

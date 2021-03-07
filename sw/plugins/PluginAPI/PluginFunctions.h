@@ -53,7 +53,7 @@ struct CommandLineOption {
 } typedef CommandLineOption;
 
 typedef struct BuildSequenceStep {
-  CommandLineOption *option; // To run the function, the flagValue in here needs to be true
+  CommandLineOption option; // To run the function, the flagValue in here needs to be true
   int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
                       ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
                       char *basePath);
@@ -103,18 +103,14 @@ typedef struct BuildSequenceStep {
 // Note that the printHelloWorld() function must have the correct arguments
 // and should return 0 for success and 1 for failure.
 /*
-BuildSequenceStep* beforeLoadingTestAndSourceFiles()
+BuildSequenceStep* before_loadTestsAndSourceFiles()
 {
-   BuildSequenceStep* step =
-   malloc(sizeof(BuildSequenceStep));
-   step->option = malloc(sizeof(CommandLineOption));
-
+   BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
    step->function_ptr = printHelloWorld;
-   strcpy(step->functionName, "printHelloWorld"); //Should match the function_ptr name
-   strcpy(step->option->optionText, NULL_COMMAND_LINE_OPTION_TEXT);
-   strcpy(step->option->description, NULL_COMMAND_LINE_DESCRIPTION);
-   step->option->flagValue = NULL_COMMAND_LINE_FLAG_VALUE;
-
+   strcpy(step->functionName, "printHelloWorld");
+   strcpy(step->option.optionText, "--best");
+   strcpy(step->option.description, "TheBestPlugin");
+   step->option.flagValue = false;
    return step;
 }
 

@@ -7,12 +7,11 @@
 BuildSequenceStep* before_loadTestsAndSourceFiles()
 {
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
-   step->option = malloc(sizeof(CommandLineOption));
    step->function_ptr = printHelloWorld;
    strcpy(step->functionName, "printHelloWorld");
-   strcpy(step->option->optionText, "--time");
-   strcpy(step->option->description, "TimeTrackingPlugin");
-   step->option->flagValue = false;
+   strcpy(step->option.optionText, "--time");
+   strcpy(step->option.description, "TimeTrackingPlugin");
+   step->option.flagValue = false;
    return step;
 }
 
