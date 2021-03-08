@@ -1,6 +1,7 @@
 Refactoring and Minor Improvements
 -----------------------------------
- - Currently there are no items in this category
+0a) Install GregTest in the default lib path so the user doesn't need to worry about
+    having it in their repo
 
  
 
