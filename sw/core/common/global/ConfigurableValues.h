@@ -9,8 +9,8 @@
 
 #define COMPILER_CONFIG_DELIMITER ':'
 
-static char hostCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";
-static char targetCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc.exe";
+static char hostCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc";
+static char targetCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc";
 
 static LinkedList* hostCompilerOptions_ = NULL;
 static LinkedList* targetCompilerOptions_ = NULL;
