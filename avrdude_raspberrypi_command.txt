@@ -1,1 +1,6 @@
-sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/006 -b 115200 -D -U flash:w:Blink.hex:i
+sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U flash:w:Blink.elf:e
+sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U hfuse:w:0xD9:m
+sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U lfuse:w:0xEF:m
+sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U efuse:w:0xFF:m
+
+To get the <port number>, run lsusb
