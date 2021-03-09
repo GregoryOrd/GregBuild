@@ -27,7 +27,7 @@
 #endif
 
 #define DIST        "dist"
-#define PROJECT_EXE "dist/HelloWorld.exe"
+#define PROJECT_EXE "dist/Blink.elf"
 #define SRC_DIR     "src"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2

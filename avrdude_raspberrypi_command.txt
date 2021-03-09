@@ -1,0 +1,1 @@
+sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/006 -b 115200 -D -U flash:w:Blink.hex:i
