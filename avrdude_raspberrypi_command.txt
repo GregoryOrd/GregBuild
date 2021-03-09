@@ -1,6 +1,11 @@
 sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U flash:w:Blink.elf:e
+
+To get the <port number>, run lsusb
+We shouldn't need to rewrite the fuse bits, but if we do, it can be done with:
+
 sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U hfuse:w:0xD9:m
 sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U lfuse:w:0xEF:m
 sudo avrdude -v -p atmega328p -c atmelice_isp -P usb/001/<port number> -b 115200 -U efuse:w:0xFF:m
 
-To get the <port number>, run lsusb
+These are the fuse bit values that come from our startup blink examples. Be careful to not
+set the fuse bits incorrectly.
