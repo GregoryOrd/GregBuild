@@ -2,6 +2,9 @@ Refactoring and Minor Improvements
 -----------------------------------
 0a) Install GregTest in the default lib path so the user doesn't need to worry about
     having it in their repo
+0b) Investigate why having WritePortB.c in the exectuable but not using it was breaking the
+program on the arduino.
+    Is it because it was not linked to main.c through a #include??
 
  
 
