@@ -26,6 +26,8 @@ extern "C"
    LinkedList* hostLinkerOptions();
    LinkedList* targetLinkerOptions();
 
+   LinkedList* hostExcludedFiles();
+
    void freeGlobalOptionsLists();
    void freeHostExcludedFilesList();
 

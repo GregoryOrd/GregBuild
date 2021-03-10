@@ -40,6 +40,10 @@ static void setConfigurations(const char* param, const char* value);
 static void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
 static void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
 static void initOptionLists();
+static void initHostCompilerOptionsList();
+static void initTargetCompilerOptionsList();
+static void initHostLinkerOptionsList();
+static void initTargetLinkerOptionsList();
 static void initHostExcludedFilesList();
 static void freeStringData(void* data);
 static int listTypeFromData(void* data);
@@ -242,14 +246,33 @@ int string_copy(void** args)
 
 void initOptionLists()
 {
-   hostCompilerOptions_ = malloc(sizeof(LinkedList));
-   targetCompilerOptions_ = malloc(sizeof(LinkedList));
-   initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
-   initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
+   initHostCompilerOptionsList();
+   initTargetCompilerOptionsList();
+   initHostLinkerOptionsList();
+   initTargetLinkerOptionsList();
+}
 
+void initHostCompilerOptionsList()
+{
+   hostCompilerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
+}
+
+void initTargetCompilerOptionsList()
+{
+   targetCompilerOptions_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
+}
+
+void initHostLinkerOptionsList()
+{
    hostLinkerOptions_ = malloc(sizeof(LinkedList));
-   targetLinkerOptions_ = malloc(sizeof(LinkedList));
    initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
+}
+
+void initTargetLinkerOptionsList()
+{
+   targetLinkerOptions_ = malloc(sizeof(LinkedList));
    initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
 }
 
@@ -279,8 +302,7 @@ LinkedList* hostCompilerOptions()
 {
    if (hostCompilerOptions_ == NULL)
    {
-      hostCompilerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(hostCompilerOptions_, COMPILER_OPTION_TYPE);
+      initHostCompilerOptionsList();
    }
    return hostCompilerOptions_;
 }
@@ -289,8 +311,7 @@ LinkedList* targetCompilerOptions()
 {
    if (targetCompilerOptions_ == NULL)
    {
-      targetCompilerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(targetCompilerOptions_, COMPILER_OPTION_TYPE);
+      initTargetCompilerOptionsList();
    }
    return targetCompilerOptions_;
 }
@@ -299,8 +320,7 @@ LinkedList* hostLinkerOptions()
 {
    if (hostLinkerOptions_ == NULL)
    {
-      hostLinkerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(hostLinkerOptions_, LINKER_OPTION_TYPE);
+      initHostLinkerOptionsList();
    }
    return hostLinkerOptions_;
 }
@@ -309,8 +329,16 @@ LinkedList* targetLinkerOptions()
 {
    if (targetLinkerOptions_ == NULL)
    {
-      targetLinkerOptions_ = malloc(sizeof(LinkedList));
-      initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
+      initTargetLinkerOptionsList();
    }
    return targetLinkerOptions_;
+}
+
+LinkedList* hostExcludedFiles()
+{
+   if (hostExcludedFiles_ == NULL)
+   {
+      initHostExcludedFilesList();
+   }
+   return hostExcludedFiles_;
 }
