@@ -79,12 +79,6 @@ int readConfigurationsFromFile()
    argList->args[0] = table;
    readFileWithActionAfterEachLine(CONFIG_FILE, argList, parseConfigurationFileLine);
 
-   printf("Host Excluded Files(%d):\n", hostExcludedFiles_->size);
-   for (int i = 0; i < hostExcludedFiles_->size; i++)
-   {
-      printf("%s\n", (char*)at_ll(hostExcludedFiles_, HOST_EXCLUDED_FILE_TYPE, i));
-   }
-
    freeHashTable(table, freeSetupConfigurations, false, false);
    freeArgList(argList, false);
    return 0;
