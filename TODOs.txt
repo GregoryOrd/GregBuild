@@ -20,6 +20,7 @@ Major Improvements
     and our host compiler doesn't know how to handle them when compiling the tests
     - We can make this list known in the configuration file
     - See Configuration.md
+    - Might also be good to have the ability to exclude entire directories
 2) Make the PROJECT_EXE and SRC_DIR variables configurable
 3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
