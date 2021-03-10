@@ -24,12 +24,9 @@ int compileIntoTempObjectFiles(
 int compileIntoTempObjectFilesWithCompiler(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath)
 {
-   ArgList* compilerArgs = malloc(sizeof(ArgList));
-   ArgList* mvArgs = malloc(sizeof(ArgList));
-
    int error = 0;
 
-   error = compileIntoObjectFiles(compilerArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
+   error = compileIntoObjectFiles(testFiles, sourceFiles, tempObjectFiles, compiler);
    if (error)
    {
       printf("\n===================================================================\n");
@@ -39,12 +36,10 @@ int compileIntoTempObjectFilesWithCompiler(
       resetObjectFileList(tempObjectFiles);
    }
 
-   freeArgList(compilerArgs, true);
-   freeArgList(mvArgs, true);
    return 0;
 }
 
-int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
+int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))
@@ -62,18 +57,22 @@ int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles,
 
    for (int i = 0; i < numTestFiles; i++)
    {
+      ArgList* compilerArgs = malloc(sizeof(ArgList));
       determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
       addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
       argsForCompilingToObjectFiles(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
       result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+      freeArgList(compilerArgs, true);
    }
 
    for (int i = 0; i < sourceFiles->size; i++)
    {
+      ArgList* compilerArgs = malloc(sizeof(ArgList));
       determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);
       addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
       argsForCompilingToObjectFiles(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
       result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+      freeArgList(compilerArgs, true);
    }
    return result;
 }

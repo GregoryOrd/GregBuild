@@ -1,7 +1,6 @@
 #ifndef COMPILE_AND_LINK_COMMANDS_H
 #define COMPILE_AND_LINK_COMMANDS_H
 
-#include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
 #include "../common/FileStructureDefs.h"
 
 #ifdef __cplusplus
@@ -13,7 +12,7 @@ extern "C"
        const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
    int compileIntoTempObjectFilesWithCompiler(
        const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath);
-   int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
+   int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
    int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
        const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
    int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
