@@ -1,5 +1,6 @@
 #include "CompileAndLinkHelpers.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -78,12 +79,14 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles)
 {
    int numObjectFilesFromSourceAddedToArgsList = 0;
+   LinkedList* options = targetLinkerOptions();
+
    for (int i = 0; i < tempObjectFiles->size; i++)
    {
       ObjectFile* file = &tempObjectFiles->files[i];
       if (file->isFromSource)
       {
-         strcpy(linkerArgs->args[numObjectFilesFromSourceAddedToArgsList + 1], file->name);
+         strcpy(linkerArgs->args[numObjectFilesFromSourceAddedToArgsList + options->size + 1], file->name);
          numObjectFilesFromSourceAddedToArgsList++;
       }
    }

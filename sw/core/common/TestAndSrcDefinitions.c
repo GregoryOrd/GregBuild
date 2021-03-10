@@ -59,7 +59,9 @@ bool isSourceFile(const char* filename)
 {
    char lower[WINDOWS_MAX_PATH_LENGTH];
    bool isCFile = (filename[strlen(filename) - 2] == '.') && (filename[strlen(filename) - 1] == 'c');
-   bool result = (strncmp(filename, "test", 4) != 0 && isCFile);
+   bool isCPPFile = strlen(filename) > 4 && (filename[strlen(filename) - 4] == '.') && (filename[strlen(filename) - 3] == 'c') && (filename[strlen(filename) - 2] == 'p') &&
+                    (filename[strlen(filename) - 1] == 'p');
+   bool result = (strncmp(filename, "test", 4) != 0 && (isCFile || isCPPFile));
    return result;
 }
 
