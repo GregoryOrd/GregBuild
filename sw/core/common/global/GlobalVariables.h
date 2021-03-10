@@ -16,7 +16,7 @@ extern "C"
    bool testsWereRun();
    void setTestsWereRun();
 
-   int readCompilerConfigurationFromFile();
+   int readConfigurationsFromFile();
 
    char* hostCompiler();
    char* targetCompiler();
@@ -27,6 +27,7 @@ extern "C"
    LinkedList* targetLinkerOptions();
 
    void freeGlobalOptionsLists();
+   void freeHostExcludedFilesList();
 
 #ifdef __cplusplus
 }

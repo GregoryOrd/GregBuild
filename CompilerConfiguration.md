@@ -3,7 +3,7 @@
 
 ## Telling GregBuild What Compiler To Use
 
-To configure the compilers used by GregBuild, place a file called "compiler.config" in
+To configure the compilers used by GregBuild, add or use a file called "config" in
 the root directory of the repo to be built with GregBuild. Add a line to specify the
 host compiler and a line to specify the target compiler. For example:
 
@@ -30,7 +30,7 @@ will work. However, trying to use "C:\Program Files (x86)\Atmel\Studio\7.0\toolc
 
 ## Configuring Compiler Options
 
-To configure compiler and linked options, add lines to compiler.config starting with 
+To configure compiler and linked options, add lines to the "config" file starting with 
 `compilerOption:` or `linkerOption:`. For example:
 
 ```

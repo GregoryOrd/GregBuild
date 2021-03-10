@@ -18,6 +18,8 @@ static LinkedList* targetCompilerOptions_ = NULL;
 static LinkedList* hostLinkerOptions_ = NULL;
 static LinkedList* targetLinkerOptions_ = NULL;
 
-#define COMPILER_CONFIG_FILE "./compiler.config"
+static LinkedList* hostExcludedFiles_ = NULL;
+
+#define CONFIG_FILE "./config"
 
 #endif

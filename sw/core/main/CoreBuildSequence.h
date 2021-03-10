@@ -25,8 +25,8 @@ BuildSequenceStepInfo coreBuildSequenceInfo[9] =
         NULL_COMMAND_LINE_DESCRIPTION, 
         NULL_COMMAND_LINE_OPTION_TEXT, 
         NULL_COMMAND_LINE_FLAG_VALUE, 
-        readCompilerConfigurationFromFile, 
-        "readCompilerConfigurationFromFile"
+        readConfigurationsFromFile, 
+        "readConfigurationsFromFile"
     },
     {
         NULL_COMMAND_LINE_DESCRIPTION, 

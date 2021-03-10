@@ -41,5 +41,6 @@ int main(int argc, const char* argv[])
    freePluginModules(pluginModules);
    freeBuildSequence(buildSequence);
    freeGlobalOptionsLists();
+   freeHostExcludedFilesList();
    return error;
 }

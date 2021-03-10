@@ -8,7 +8,7 @@ This build system is being developed on a Windows machine using gcc and Cygwin. 
 
 ## Compilers
 
-Different compilers can be used by GregBuild by adding a compiler.config file inside of your repository. See [CompilerConfiguration.md](CompilerConfiguration.md) for me details. Please ensure the compiler and all of its depencies are in a location that
+Different compilers can be used by GregBuild by adding a config file inside of your repository. See [CompilerConfiguration.md](CompilerConfiguration.md) for me details. Please ensure the compiler and all of its depencies are in a location that
 can be reached by GregBuild. For example, if running GregBuild inside of Cygwin,
 please make sure the compiler is also located within Cygwin. It may vary based on where Cygwin is installed. But using my path as an example, the compiler files should be located somewhere under "C:/cygwin64"
 

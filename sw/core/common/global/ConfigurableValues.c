@@ -15,7 +15,7 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-#define NUM_COMPILER_CONFIG_PARAMS    8
+#define NUM_COMPILER_CONFIG_PARAMS    9
 #define SET_CONFIGURATION_TYPE        1
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
@@ -40,10 +40,12 @@ static void setConfigurations(const char* param, const char* value);
 static void setConfigurationForSingleParameter(HashTable* table, const char* param, const char* value);
 static void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, const char* value);
 static void initOptionLists();
+static void initHostExcludedFilesList();
 static void freeStringData(void* data);
+static int listTypeFromData(void* data);
 
-static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",    "hostCompilerOption", "targetCompilerOption",
-                                                                       "linkerOption", "hostLinkerOption", "targetLinkerOption"};
+static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",     "hostCompilerOption", "targetCompilerOption",
+                                                                       "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile"};
 
 static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
@@ -53,23 +55,32 @@ static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetCompilerOption
     {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // compilerOption
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostLinkerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}}                              // targetLinkerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetLinkerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostExcludedFiles
 };
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
 //////////////////////////////////////////////////////////////////////
 
-int readCompilerConfigurationFromFile()
+int readConfigurationsFromFile()
 {
    initOptionLists();
+   initHostExcludedFilesList();
 
    HashTable* table = setupConfigurationsHashTable();
    ArgList* argList = malloc(sizeof(ArgList));
    argList->size = 1;
    argList->args = malloc(sizeof(void*));
    argList->args[0] = table;
-   readFileWithActionAfterEachLine(COMPILER_CONFIG_FILE, argList, parseConfigurationFileLine);
+   readFileWithActionAfterEachLine(CONFIG_FILE, argList, parseConfigurationFileLine);
+
+   printf("Host Excluded Files(%d):\n", hostExcludedFiles_->size);
+   for (int i = 0; i < hostExcludedFiles_->size; i++)
+   {
+      printf("%s\n", (char*)at_ll(hostExcludedFiles_, HOST_EXCLUDED_FILE_TYPE, i));
+   }
+
    freeHashTable(table, freeSetupConfigurations, false, false);
    freeArgList(argList, false);
    return 0;
@@ -150,13 +161,28 @@ void executeActionOnDataWithValue(SET_CONFIGURATION_ACTION action, void* data, c
    void* args[3];
    args[0] = data;
    args[1] = (void*)value;
-   int listType = COMPILER_OPTION_TYPE;
-   if (action == append_string_voidArgs_ll && (data == hostLinkerOptions_ || data == targetLinkerOptions_))
-   {
-      listType = LINKER_OPTION_TYPE;
-   }
+
+   // If the data is not a list, the action will not use the listType argument
+   int listType = listTypeFromData(data);
    args[2] = &listType;
+
    action(args);
+}
+
+int listTypeFromData(void* data)
+{
+   if (data == hostCompilerOptions_ || data == targetCompilerOptions_)
+   {
+      return COMPILER_OPTION_TYPE;
+   }
+   if (data == hostLinkerOptions_ || data == targetLinkerOptions_)
+   {
+      return LINKER_OPTION_TYPE;
+   }
+   else if (data == hostExcludedFiles_)
+   {
+      return HOST_EXCLUDED_FILE_TYPE;
+   }
 }
 
 void freeSetupConfigurations() {}
@@ -165,7 +191,7 @@ HashTable* setupConfigurationsHashTable()
 {
    HashTable* table = malloc(sizeof(HashTable));
    initHashTable(table, SET_CONFIGURATION_TYPE, NUM_COMPILER_CONFIG_PARAMS);
-   for (int i = 0; i < NUM_COMPILER_CONFIG_PARAMS - 1; i++)
+   for (int i = 0; i < NUM_COMPILER_CONFIG_PARAMS; i++)
    {
       setDataToActOn(i);
       HashTableItem* item = malloc(sizeof(HashTableItem));
@@ -200,6 +226,9 @@ void setDataToActOn(int i)
       case 7:  // targetLinkerOption
          configurations[i].dataToActOn[0] = (void*)targetLinkerOptions_;
          break;
+      case 8:  // hostExcludedFiles
+         configurations[i].dataToActOn[0] = (void*)hostExcludedFiles_;
+         break;
    }
 }
 
@@ -224,6 +253,12 @@ void initOptionLists()
    initEmptyLinkedList(targetLinkerOptions_, LINKER_OPTION_TYPE);
 }
 
+void initHostExcludedFilesList()
+{
+   hostExcludedFiles_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hostExcludedFiles_, HOST_EXCLUDED_FILE_TYPE);
+}
+
 void freeGlobalOptionsLists()
 {
    freeLinkedList(hostCompilerOptions_, freeStringData);
@@ -231,6 +266,8 @@ void freeGlobalOptionsLists()
    freeLinkedList(hostLinkerOptions_, freeStringData);
    freeLinkedList(targetLinkerOptions_, freeStringData);
 }
+
+void freeHostExcludedFilesList() { freeLinkedList(hostExcludedFiles_, freeStringData); }
 
 void freeStringData(void* data) { free(data); }
 
