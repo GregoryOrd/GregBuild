@@ -5,6 +5,10 @@ Refactoring and Minor Improvements
 0b) Investigate why having WritePortB.c in the exectuable but not using it was breaking the
 program on the arduino.
     Is it because it was not linked to main.c through a #include??
+0c) Figure out a way to do expect call type stuff in GregTest
+    -> Something similar to strace/ltrace
+    -> Or maybe can use some of the stuff in the Jacob Sorber youtube video
+    and function profiling
 
  
 
@@ -27,6 +31,7 @@ Major Improvements
         avrdude
 4) Add asserts to GregTest for all standard types (int, double, float) and custom structs when provided with
    a "comparator" function pointer for the customer struct
+    - Include stdint types in this
 5) Documentation Review and Improvements
 6) Explore git tags and prep to make a formal release
 
