@@ -11,9 +11,8 @@
 #include "../common/TestAndSrcDefinitions.h"
 #include "../common/global/GlobalVariables.h"
 
-void addTempObjectFileToList(ObjectFileList* list, const char* filename, const char* compiler)
+void addTempObjectFileToList(ObjectFileList* list, const char* filename, char* tempObjectFile, const char* compiler)
 {
-   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    tempDirPathFromCompiler(tempObjectFile, compiler);
    strcat(tempObjectFile, DELIMITER);
    strcat(tempObjectFile, filename);
@@ -138,7 +137,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 }
 
-void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
+void argsForCompilingToObjectFiles(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))
@@ -149,39 +148,24 @@ void initArgsForCompilingToObjectFiles(ArgList* compilerArgs, const SourceFileLi
    {
       options = targetCompilerOptions();
    }
-   compilerArgs->size = numTestFiles + sourceFiles->size + options->size + 3;
+   compilerArgs->size = options->size + 6;
    compilerArgs->args = calloc(compilerArgs->size, sizeof(void*));
    for (int i = 0; i < compilerArgs->size - 1; i++)
    {
       compilerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
    strcpy(compilerArgs->args[0], compiler);
-   strcpy(compilerArgs->args[1], "-c");
+   strcpy(compilerArgs->args[1], "-o");
+   strcpy(compilerArgs->args[2], tempObjectFileName);
+   strcpy(compilerArgs->args[3], "-c");
 
    for (int j = 0; j < options->size; j++)
    {
-      strcpy(compilerArgs->args[j + 2], (char*)at_ll(options, COMPILER_OPTION_TYPE, j));
+      strcpy(compilerArgs->args[j + 4], (char*)at_ll(options, COMPILER_OPTION_TYPE, j));
    }
 
+   strcpy(compilerArgs->args[compilerArgs->size - 2], filename);
    compilerArgs->args[compilerArgs->size - 1] = NULL;
-}
-
-void initMvArgsForMovingCompiledObjectFilesToTempDir(ArgList* mvArgs, const SourceFileList* sourceFiles, int numTestFiles, char* compiler)
-{
-   mvArgs->size = numTestFiles + sourceFiles->size + 3;
-   mvArgs->args = calloc(mvArgs->size, sizeof(void*));
-
-   for (int i = 0; i < mvArgs->size - 1; i++)
-   {
-      mvArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-   }
-
-   strcpy(mvArgs->args[0], mv);
-   char tempFilePath[WINDOWS_MAX_PATH_LENGTH] = "";
-   tempDirPathFromCompiler(tempFilePath, compiler);
-   makeDir(tempFilePath);
-   strcpy(mvArgs->args[mvArgs->size - 2], tempFilePath);
-   mvArgs->args[mvArgs->size - 1] = NULL;
 }
 
 int listSize(const void* fileList, int listType)
@@ -196,28 +180,4 @@ int listSize(const void* fileList, int listType)
       listSize = ((SourceFileList*)fileList)->size;
    }
    return listSize;
-}
-
-void copyTempObjectOrCFileNameIntoArgList(ArgList* argList, int* argIndex, int offset, int optionsOffset, const void* fileList, int index, char* objectFileName, int listType)
-{
-   if (offset == mvFileArgOffset)
-   {
-      strcpy(argList->args[*argIndex + offset + optionsOffset], objectFileName);
-   }
-   else if (offset == gccFileArgOffset)
-   {
-      strCopyUsingListType(listType, argList->args[*argIndex + offset + optionsOffset], fileList, index);
-   }
-}
-
-void strCopyUsingListType(int listType, char* dest, const void* fileList, int index)
-{
-   if (listType == TEST_FILE_LIST_TYPE)
-   {
-      strcpy(dest, ((TestFileList*)fileList)->files[index].name);
-   }
-   else
-   {
-      strcpy(dest, ((SourceFileList*)fileList)->files[index].name);
-   }
 }

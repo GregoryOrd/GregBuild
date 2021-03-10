@@ -12,6 +12,8 @@ void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFile
    initSourceFiles(sourceFiles);
    initObjectFileList(tempObjectFiles);
    makeDir(TEMP_DIR);
+   makeDir(TEMP_DIR_HOST);
+   makeDir(TEMP_DIR_TARGET);
 }
 
 void initTestFiles(TestFileList* testFiles)

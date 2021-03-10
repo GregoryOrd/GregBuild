@@ -38,10 +38,6 @@ int compileIntoTempObjectFilesWithCompiler(
       setHostCompileFailed();
       resetObjectFileList(tempObjectFiles);
    }
-   else
-   {
-      moveObjectFilesToTempDir(mvArgs, testFiles, sourceFiles, tempObjectFiles, compiler);
-   }
 
    freeArgList(compilerArgs, true);
    freeArgList(mvArgs, true);
@@ -60,30 +56,26 @@ int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles,
       options = targetCompilerOptions();
    }
    int numTestFiles = testFilesSize(testFiles);
-   initArgsForCompilingToObjectFiles(compilerArgs, sourceFiles, numTestFiles, compiler);
-   populateTempObjectFileArgs(tempObjectFiles, compilerArgs, testFiles, sourceFiles, compiler, gccFileArgOffset, options->size);
-   return popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-}
+   int result = 0;
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
 
-int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
-{
-   int numTestFiles = testFilesSize(testFiles);
-   initMvArgsForMovingCompiledObjectFilesToTempDir(mvArgs, sourceFiles, numTestFiles, compiler);
-   populateTempObjectFileArgs(tempObjectFiles, mvArgs, testFiles, sourceFiles, compiler, mvFileArgOffset, 0);
-   return forkAndRunChildProcess((char* const*)mvArgs->args);
-}
-
-void populateTempObjectFileArgs(
-    ObjectFileList* tempObjectFiles, ArgList* argList, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* compiler, int offset, int optionsOffset)
-{
-   resetObjectFileList(tempObjectFiles);
-
-   int argIndex = 0;
-   if (testFiles != NULL)
+   for (int i = 0; i < numTestFiles; i++)
    {
-      getArgsForFileList(tempObjectFiles, &argIndex, testFiles, argList, compiler, offset, optionsOffset, TEST_FILE_LIST_TYPE);
+      determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
+      addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+      argsForCompilingToObjectFiles(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
+      result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
    }
-   getArgsForFileList(tempObjectFiles, &argIndex, sourceFiles, argList, compiler, offset, optionsOffset, SRC_FILE_LIST_TYPE);
+
+   for (int i = 0; i < sourceFiles->size; i++)
+   {
+      determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);
+      addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+      argsForCompilingToObjectFiles(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
+      result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+   }
+   return result;
 }
 
 void printArgList(ArgList* argList)
@@ -161,21 +153,4 @@ int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
       }
    }
    return retval;
-}
-
-void getArgsForFileList(
-    ObjectFileList* tempObjectFiles, int* argIndex, const void* fileList, ArgList* argList, const char* compiler, int offset, int optionsOffset, int listType)
-{
-   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
-   int index = 0;
-   int numFiles = listSize(fileList, listType);
-   while (index < numFiles)
-   {
-      determineObjectFileNameUsingListType(listType, objectFileName, fileList, index);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, compiler);
-      copyTempObjectOrCFileNameIntoArgList(argList, argIndex, offset, optionsOffset, fileList, index, objectFileName, listType);
-
-      (*argIndex)++;
-      index++;
-   }
 }

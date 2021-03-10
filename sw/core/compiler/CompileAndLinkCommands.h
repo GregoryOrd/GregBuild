@@ -14,10 +14,6 @@ extern "C"
    int compileIntoTempObjectFilesWithCompiler(
        const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath);
    int compileIntoObjectFiles(ArgList* compilerArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
-   int moveObjectFilesToTempDir(ArgList* mvArgs, const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler);
-   void populateTempObjectFileArgs(
-       ObjectFileList* tempObjectFiles, ArgList* argList, const TestFileList* testFiles, const SourceFileList* sourceFiles, const char* compiler, int offset,
-       int optionsOffset);
    int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
        const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
    int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
@@ -25,8 +21,6 @@ extern "C"
    int compileIntoProjectExecutable(
        const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
    int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles);
-   void getArgsForFileList(
-       ObjectFileList* tempObjectFiles, int* argIndex, const void* fileList, ArgList* argList, const char* compiler, int offset, int optionsOffset, int listType);
 
 #ifdef __cplusplus
 }

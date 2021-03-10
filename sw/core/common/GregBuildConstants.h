@@ -16,6 +16,8 @@
 #define CURRENT_DIR "."
 
 #define TEMP_DIR         "temp"
+#define TEMP_DIR_HOST    "temp/host"
+#define TEMP_DIR_TARGET  "temp/target"
 #define TEMP_TEST_MAIN   "temp/TestMain"
 #define TEMP_TEST_MAIN_C "temp/TestMain.c"
 #define TEMP_TEST_MAIN_H "temp/TestMain.h"
