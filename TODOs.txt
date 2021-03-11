@@ -1,20 +1,13 @@
-Refactoring and Minor Improvements
------------------------------------
-0a) Install GregTest in the default lib path so the user doesn't need to worry about
+Small Refactorings / Unscheduled Improvements
+-----------------------------------------------
+0a) Install GregTest.so in the default lib path so the user doesn't need to worry about
     having it in their repo
-0b) Investigate why having WritePortB.c in the exectuable but not using it was breaking the
-program on the arduino.
-    Is it because it was not linked to main.c through a #include??
-0c) Figure out a way to do expect call type stuff in GregTest
-    -> Something similar to strace/ltrace
-    -> Or maybe can use some of the stuff in the Jacob Sorber youtube video
-    and function profiling
-0d) Add GregTest to the inlcude path on install
+0d) Add GregTest.h to the inlcude path on install
 
  
 
-Major Improvements
----------------------
+Major / Scheduled Improvements
+---------------------------------
 
 1) Have a list of files that are exlcuded when compiling the tests on the host
     - This is for the situation where target hardware specific files exist
@@ -34,8 +27,9 @@ Major Improvements
 4) Add asserts to GregTest for all standard types (int, double, float) and custom structs when provided with
    a "comparator" function pointer for the customer struct
     - Include stdint types in this
-5) Documentation Review and Improvements
-6) Explore git tags and prep to make a formal release
+5) Add expect calls for testing
+6) Documentation Review and Improvements
+7) Explore git tags and prep to make a formal release
 
 
 //////////////////////////////////////////////////////////////////////
@@ -45,44 +39,50 @@ Major Improvements
 
 Plan for Release 1.1:
 ------------------------
-1) Add in tests for the toolkit
-2) Add tests to this repo.
+1) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
+    - Compiling into libraries base on GBScripts found througout the repo
+    - Maintaining a Dependency graph based on these scripts, and linking 
+    libraries in an appropriate order based on the dependencies
+    - Will probably need a stack data structure implementation
+    and a graph data structure implementation in the toolkit
+2) Add in tests for the toolkit
+3) Add tests to this repo.
     - Use version 1.0 of GregBuild 
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
-3) Timeout protection for infinite loops/hanging while running test cases 
-4) Make GregBuild smart enough to not build files that have not been modified
+4) Timeout protection for infinite loops/hanging while running test cases 
+
+
+
+Plan for Release 1.2:
+------------------------
+1) Make GregBuild smart enough to not build files that have not been modified
     - Will likely no to switch the default flag value for the --leave-temp command
     line option
     - Might also be good to rename to --delete-temp
     - Might also be good idea to rename temp dir to build or something
     - Will need to rename and after the functions in the build sequence and
     the functions in PluginFunctions.h
-5) Tell the file name as well as the test case name on test failure
-6) Change compileIntoTempObjectFiles to compile .c files one at a time
-instead of all at once
-    -> Does this actually give us any benefits?
-    -> Make change if we think it will have benefits
-
-
-
-Plan for Release 1.2:
-------------------------
-1) Add ability to build from deeper withing the src file tree
+2) Tell the file name as well as the test case name on test failure
+3) Add ability to build from deeper withing the src file tree
 2) Implement HashTable for storing file lists
     - Will provide more efficient lookups for large sets of files
-3) Configurablity for exiting or continuing after failing to compile and run tests
-    on the host. Continuing would mean to try to build on the target without any of the 
-    tests being run on the host, as it currently does.
-4) Add a debug build ability
-    - Can this be achieved by simply using -g in the compiler options in the config file?
-5) Add a verbose output option
-    - Add attributes to BuildSequenceStep that can be used to influence how
-    to execution of the step is displayed to the user on the console interface
 
 
 
 Plan for Release 1.3:
 ------------------------
+1) Configurablity for exiting or continuing after failing to compile and run tests
+    on the host. Continuing would mean to try to build on the target without any of the 
+    tests being run on the host, as it currently does.
+2) Add a debug build ability
+    - Can this be achieved by simply using -g in the compiler options in the config file?
+3) Add a verbose output option
+    - Add attributes to BuildSequenceStep that can be used to influence how
+    to execution of the step is displayed to the user on the console interface
+
+
+Plan for Release 1.4:
+-------------------------
 1) Multithreaded solution for gathering the test and source files
     a) Split the subdirectories from the top level?
     b) Each thread does a recursion starting from a second level directory and working in?
@@ -91,17 +91,17 @@ Plan for Release 1.3:
         c0) Would need to improve the hash table implementation to dynamically scale to a table of any size
             -> Could probably acheive this with external chaining rather than the current collision handling method
             of linear probing
-2) Sort alphabetically when printing the list of supported command line options in the
+1) Multithreaded approach for execution of test cases
+    a) Figure out when the dataset is large enough that multithreading is worth it
+    b) Implement logic to swtich between single and multithreaded approach based on this information
+
+
+Plan for Release 1.5:
+-------------------------
+1) Sort alphabetically when printing the list of supported command line options in the
    printSupportedOptions() functions for both CommandLineOptions.h and CommandLineOptions_ll.h
     - Only need CommandLineOptions.h for this project, but might as well do the linked list
     version as well.
     - Both of these header files, along with their implementations, are in the toolkit
-3) Verify support for different platforms
+2) Verify support for different platforms
     - Different make files. One for windows, one for linux
-
-
-Plan for Release 1.4:
--------------------------
-1) Multithreaded approach for execution of test cases
-    a) Figure out when the dataset is large enough that multithreading is worth it
-    b) Implement logic to swtich between single and multithreaded approach based on this information
