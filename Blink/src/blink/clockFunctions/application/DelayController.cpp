@@ -6,7 +6,7 @@ DelayController::DelayController(DelayDriver driver) : driver_(driver)
 {
 }
 
-void DelayController::delayForBlink()
+void DelayController::delayForBlink(uint32_t delayTime)
 {
-    driver_.delayMS(100);
+    driver_.delayMS(delayTime);
 }
