@@ -1,5 +1,5 @@
 host:gcc
-target:avr-g++
+target:avr-gcc
 
 compilerOption:-DF_CPU=16000000UL
 compilerOption:-Og
