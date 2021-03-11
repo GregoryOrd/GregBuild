@@ -9,6 +9,7 @@ program on the arduino.
     -> Something similar to strace/ltrace
     -> Or maybe can use some of the stuff in the Jacob Sorber youtube video
     and function profiling
+0d) Add GregTest to the inlcude path on install
 
  
 

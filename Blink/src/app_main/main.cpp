@@ -5,20 +5,23 @@
  * Author : gord
  */
 
-#include "../clockFunctions/Delays.h"
+#include "../clockFunctions/application/DelayController.h"
 #include "../controlLEDs/application/LEDController.h"
-#include "../controlLEDs/drivers/LEDDriver.h"
 
 int main(void)
 {
-   LEDDriver driver = LEDDriver();
-   LEDController ledController = LEDController(driver);
+   DelayDriver delayDriver = DelayDriver();
+   DelayController delayController = DelayController(delayDriver);
+
+   LEDDriver ledDriver = LEDDriver();
+   LEDController ledController = LEDController(ledDriver);
+   
    ledController.configureBoardLEDForWriting();
    while (1)
    {
       ledController.turnOnBoardLED();
-      delayForBlink();
+      delayController.delayForBlink();
       ledController.turnOffBoardLED();
-      delayForBlink();
+      delayController.delayForBlink();
    }
 }

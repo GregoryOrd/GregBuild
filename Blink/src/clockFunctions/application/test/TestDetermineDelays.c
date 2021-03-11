@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../../GregTest.h"
+#include "../../../GregTest.h"
 #include "../DetermineDelays.h"
 
 void willReturnCorrectBlinkDelay()
