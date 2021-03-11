@@ -6,8 +6,8 @@
  */
 
 #include "../clockFunctions/Delays.h"
-#include "../controlLEDs/LEDController.h"
-#include "../controlLEDs/LEDDriver.h"
+#include "../controlLEDs/application/LEDController.h"
+#include "../controlLEDs/drivers/LEDDriver.h"
 
 int main(void)
 {

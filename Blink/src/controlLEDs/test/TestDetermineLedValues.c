@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "../../GregTest.h"
-#include "../DetermineLedValues.h"
+#include "../application/DetermineLedValues.h"
 
 void willReturnCorrectBitsForDataDirectionRegister()
 {

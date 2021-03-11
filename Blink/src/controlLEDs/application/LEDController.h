@@ -1,7 +1,7 @@
 #ifndef CONTROL_LEDS_H
 #define CONTROL_LEDS_H
 
-#include "LEDDriver.h"
+#include "../drivers/LEDDriver.h"
 
 class LEDController
 {
