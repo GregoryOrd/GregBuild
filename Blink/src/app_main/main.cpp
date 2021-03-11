@@ -10,12 +10,13 @@
 
 int main(void)
 {
-   configureBoardLEDForWriting();
+   ControlLEDs ledController = ControlLEDs();
+   ledController.configureBoardLEDForWriting();
    while (1)
    {
-      turnOnBoardLED();
+      ledController.turnOnBoardLED();
       delayForBlink();
-      turnOffBoardLED();
+      ledController.turnOffBoardLED();
       delayForBlink();
    }
 }

@@ -3,18 +3,17 @@
 
 #include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+class ControlLEDs
+{
+public:
+    ControlLEDs();
 
-void configureBoardLEDForWriting();
-void turnOnBoardLED();
-void turnOffBoardLED();
-void writeToDataDirectionRegisterB(uint8_t dataDirectionBBits);
-void writeToPortB(uint8_t portBBits);
-
-#ifdef __cplusplus
-}
-#endif
+public:
+   void configureBoardLEDForWriting();
+   void turnOnBoardLED();
+   void turnOffBoardLED();
+   void writeToDataDirectionRegisterB(uint8_t dataDirectionBBits);
+   void writeToPortB(uint8_t portBBits);
+};
 
 #endif
