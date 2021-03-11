@@ -15,5 +15,5 @@ int main(void)
    ControllerContainer controllerContainer = ControllerContainer(driverContainer);
 
    Blinker blinker = Blinker(controllerContainer);
-   blinker.blink(1000);
+   blinker.blink(100, 0x000000a);
 }
