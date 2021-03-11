@@ -5,17 +5,19 @@
  * Author : gord
  */
 
-#include "../clockFunctions/application/DelayController.h"
-#include "../controlLEDs/application/LEDController.h"
+#include "../blink/clockFunctions/application/DelayController.h"
+#include "../blink/controlLEDs/application/LEDController.h"
+#include "../blink/containers/DriverContainer.h"
 
 int main(void)
 {
-   DelayDriver delayDriver = DelayDriver();
-   DelayController delayController = DelayController(delayDriver);
+   DriverContainer driverContainer = DriverContainer();
+   DelayDriver delayDriver = driverContainer.delayDriver_;
+   LEDDriver ledDriver = driverContainer.ledDriver_;
 
-   LEDDriver ledDriver = LEDDriver();
+   DelayController delayController = DelayController(delayDriver);
    LEDController ledController = LEDController(ledDriver);
-   
+
    ledController.configureBoardLEDForWriting();
    while (1)
    {
