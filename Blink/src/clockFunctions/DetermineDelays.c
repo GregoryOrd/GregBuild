@@ -1,3 +1,3 @@
 #include "DetermineDelays.h"
 
-int blinkingDelay() { return 1000; }
+int blinkingDelay() { return 500; }
