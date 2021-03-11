@@ -6,11 +6,13 @@
  */
 
 #include "../clockFunctions/Delays.h"
-#include "../controlLEDs/ControlLEDs.h"
+#include "../controlLEDs/LEDController.h"
+#include "../controlLEDs/LEDDriver.h"
 
 int main(void)
 {
-   ControlLEDs ledController = ControlLEDs();
+   LEDDriver driver = LEDDriver();
+   LEDController ledController = LEDController(driver);
    ledController.configureBoardLEDForWriting();
    while (1)
    {
