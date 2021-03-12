@@ -39,13 +39,21 @@ void determineObjectFileNameUsingListType(int listType, char* objectFileName, co
 void determineObjectFileName(char* objectFileName, const char* filePath)
 {
    int length = strlen(filePath) - 1;
+   bool isCpp = filePath[length] == 'p' && filePath[length - 1] == 'p' && filePath[length - 2] == 'c' && filePath[length - 3] == '.';
+
    int offset = 2;
    char reversedObjectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    reversedObjectFileName[0] = 'o';
    reversedObjectFileName[1] = '.';
    bool pastExtension = false;
 
-   for (int i = length - 1; i > 0; i--)
+   int loopStart = length - 1;
+   if (isCpp)
+   {
+      loopStart = length - 3;
+   }
+
+   for (int i = loopStart; i > 0; i--)
    {
       if (filePath[i] == '\\' || filePath[i] == '/')
       {
