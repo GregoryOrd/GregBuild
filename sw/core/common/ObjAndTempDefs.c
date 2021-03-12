@@ -7,6 +7,17 @@
 #include "GregBuildConstants.h"
 #include "global/GlobalVariables.h"
 
+//////////////////////////////////////////////////////////////////////
+//              Private Data and Function Prototypes                //
+//////////////////////////////////////////////////////////////////////
+#define DOT_o_EXTENSION_OFFSET 2
+bool isCpp(const char* filePath);
+int loopStart(const char* filePath);
+void loopBackwardsUntilFolderSlash(char* reversedObjectFileName, const char* filePath, int loopStart);
+
+//////////////////////////////////////////////////////////////////////
+//              Function Implementation Section                     //
+//////////////////////////////////////////////////////////////////////
 void determineObjectFilePathUsingListType(int listType, char* objectFileName, const char* compiler, const void* fileList, int index)
 {
    if (listType == TEST_FILE_LIST_TYPE)
@@ -38,21 +49,17 @@ void determineObjectFileNameUsingListType(int listType, char* objectFileName, co
 
 void determineObjectFileName(char* objectFileName, const char* filePath)
 {
-   int length = strlen(filePath) - 1;
-   bool isCpp = filePath[length] == 'p' && filePath[length - 1] == 'p' && filePath[length - 2] == 'c' && filePath[length - 3] == '.';
-
-   int offset = 2;
    char reversedObjectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    reversedObjectFileName[0] = 'o';
    reversedObjectFileName[1] = '.';
-   bool pastExtension = false;
 
-   int loopStart = length - 1;
-   if (isCpp)
-   {
-      loopStart = length - 3;
-   }
+   loopBackwardsUntilFolderSlash(reversedObjectFileName, filePath, loopStart(filePath));
+   reverseString(objectFileName, reversedObjectFileName);
+}
 
+void loopBackwardsUntilFolderSlash(char* reversedObjectFileName, const char* filePath, int loopStart)
+{
+   int offset = DOT_o_EXTENSION_OFFSET;
    for (int i = loopStart; i > 0; i--)
    {
       if (filePath[i] == '\\' || filePath[i] == '/')
@@ -65,12 +72,29 @@ void determineObjectFileName(char* objectFileName, const char* filePath)
          reversedObjectFileName[offset + 1] = '\0';
          offset++;
       }
-      else if (filePath[i] == '.')
-      {
-         pastExtension = true;
-      }
    }
-   reverseString(objectFileName, reversedObjectFileName);
+}
+
+bool isCpp(const char* filePath)
+{
+   int length = strlen(filePath);
+   bool dot = filePath[length - 4] == '.';
+   bool c = filePath[length - 3] == 'c';
+   bool p1 = filePath[length - 2] == 'p';
+   bool p2 = filePath[length - 1] == 'p';
+
+   return dot && c && p1 && p2;
+}
+
+int loopStart(const char* filePath)
+{
+   int length = strlen(filePath) - 1;
+   int start = length - 1;
+   if (isCpp(filePath))
+   {
+      start = length - 3;
+   }
+   return start;
 }
 
 void tempDirPathFromCompiler(char* dest, const char* compiler)
