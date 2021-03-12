@@ -2,8 +2,9 @@ Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
 0a) Install GregTest.so in the default lib path so the user doesn't need to worry about
     having it in their repo
-0d) Add GregTest.h to the inlcude path on install
-
+0b) Add GregTest.h to the inlcude path on install
+0c) Naming of C++ .o files is looking like <name>cp.of
+    - We should change this to be <name>.o
  
 
 Major / Scheduled Improvements
@@ -28,8 +29,12 @@ Major / Scheduled Improvements
    a "comparator" function pointer for the customer struct
     - Include stdint types in this
 5) Add expect calls for testing
-6) Documentation Review and Improvements
-7) Explore git tags and prep to make a formal release
+6) Change link order to build main first
+    - Short term hack for the dependency management work that will come later
+    - After each file to a .o file, using nm to look for the main function
+    inside of the .o file
+7) Documentation Review and Improvements
+8) Explore git tags and prep to make a formal release
 
 
 //////////////////////////////////////////////////////////////////////
