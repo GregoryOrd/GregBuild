@@ -116,6 +116,11 @@ void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
       }
       else if (tokenCount == 2 && secondTokenIsUpperT)
       {
+         // We need to run c++filt on the token
+         // to demangle the function name.
+         // Then check for () at the end and remove  this
+         // The () at the end is present for C++ tests, but not for
+         // our  C tests
          strcpy(testCaseName, token);
       }
       tokenCount++;

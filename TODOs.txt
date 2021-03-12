@@ -12,6 +12,7 @@ Small Refactorings / Unscheduled Improvements
  0f) Option to print out the source files list and the test files list
      for debugging
 0g) Demangle names so that we can have cpp tests
+    - See note int getTestNameFromThirdToken()
 
 Major / Scheduled Improvements
 ---------------------------------
