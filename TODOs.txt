@@ -3,8 +3,8 @@ Small Refactorings / Unscheduled Improvements
 0a) Install GregTest.so in the default lib path so the user doesn't need to worry about
     having it in their repo
 0b) Add GregTest.h to the inlcude path on install
-0c) Naming of C++ .o files is looking like <name>cp.of
-    - We should change this to be <name>.o
+0c) Cleanup compileIntoObjectFiles() with helpers
+0d) Cleanup argsForCompilingToObjectFile() withh helpers
  
 
 Major / Scheduled Improvements

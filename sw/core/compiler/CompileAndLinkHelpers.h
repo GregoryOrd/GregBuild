@@ -18,7 +18,7 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler);
 void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
-void argsForCompilingToObjectFiles(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler);
+void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler);
 int listSize(const void* fileList, int listType);
 void printArgList(ArgList* argList);
 

@@ -55,24 +55,43 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
 
+   bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
+   bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
+   bool target = !sameCompiler && stringsAreEqual(targetCompiler(), compiler);
+
+   if (target)
+   {
+      resetObjectFileList(tempObjectFiles);
+   }
+
    for (int i = 0; i < numTestFiles; i++)
    {
-      ArgList* compilerArgs = malloc(sizeof(ArgList));
-      determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-      argsForCompilingToObjectFiles(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
-      result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-      freeArgList(compilerArgs, true);
+      bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
+      bool target = stringsAreEqual(targetCompiler(), compiler);
+      if (hostAndNotExcluded || target)
+      {
+         ArgList* compilerArgs = malloc(sizeof(ArgList));
+         determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
+         addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+         argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
+         result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+         freeArgList(compilerArgs, true);
+      }
    }
 
    for (int i = 0; i < sourceFiles->size; i++)
    {
-      ArgList* compilerArgs = malloc(sizeof(ArgList));
-      determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);
-      addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-      argsForCompilingToObjectFiles(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
-      result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-      freeArgList(compilerArgs, true);
+      bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
+      bool target = stringsAreEqual(targetCompiler(), compiler);
+      if (hostAndNotExcluded || target)
+      {
+         ArgList* compilerArgs = malloc(sizeof(ArgList));
+         determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);
+         addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+         argsForCompilingToObjectFile(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
+         result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+         freeArgList(compilerArgs, true);
+      }
    }
    return result;
 }

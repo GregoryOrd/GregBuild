@@ -140,7 +140,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 }
 
-void argsForCompilingToObjectFiles(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
+void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))

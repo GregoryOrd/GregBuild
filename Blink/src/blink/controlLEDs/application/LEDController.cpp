@@ -1,7 +1,5 @@
 #include "LEDController.h"
 
-#include <avr/io.h>
-
 LEDController::LEDController(LEDDriver driver) : driver_(driver)
 {
 }

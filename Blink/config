@@ -3,8 +3,12 @@ target:avr-gcc
 
 compilerOption:-DF_CPU=16000000UL
 compilerOption:-Og
+compilerOption:-D__DELAY_BACKWARD_COMPATIBLE__
 
 hostCompilerOption:-D__AVR_ATmega328P__
-hostCompilerOption:-D__DELAY_BACKWARD_COMPATIBLE__
 
 targetCompilerOption:-mmcu=atmega328p
+
+hostExcludedFile:src/app_main/main.cpp
+hostExcludedFile:src/blink/controlLEDs/drivers/LEDDriver.cpp
+hostExcludedFile:src/blink/clockFunctions/drivers/DelayDriver.cpp
