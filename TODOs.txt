@@ -4,25 +4,27 @@ Small Refactorings / Unscheduled Improvements
     having it in their repo
 0b) Add GregTest.h to the inlcude path on install
 0c) Cleanup compileIntoObjectFiles() with helpers
-0d) Cleanup argsForCompilingToObjectFile() withh helpers
-0e) Change the result() function in GregTest to return an enum
-    - 0 => no tests run
-    - 1 => tests passed successfully
-    - 2 => tests failed
- 0f) Option to print out the source files list and the test files list
-     for debugging
-0g) Demangle names so that we can have cpp tests
-    - See note int getTestNameFromThirdToken()
+0d) Cleanup argsForCompilingToObjectFile() with helpers
 
 Major / Scheduled Improvements
 ---------------------------------
-
+0a) Change the result() function in GregTest to return an enum
+    - 0 => no tests run
+    - 1 => tests passed successfully
+    - 2 => tests failed
+0b) Demangle names so that we can have cpp tests
+    - See note int getTestNameFromThirdToken()
 1) Have a list of files that are exlcuded when compiling the tests on the host
     - This is for the situation where target hardware specific files exist
     and our host compiler doesn't know how to handle them when compiling the tests
     - We can make this list known in the configuration file
     - See Configuration.md
-    - Might also be good to have the ability to exclude entire directories
+    - This is currently function but want the improvements such that
+      we can exclude specific directories
+       - And all directories that Include a specific name. For example:
+          sw/application/somefeature/driver
+       - The all of the drivers directories for all of the features should be
+       excluded when compiling on the host
 2) Make the PROJECT_EXE and SRC_DIR variables configurable
 3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
@@ -91,6 +93,8 @@ Plan for Release 1.3:
 3) Add a verbose output option
     - Add attributes to BuildSequenceStep that can be used to influence how
     to execution of the step is displayed to the user on the console interface
+    - Option to print out the source files list and the test files list
+     for debugging
 
 
 Plan for Release 1.4:
