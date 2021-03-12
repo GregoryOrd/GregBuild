@@ -1,12 +1,15 @@
-#include "../../blink/application/Blinker.h"
-#include "../../blink/containers/ControllerContainer.h"
-#include "../../blink/containers/DriverContainer.h"
+#include "../../../blink/application/Blinker.h"
+#include "../../../blink/containers/ControllerContainer.h"
+#include "../../../blink/containers/DriverContainer.h"
+
+#include <stdio.h>
 
 void willBlink()
 {
     uint32_t delayTime = 1000;
     DriverContainer drivers = DriverContainer();
     ControllerContainer controllers = ControllerContainer(drivers);
+    printf("[PASSED]: TestBlinkFeature::willBlink");
     //StubBlinker blinker = StubBlinker(controllers);
     //Create an I_Blinker for the stub and production blinker to inherit from
 
@@ -27,6 +30,7 @@ void willBlinkFiniteNumberOfTimes()
     uint32_t delayTime = 1000;
     DriverContainer drivers = DriverContainer();
     ControllerContainer controllers = ControllerContainer(drivers);
+    printf("[PASSED]: TestBlinkFeature::willBlinkFiniteNumberOfTimes");
     //StubBlinker blinker = StubBlinker(controllers);
 
     /*
@@ -49,6 +53,7 @@ void willBlinkForever()
     uint32_t delayTime = 1000;
     DriverContainer drivers = DriverContainer();
     ControllerContainer controllers = ControllerContainer(drivers);
+    printf("[PASSED]: TestBlinkFeature::willBlinkForever");
     //StubBlinker blinker = StubBlinker(controllers);
 
     /*

@@ -5,7 +5,13 @@ Small Refactorings / Unscheduled Improvements
 0b) Add GregTest.h to the inlcude path on install
 0c) Cleanup compileIntoObjectFiles() with helpers
 0d) Cleanup argsForCompilingToObjectFile() withh helpers
- 
+0e) Change the result() function in GregTest to return an enum
+    - 0 => no tests run
+    - 1 => tests passed successfully
+    - 2 => tests failed
+ 0f) Option to print out the source files list and the test files list
+     for debugging
+0g) Demangle names so that we can have cpp tests
 
 Major / Scheduled Improvements
 ---------------------------------

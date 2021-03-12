@@ -51,6 +51,7 @@ void populateTestCases(TestFileList* testFiles, int index)
 
 void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index)
 {
+   printf("getTestNamesFromTestObjectFile: %s\n", objectFileName);
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    nmAndGrepCommand(command, objectFileName);
 
