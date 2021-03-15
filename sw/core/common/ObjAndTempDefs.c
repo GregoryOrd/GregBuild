@@ -11,7 +11,6 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 #define DOT_o_EXTENSION_OFFSET 2
-bool isCpp(const char* filePath);
 int loopStart(const char* filePath);
 void loopBackwardsUntilFolderSlash(char* reversedObjectFileName, const char* filePath, int loopStart);
 

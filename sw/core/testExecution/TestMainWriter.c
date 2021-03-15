@@ -20,6 +20,8 @@ static void populateTestCases(TestFileList* testFiles, int index);
 static void nmAndGrepCommand(char* command, const char* objectFileName);
 static void addTestCase(char* testCaseName, TestFileList* testFile, int index);
 static void reallocTestCasesList(TestFileList* testFiles, int index);
+static void demangleToken(char* token);
+static void getDemangleCommand(char* command, const char* token);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
@@ -51,7 +53,6 @@ void populateTestCases(TestFileList* testFiles, int index)
 
 void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index)
 {
-   printf("getTestNamesFromTestObjectFile: %s\n", objectFileName);
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    nmAndGrepCommand(command, objectFileName);
 
@@ -116,15 +117,35 @@ void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
       }
       else if (tokenCount == 2 && secondTokenIsUpperT)
       {
-         // We need to run c++filt on the token
-         // to demangle the function name.
-         // Then check for () at the end and remove  this
-         // The () at the end is present for C++ tests, but not for
-         // our  C tests
+         if (isCpp(token))
+         {
+            demangleToken(token);
+            removeFunctionBrackets(token);
+         }
          strcpy(testCaseName, token);
       }
       tokenCount++;
    }
+}
+
+void demangleToken(char* token)
+{
+   char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
+   getDemangleCommand(command, token);
+
+   FILE* pipe = popen(command, "r");
+   char buffer[BUFFER_SIZE];
+   fgets(buffer, BUFFER_SIZE, pipe);
+   pclose(pipe);
+   strcpy(token, buffer);
+   removeTrailingNewLine(token);
+}
+
+void getDemangleCommand(char* command, const char* token)
+{
+   strcat(command, cppfilt_demangle);
+   strcat(command, " ");
+   strcat(command, token);
 }
 
 void writeToTestMainC(const TestFileList* testFiles)
