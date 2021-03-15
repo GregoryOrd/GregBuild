@@ -12,19 +12,10 @@ Major / Scheduled Improvements
     - 0 => no tests run
     - 1 => tests passed successfully
     - 2 => tests failed
-0b) Demangle names so that we can have cpp tests
-    - See note int getTestNameFromThirdToken()
-1) Have a list of files that are exlcuded when compiling the tests on the host
-    - This is for the situation where target hardware specific files exist
-    and our host compiler doesn't know how to handle them when compiling the tests
-    - We can make this list known in the configuration file
-    - See Configuration.md
-    - This is currently function but want the improvements such that
-      we can exclude specific directories
-       - And all directories that Include a specific name. For example:
-          sw/application/somefeature/driver
-       - The all of the drivers directories for all of the features should be
-       excluded when compiling on the host
+1) Extend excluding files from both host and target builds to Include
+   directory paths, as well as any subdirectory under a specific directory name
+    - for example, exclude all "drivers" directories on the host build
+      and exclude all "stubs" directories on the target build
 2) Make the PROJECT_EXE and SRC_DIR variables configurable
 3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
@@ -38,12 +29,8 @@ Major / Scheduled Improvements
    a "comparator" function pointer for the customer struct
     - Include stdint types in this
 5) Add expect calls for testing
-6) Change link order to build main first
-    - Short term hack for the dependency management work that will come later
-    - After each file to a .o file, using nm to look for the main function
-    inside of the .o file
-7) Documentation Review and Improvements
-8) Explore git tags and prep to make a formal release
+6) Documentation Review and Improvements
+7) Explore git tags and prep to make a formal release
 
 
 //////////////////////////////////////////////////////////////////////
