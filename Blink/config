@@ -9,6 +9,8 @@ hostCompilerOption:-D__AVR_ATmega328P__
 
 targetCompilerOption:-mmcu=atmega328p
 
-hostExcludedFile:src/app_main/main.cpp
-hostExcludedFile:src/blink/controlLEDs/drivers/LEDDriver.cpp
-hostExcludedFile:src/blink/clockFunctions/drivers/DelayDriver.cpp
+hostExcludedFile:src/blink/controlLEDs/drivers/LEDDriver.c
+hostExcludedFile:src/blink/clockFunctions/drivers/DelayDriver.c
+
+targetExcludedFile:src/blink/controlLEDs/drivers/stubs/StubLEDDriver.c
+targetExcludedFile:src/blink/clockFunctions/drivers/stubs/StubDelayDriver.c

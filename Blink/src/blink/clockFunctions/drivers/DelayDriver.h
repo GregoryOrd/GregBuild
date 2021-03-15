@@ -3,15 +3,6 @@
 
 #include <stdint.h>
 
-class DelayDriver
-{
-
-public:
-    DelayDriver();
-
-public:
-    void delayMS(uint32_t msToDelay);
-};
-
+void delayMS(uint32_t msToDelay);
 
 #endif

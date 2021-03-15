@@ -1,20 +1,15 @@
 #ifndef CONTROL_LEDS_H
 #define CONTROL_LEDS_H
 
-#include "../drivers/LEDDriver.h"
+#include <stdint.h>
 
-class LEDController
-{
-public:
-    LEDController(LEDDriver driver);
+void configureBoardLEDForWriting();
+void turnOnBoardLED();
+void turnOffBoardLED();
 
-public:
-   void configureBoardLEDForWriting();
-   void turnOnBoardLED();
-   void turnOffBoardLED();
+uint8_t determineBitPatternForConfiguringLEDsForWriting();
+uint8_t determineBitPatternForTurningOnTheBoardLED();
+uint8_t determineBitPatternForTurningOffTheBoardLED();
 
-private:
-    LEDDriver driver_;
-};
 
 #endif
