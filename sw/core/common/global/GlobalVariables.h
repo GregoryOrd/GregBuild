@@ -27,9 +27,11 @@ extern "C"
    LinkedList* targetLinkerOptions();
 
    LinkedList* hostExcludedFiles();
+   LinkedList* targetExcludedFiles();
 
    void freeGlobalOptionsLists();
    void freeHostExcludedFilesList();
+   void freeTargetExcludedFilesList();
 
 #ifdef __cplusplus
 }

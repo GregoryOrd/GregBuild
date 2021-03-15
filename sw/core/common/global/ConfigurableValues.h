@@ -19,6 +19,7 @@ static LinkedList* hostLinkerOptions_ = NULL;
 static LinkedList* targetLinkerOptions_ = NULL;
 
 static LinkedList* hostExcludedFiles_ = NULL;
+static LinkedList* targetExcludedFiles_ = NULL;
 
 #define CONFIG_FILE "./config"
 

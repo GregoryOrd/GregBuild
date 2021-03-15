@@ -67,8 +67,8 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    for (int i = 0; i < numTestFiles; i++)
    {
       bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-      bool target = stringsAreEqual(targetCompiler(), compiler);
-      if (hostAndNotExcluded || target)
+      bool targetAndNotExcluded = target && !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
+      if (hostAndNotExcluded || targetAndNotExcluded)
       {
          ArgList* compilerArgs = malloc(sizeof(ArgList));
          determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
@@ -82,8 +82,8 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    for (int i = 0; i < sourceFiles->size; i++)
    {
       bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-      bool target = stringsAreEqual(targetCompiler(), compiler);
-      if (hostAndNotExcluded || target)
+      bool targetAndNotExcluded = target && !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
+      if (hostAndNotExcluded || targetAndNotExcluded)
       {
          ArgList* compilerArgs = malloc(sizeof(ArgList));
          determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);

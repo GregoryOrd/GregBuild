@@ -42,5 +42,6 @@ int main(int argc, const char* argv[])
    freeBuildSequence(buildSequence);
    freeGlobalOptionsLists();
    freeHostExcludedFilesList();
+   freeTargetExcludedFilesList();
    return error;
 }
