@@ -6,12 +6,9 @@ Small Refactorings / Unscheduled Improvements
 0c) Cleanup compileIntoObjectFiles() with helpers
 0d) Cleanup argsForCompilingToObjectFile() with helpers
 
-Major / Scheduled Improvements
----------------------------------
-0a) Change the result() function in GregTest to return an enum
-    - 0 => no tests run
-    - 1 => tests passed successfully
-    - 2 => tests failed
+
+Plan for Release 1.0:
+------------------------
 1) Extend excluding files from both host and target builds to Include
    directory paths, as well as any subdirectory under a specific directory name
     - for example, exclude all "drivers" directories on the host build
@@ -19,23 +16,11 @@ Major / Scheduled Improvements
 2) Make the PROJECT_EXE and SRC_DIR variables configurable
 3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
-        - Possible solution is to have the plugin from a .bat file
-        that opens the AtmelStudio Command Prompt and gives it the appropriate
-        inputs to issue the atprogram command
-            - Windows
-        - Now with the linux environment, we should be able to do this with
-        avrdude
-4) Add asserts to GregTest for all standard types (int, double, float) and custom structs when provided with
-   a "comparator" function pointer for the customer struct
-    - Include stdint types in this
-5) Add expect calls for testing
-6) Documentation Review and Improvements
-7) Explore git tags and prep to make a formal release
-
-
-//////////////////////////////////////////////////////////////////////
-//              Mark this point in time as the 1.0 release          //
-//////////////////////////////////////////////////////////////////////
+4) Make the paths to the test framework .so and .h file configurable
+    so we can decouple GregBuild from GregTest
+        - This is related to 0a and 0b above
+5) Documentation Review and Improvements
+6) Explore git tags and prep to make a formal release
 
 
 Plan for Release 1.1:
