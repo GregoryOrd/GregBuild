@@ -27,6 +27,13 @@ targetExcludedFile:src/blink/MyTargetFileToExclude.c
 
 Note that GregBuild will always exclude compiling test files when compiling with the target compiler. In the case that the host and target compiler are the same, the test files will be compiled for the tests, but will not be linked into the final executable.
 
+## Known Limitations
+
+There is no dependency management baked into GregBuild. This means that the user
+must organize their repos such that the dependencies are ordered alphabetically. The
+alphabetical order is then used at link time to link everything. This is scheduled
+to be improved in the 1.1 release.
+
 
 ## sw/core
 This directory holds the core module that make up GregBuild. Underneath this we have the "main" module, "common" module, and variout other modules. One of the goals of the architecture here is to setup the dependencies correctly so that each module only depends on the toolkit and some shared headers in the common directory. The "main" module can then depend on the other modules. This way each module can be compiled independtly before the "main" module is compiled with all of the other modules.
