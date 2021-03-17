@@ -14,6 +14,15 @@ TOOLKIT=GregCToolkit
 TOOLKIT_SW = external/$(TOOLKIT)/sw
 USR_BIN_EXE=/usr/bin/$(EXE)
 
+#GregTest Variables
+GREG_TEST_SO=GregTest.so
+GREG_TEST_H=GregTest.h
+GREG_TEST_USR_LIB_SO=/usr/lib/$(GREG_TEST_SO)
+GREG_TEST_DIST_SO=external/GregTest/dist/$(GREG_TEST_SO)
+GREG_TEST_USR_INCLUDE_H=/usr/include/$(GREG_TEST_H)
+GREG_TEST_SW_H=external/GregTest/sw/$(GREG_TEST_H)
+GREGTEST_MAKE_PATH=external/GregTest/sw
+
 ############################################################################
 ######						 GregBuild OBJS 						  ######
 ############################################################################
@@ -81,13 +90,23 @@ TOOLKIT_OBJS =  $(ARG_LIST_OBJS) \
 ######						 Final Exe Rules						  ######
 ############################################################################
 
+install: $(USR_BIN_EXE) $(GREG_TEST_USR_LIB_SO) $(GREG_TEST_USR_INCLUDE_H)
+
 $(USR_BIN_EXE): $(DIST_EXE)
-	sudo cp $(DIST_EXE) $(USR_BIN_EXE)
+	sudo cp $< $@
 
 $(DIST_EXE): $(TOOLKIT_OBJS) $(GREG_BUILD_OBJS)
 	mkdir -p $(DIST)
 	$(CC) -o $@ $^ $(CFLAGS) $(LINKFLAGS)
 
+$(GREG_TEST_USR_LIB_SO): $(GREG_TEST_DIST_SO)
+	sudo cp $< $@
+
+$(GREG_TEST_DIST_SO):
+	cd $(GREGTEST_MAKE_PATH) && $(MAKE)
+
+$(GREG_TEST_USR_INCLUDE_H): $(GREG_TEST_SW_H)
+	sudo cp $< $@
 
 ############################################################################
 ######						GregBuild OBJ Rules						  ######
