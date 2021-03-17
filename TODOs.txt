@@ -1,8 +1,17 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
-0a) Cleanup compileIntoObjectFiles() with helpers
-0b) Cleanup argsForCompilingToObjectFile() with helpers
-0c) Don't compile .o files on host when it is a --no-test-build
+0a) Don't compile .o files on host when it is a --no-test-build
+    - Change the global testsWereRun() and setTestsWereRun() to be
+    runTests() and setRunTests(), then set this when processing the command line
+    options
+    - If it is set at this earlier point in the sequence, then we will be able
+    to check it in the compileIntoObjectFiles() to determine if we should run the
+    test files loop or not
+
+***Do 0a first so that it is working and functional before we do the refactorings
+in 0b and 0c
+0b) Cleanup compileIntoObjectFiles() with helpers
+0c) Cleanup argsForCompilingToObjectFile() with helpers
 
 
 Plan for Release 1.0:
