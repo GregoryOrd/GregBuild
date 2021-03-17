@@ -64,13 +64,14 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
       resetObjectFileList(tempObjectFiles);
    }
 
+   // Test Files Loop
    for (int i = 0; i < numTestFiles; i++)
    {
       bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-      bool targetAndNotExcluded = target && !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
       bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
                                         !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-      if (hostAndNotExcluded || targetAndNotExcluded || sameCompilerAndNotExcluded)
+      // Only host or sameCompiler because we don't want to compile tests for the target
+      if (hostAndNotExcluded || sameCompilerAndNotExcluded)
       {
          ArgList* compilerArgs = malloc(sizeof(ArgList));
          determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
@@ -81,12 +82,13 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
       }
    }
 
+   // Source Files Loop
    for (int i = 0; i < sourceFiles->size; i++)
    {
       bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
       bool targetAndNotExcluded = target && !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-      bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
-                                        !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
+      bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
+                                        !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
       if (hostAndNotExcluded || targetAndNotExcluded || sameCompilerAndNotExcluded)
       {
          ArgList* compilerArgs = malloc(sizeof(ArgList));

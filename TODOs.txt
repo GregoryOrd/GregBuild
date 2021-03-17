@@ -2,7 +2,7 @@ Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
 0a) Cleanup compileIntoObjectFiles() with helpers
 0b) Cleanup argsForCompilingToObjectFile() with helpers
-0c) Don't include test files when compiling for target
+0c) Don't compile .o files on host when it is a --no-test-build
 
 
 Plan for Release 1.0:
