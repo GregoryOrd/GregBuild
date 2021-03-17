@@ -1,10 +1,12 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
-0a) Install GregTest.so in the default lib path so the user doesn't need to worry about
-    having it in their repo
-0b) Add GregTest.h to the inlcude path on install
-0c) Cleanup compileIntoObjectFiles() with helpers
-0d) Cleanup argsForCompilingToObjectFile() with helpers
+0a) Cleanup compileIntoObjectFiles() with helpers
+0b) Cleanup argsForCompilingToObjectFile() with helpers
+0c) Don't include test files when compiling for target
+0d) Building ExampleSrcRepo is broken.
+    - Might be related to logic around exlcuding/not excluding files with
+    different/same host and target compilers
+    - Different case than Blink because both compilers are the same
 
 
 Plan for Release 1.0:
@@ -18,7 +20,6 @@ Plan for Release 1.0:
    and loading the .hex onto the Arduino through the Atmel ICE 
 4) Make the paths to the test framework .so and .h file configurable
     so we can decouple GregBuild from GregTest
-        - This is related to 0a and 0b above
 5) Documentation Review and Improvements
 6) Explore git tags and prep to make a formal release
 

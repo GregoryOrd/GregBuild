@@ -14,3 +14,4 @@ hostExcludedFile:src/blink/clockFunctions/drivers/DelayDriver.c
 
 targetExcludedFile:src/blink/controlLEDs/drivers/stubs/StubLEDDriver.c
 targetExcludedFile:src/blink/clockFunctions/drivers/stubs/StubDelayDriver.c
+targetExcludedFile:src/acceptance/test/blink/TestBlinkFeature.c
