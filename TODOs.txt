@@ -1,6 +1,8 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
 0a) Cleanup compileIntoObjectFiles() with helpers
+    - Cleanup same of the booleans in compileTestFiles() and compilerSourceFiles()
+    - Cleanup const discarded warnings
 0b) Cleanup argsForCompilingToObjectFile() with helpers
 
 
