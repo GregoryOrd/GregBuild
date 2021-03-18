@@ -14,6 +14,17 @@
 #include "../common/global/GlobalVariables.h"
 #include "CompileAndLinkHelpers.h"
 
+//////////////////////////////////////////////////////////////////////
+//              Private Data and Function Prototypes                //
+//////////////////////////////////////////////////////////////////////
+LinkedList* determineOptionsListFromCompiler(const char* compiler);
+int compileTestFiles(const char* compiler, bool host, bool sameCompiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
+int compileSourceFiles(const char* compiler, bool host, bool sameCompiler, bool target, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+
+//////////////////////////////////////////////////////////////////////
+//              Function Implementation Section                     //
+//////////////////////////////////////////////////////////////////////
+
 int compileIntoTempObjectFiles(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
@@ -41,19 +52,8 @@ int compileIntoTempObjectFilesWithCompiler(
 
 int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
 {
-   LinkedList* options;
-   if (stringsAreEqual(compiler, hostCompiler()))
-   {
-      options = hostCompilerOptions();
-   }
-   else
-   {
-      options = targetCompilerOptions();
-   }
-   int numTestFiles = testFilesSize(testFiles);
+   LinkedList* options = determineOptionsListFromCompiler(compiler);
    int result = 0;
-   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
-   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
 
    bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
    bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
@@ -67,21 +67,10 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    // Test Files Loop
    if (testBuild())
    {
-      for (int i = 0; i < numTestFiles; i++)
+      result |= compileTestFiles(compiler, host, sameCompiler, testFiles, tempObjectFiles);
+      if (result)
       {
-         bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-         bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
-                                           !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-         // Only host or sameCompiler because we don't want to compile tests for the target
-         if (hostAndNotExcluded || sameCompilerAndNotExcluded)
-         {
-            ArgList* compilerArgs = malloc(sizeof(ArgList));
-            determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
-            addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-            argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
-            result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-            freeArgList(compilerArgs, true);
-         }
+         return result;
       }
    }
    else
@@ -90,6 +79,49 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    }
 
    // Source Files Loop
+   result |= compileSourceFiles(compiler, host, sameCompiler, target, sourceFiles, tempObjectFiles);
+   if (result)
+   {
+      return result;
+   }
+   printf("Returing result: %d\n", result);
+   return result;
+}
+
+int compileTestFiles(const char* compiler, bool host, bool sameCompiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles)
+{
+   int result = 0;
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
+   int numTestFiles = testFilesSize(testFiles);
+   for (int i = 0; i < numTestFiles; i++)
+   {
+      bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
+      bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
+                                        !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
+      // Only host or sameCompiler because we don't want to compile tests for the target
+      if (hostAndNotExcluded || sameCompilerAndNotExcluded)
+      {
+         ArgList* compilerArgs = malloc(sizeof(ArgList));
+         determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
+         addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+         argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
+         result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+         if (result)
+         {
+            return result;
+         }
+         freeArgList(compilerArgs, true);
+      }
+   }
+   return result;
+}
+
+int compileSourceFiles(const char* compiler, bool host, bool sameCompiler, bool target, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
+{
+   int result = 0;
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    for (int i = 0; i < sourceFiles->size; i++)
    {
       bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
@@ -103,10 +135,28 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
          addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
          argsForCompilingToObjectFile(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
          result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+         if (result)
+         {
+            return result;
+         }
          freeArgList(compilerArgs, true);
       }
    }
    return result;
+}
+
+LinkedList* determineOptionsListFromCompiler(const char* compiler)
+{
+   LinkedList* options;
+   if (stringsAreEqual(compiler, hostCompiler()))
+   {
+      options = hostCompilerOptions();
+   }
+   else
+   {
+      options = targetCompilerOptions();
+   }
+   return options;
 }
 
 void printArgList(ArgList* argList)
