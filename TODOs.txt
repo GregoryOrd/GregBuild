@@ -1,22 +1,12 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
-0a) Don't compile .o files on host when it is a --no-test-build
-    - Change the global testsWereRun() and setTestsWereRun() to be
-    runTests() and setRunTests(), then set this when processing the command line
-    options
-    - If it is set at this earlier point in the sequence, then we will be able
-    to check it in the compileIntoObjectFiles() to determine if we should run the
-    test files loop or not
-
-***Do 0a first so that it is working and functional before we do the refactorings
-in 0b and 0c
-0b) Cleanup compileIntoObjectFiles() with helpers
-0c) Cleanup argsForCompilingToObjectFile() with helpers
+0a) Cleanup compileIntoObjectFiles() with helpers
+0b) Cleanup argsForCompilingToObjectFile() with helpers
 
 
 Plan for Release 1.0:
 ------------------------
-1) Extend excluding files from both host and target builds to Include
+1) Extend excluding files from both host and target builds to include
    directory paths, as well as any subdirectory under a specific directory name
     - for example, exclude all "drivers" directories on the host build
       and exclude all "stubs" directories on the target build
@@ -26,22 +16,31 @@ Plan for Release 1.0:
 4) Make the paths to the test framework .so and .h file configurable
     so we can decouple GregBuild from GregTest
 5) Documentation Review and Improvements
+    5a) Create a "Features List" that keeps track of all of the cool features in
+    the program for advertising/showing to other people
 6) Explore git tags and prep to make a formal release
 
 
 Plan for Release 1.1:
 ------------------------
-1) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
+0) Add in tests for the toolkit
+1) Add tests to this repo.
+    - Use version 1.0 of GregBuild 
+    - Introduce some chickens and some eggs, then hope things don't get too weird with that
+2) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
     - Compiling into libraries base on GBScripts found througout the repo
     - Maintaining a Dependency graph based on these scripts, and linking 
     libraries in an appropriate order based on the dependencies
     - Will probably need a stack data structure implementation
     and a graph data structure implementation in the toolkit
-2) Add in tests for the toolkit
-3) Add tests to this repo.
-    - Use version 1.0 of GregBuild 
-    - Introduce some chickens and some eggs, then hope things don't get too weird with that
-4) Timeout protection for infinite loops/hanging while running test cases 
+3) Add a config file option to define the behviour when the host and target
+    are different.
+        - Two Options:
+            1) Try to build an executable for both platforms
+            2) Try to build an executable for only the target (default)
+                Under this option, if it is a --no-test-build, don't compile anything
+                for the host. Skip that step in the build sequence or just skip
+                the source files loop in the compileIntoObjectFiles() function
 
 
 
