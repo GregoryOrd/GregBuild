@@ -21,6 +21,7 @@ LinkedList* determineOptionsListFromCompiler(const char* compiler);
 int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
 int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObjectFiles);
+int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
@@ -78,13 +79,24 @@ void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObje
    }
 }
 
+int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles)
+{
+   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
+   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
+   ArgList* compilerArgs = malloc(sizeof(ArgList));
+   determineObjectFileNameUsingListType(fileListType, objectFileName, list, index);
+   addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+   argsForCompilingToObjectFile(compilerArgs, fileName, tempObjectFile, compiler);
+   int result = popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+   freeArgList(compilerArgs, true);
+   return result;
+}
+
 int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles)
 {
    int result = 0;
    if (testBuild())
    {
-      char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
-      char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
       bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
       bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
       int numTestFiles = testFilesSize(testFiles);
@@ -96,16 +108,7 @@ int compileTestFiles(const char* compiler, const TestFileList* testFiles, Object
          // Only host or sameCompiler because we don't want to compile tests for the target
          if (hostAndNotExcluded || sameCompilerAndNotExcluded)
          {
-            ArgList* compilerArgs = malloc(sizeof(ArgList));
-            determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
-            addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-            argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
-            result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-            if (result)
-            {
-               return result;
-            }
-            freeArgList(compilerArgs, true);
+            result |= compileFileAndAddToTempObjectList(TEST_FILE_LIST_TYPE, testFiles, i, compiler, testFiles->files[i].name, tempObjectFiles);
          }
       }
    }
@@ -119,8 +122,6 @@ int compileTestFiles(const char* compiler, const TestFileList* testFiles, Object
 int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
    int result = 0;
-   char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
-   char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
    bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
    bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
    bool target = !sameCompiler && stringsAreEqual(targetCompiler(), compiler);
@@ -133,16 +134,7 @@ int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, 
                                         !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
       if (hostAndNotExcluded || targetAndNotExcluded || sameCompilerAndNotExcluded)
       {
-         ArgList* compilerArgs = malloc(sizeof(ArgList));
-         determineObjectFileNameUsingListType(SRC_FILE_LIST_TYPE, objectFileName, sourceFiles, i);
-         addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-         argsForCompilingToObjectFile(compilerArgs, sourceFiles->files[i].name, tempObjectFile, compiler);
-         result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-         if (result)
-         {
-            return result;
-         }
-         freeArgList(compilerArgs, true);
+         result |= compileFileAndAddToTempObjectList(SRC_FILE_LIST_TYPE, sourceFiles, i, compiler, sourceFiles->files[i].name, tempObjectFiles);
       }
    }
    return result;
