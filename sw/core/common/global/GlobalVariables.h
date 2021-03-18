@@ -13,8 +13,8 @@ extern "C"
    bool hostCompileFailed();
    void setHostCompileFailed();
 
-   bool testsWereRun();
-   void setTestsWereRun();
+   bool testBuild();
+   void setTestBuild(bool runTests);
 
    int readConfigurationsFromFile();
 

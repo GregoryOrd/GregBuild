@@ -6,6 +6,6 @@
 #include <stdbool.h>
 
 static bool hostCompileFailed_ = false;
-static bool testsWereRun_ = false;
+static bool testBuild_ = true;
 
 #endif

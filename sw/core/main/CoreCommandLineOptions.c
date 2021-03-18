@@ -7,6 +7,7 @@
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptions.h"
 #include "../common/FileStructureDefs.h"
 #include "../common/GregBuildConstants.h"
+#include "../common/global/GlobalVariables.h"
 
 void initCoreCommandLineOptions(CommandLineOptionList* list)
 {
@@ -35,4 +36,5 @@ void coreCommandLineAcknowldegmentPrintouts(const CommandLineOptionList* list)
    {
       printf("No Test Build\n");
    }
+   setTestBuild(flag);
 }

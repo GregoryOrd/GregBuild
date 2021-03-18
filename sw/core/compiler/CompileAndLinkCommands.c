@@ -65,21 +65,28 @@ int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* 
    }
 
    // Test Files Loop
-   for (int i = 0; i < numTestFiles; i++)
+   if (testBuild())
    {
-      bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-      bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
-                                        !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-      // Only host or sameCompiler because we don't want to compile tests for the target
-      if (hostAndNotExcluded || sameCompilerAndNotExcluded)
+      for (int i = 0; i < numTestFiles; i++)
       {
-         ArgList* compilerArgs = malloc(sizeof(ArgList));
-         determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
-         addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-         argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
-         result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-         freeArgList(compilerArgs, true);
+         bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
+         bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
+                                           !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
+         // Only host or sameCompiler because we don't want to compile tests for the target
+         if (hostAndNotExcluded || sameCompilerAndNotExcluded)
+         {
+            ArgList* compilerArgs = malloc(sizeof(ArgList));
+            determineObjectFileNameUsingListType(TEST_FILE_LIST_TYPE, objectFileName, testFiles, i);
+            addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
+            argsForCompilingToObjectFile(compilerArgs, testFiles->files[i].name, tempObjectFile, compiler);
+            result |= popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+            freeArgList(compilerArgs, true);
+         }
       }
+   }
+   else
+   {
+      printf("No Test Build. Omitting test files from compilation.\n");
    }
 
    // Source Files Loop
@@ -167,7 +174,7 @@ int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
    freeArgList(linkerArgs, true);
    if (retval == 0)
    {
-      if (testsWereRun())
+      if (testBuild())
       {
          printf("\nBuild Successful!\n");
       }

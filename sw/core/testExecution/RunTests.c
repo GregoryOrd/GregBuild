@@ -15,7 +15,6 @@ int runTests()
    char* argv[] = {TEMP_TEST_MAIN_EXE, NULL};
    int testResult = forkAndRunChildProcess(argv);
    removeDllsFromCurrentDirectory();
-   setTestsWereRun();
    return testResult;
 }
 
