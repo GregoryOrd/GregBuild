@@ -140,7 +140,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 }
 
-void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
+LinkedList* determineOptionsListFromCompiler(const char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))
@@ -151,6 +151,12 @@ void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, c
    {
       options = targetCompilerOptions();
    }
+   return options;
+}
+
+void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
+{
+   LinkedList* options = determineOptionsListFromCompiler(compiler);
    compilerArgs->size = options->size + 6;
    compilerArgs->args = calloc(compilerArgs->size, sizeof(void*));
    for (int i = 0; i < compilerArgs->size - 1; i++)

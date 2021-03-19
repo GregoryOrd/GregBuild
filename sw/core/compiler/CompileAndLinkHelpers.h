@@ -2,6 +2,7 @@
 #define COMPILER_AND_LINK_HELPERS_H
 
 #include "../../external/GregCToolkit/sw/ArgList/ArgList.h"
+#include "../../external/GregCToolkit/sw/Collections/LinkedList/LinkedList.h"
 #include "../common/FileStructureDefs.h"
 
 #define gccFileArgOffset 2
@@ -18,6 +19,7 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler);
 void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
+LinkedList* determineOptionsListFromCompiler(const char* compiler);
 void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler);
 int listSize(const void* fileList, int listType);
 void printArgList(ArgList* argList);

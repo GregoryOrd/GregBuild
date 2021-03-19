@@ -17,7 +17,6 @@
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
-static LinkedList* determineOptionsListFromCompiler(const char* compiler);
 static int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
 static int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 static void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObjectFiles);
@@ -127,8 +126,7 @@ int compileTestFiles(const char* compiler, const TestFileList* testFiles, Object
    int result = 0;
    if (testBuild())
    {
-      int numTestFiles = testFilesSize(testFiles);
-      for (int i = 0; i < numTestFiles; i++)
+      for (int i = 0; i < testFilesSize(testFiles); i++)
       {
          const char* fileName = testFiles->files[i].name;
          if (hostAndNotExcludedOrSameCompilerAndNotExcluded(compiler, fileName))
@@ -156,20 +154,6 @@ int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, 
       }
    }
    return result;
-}
-
-LinkedList* determineOptionsListFromCompiler(const char* compiler)
-{
-   LinkedList* options;
-   if (stringsAreEqual(compiler, hostCompiler()))
-   {
-      options = hostCompilerOptions();
-   }
-   else
-   {
-      options = targetCompilerOptions();
-   }
-   return options;
 }
 
 void printArgList(ArgList* argList)
