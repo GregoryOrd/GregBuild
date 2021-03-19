@@ -10,12 +10,13 @@ Plan for Release 1.0:
       and exclude all "stubs" directories on the target build
 2) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
-3) Make the paths to the test framework .so and .h file configurable
-    so we can decouple GregBuild from GregTest
-4) Documentation Review and Improvements
-    5a) Create a "Features List" that keeps track of all of the cool features in
-    the program for advertising/showing to other people
-5) Explore git tags and prep to make a formal release
+------------------------------------------------------------------------
+3) Documentation Review and Improvements
+    3a) Create a "Features List" that keeps track of all of the cool features in
+        the program for advertising/showing to other people
+    3b) Also have some documentation about the list of things that are configurable from the 
+        config file
+4) Explore git tags and prep to make a formal release
 
 
 Plan for Release 1.1:
@@ -24,13 +25,16 @@ Plan for Release 1.1:
 1) Add tests to this repo.
     - Use version 1.0 of GregBuild 
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
-2) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
+2) Modify test main writing to print a no tests run message
+    - This has to be after the result() function in GregTest is modified to return
+    a 3-state enum instead of boolean
+3) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
     - Compiling into libraries base on GBScripts found througout the repo
     - Maintaining a Dependency graph based on these scripts, and linking 
     libraries in an appropriate order based on the dependencies
     - Will probably need a stack data structure implementation
     and a graph data structure implementation in the toolkit
-3) Add a config file option to define the behviour when the host and target
+4) Add a config file option to define the behviour when the host and target
     are different.
         - Two Options:
             1) Try to build an executable for both platforms
