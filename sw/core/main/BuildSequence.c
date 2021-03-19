@@ -28,8 +28,6 @@ int executeBuildSequence(
     const LinkedList* buildSequence, const CommandLineOptionList* options, TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
    int error = 0;
-   char startingDirectory[WINDOWS_MAX_PATH_LENGTH] = SRC_DIR;
-
    for (int i = 0; i < buildSequence->size; i++)
    {
       BuildSequenceStep* step = (BuildSequenceStep*)at_ll(buildSequence, BUILD_SEQUENCE_STEP_TYPE, i);
@@ -38,7 +36,7 @@ int executeBuildSequence(
       if (!error && flagVal)
       {
          printBuildSequenceExecutionMessage(step);
-         error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, startingDirectory);
+         error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, buildStartingDirectory());
       }
    }
 

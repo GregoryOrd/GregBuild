@@ -1,6 +1,7 @@
 host:gcc
 target:avr-gcc
 executableName:Blink.elf
+buildStartingDirectory:src
 
 compilerOption:-DF_CPU=16000000UL
 compilerOption:-Og

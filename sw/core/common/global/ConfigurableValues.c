@@ -14,7 +14,7 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-#define NUM_COMPILER_CONFIG_PARAMS    11
+#define NUM_COMPILER_CONFIG_PARAMS    12
 #define SET_CONFIGURATION_TYPE        1
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
@@ -50,7 +50,7 @@ static int listTypeFromData(void* data);
 
 static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {
     "host",         "target",           "executableName",     "compilerOption",   "hostCompilerOption", "targetCompilerOption",
-    "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile", "targetExcludedFile"};
+    "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile", "targetExcludedFile", "buildStartingDirectory"};
 
 static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
@@ -64,6 +64,7 @@ static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetLinkerOption
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostExcludedFiles
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetExcludedFiles
+    {.actions = {string_copy, NULL}, .dataToActOn = {buildStartingDirectory_, NULL}},                  // buildStartingDirectory
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -311,6 +312,8 @@ const char* hostCompiler() { return hostCompiler_; }
 const char* targetCompiler() { return targetCompiler_; }
 
 const char* projectExecutableName() { return projectExecutableName_; }
+
+const char* buildStartingDirectory() { return buildStartingDirectory_; }
 
 LinkedList* hostCompilerOptions()
 {

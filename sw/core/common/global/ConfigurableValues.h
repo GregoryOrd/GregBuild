@@ -12,6 +12,7 @@
 static char hostCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc";
 static char targetCompiler_[WINDOWS_MAX_PATH_LENGTH] = "/usr/bin/gcc";
 static char projectExecutableName_[WINDOWS_MAX_PATH_LENGTH] = "BuiltByGregBuild.exe";
+static char buildStartingDirectory_[WINDOWS_MAX_PATH_LENGTH] = ".";
 
 static LinkedList* hostCompilerOptions_ = NULL;
 static LinkedList* targetCompilerOptions_ = NULL;

@@ -21,6 +21,7 @@ extern "C"
    const char* hostCompiler();
    const char* targetCompiler();
    const char* projectExecutableName();
+   const char* buildStartingDirectory();
 
    LinkedList* hostCompilerOptions();
    LinkedList* targetCompilerOptions();

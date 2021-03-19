@@ -28,8 +28,7 @@
 #define TEMP_TEST_MAIN_EXE "temp/TestMain"
 #endif
 
-#define DIST    "dist"
-#define SRC_DIR "src"
+#define DIST "dist"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2
 

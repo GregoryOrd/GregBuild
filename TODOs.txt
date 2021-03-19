@@ -8,15 +8,14 @@ Plan for Release 1.0:
    directory paths, as well as any subdirectory under a specific directory name
     - for example, exclude all "drivers" directories on the host build
       and exclude all "stubs" directories on the target build
-2) Make the SRC_DIR variable configurable
-3) Add plugin(s) for creating a .hex from the outputted .elf 
+2) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
-4) Make the paths to the test framework .so and .h file configurable
+3) Make the paths to the test framework .so and .h file configurable
     so we can decouple GregBuild from GregTest
-5) Documentation Review and Improvements
+4) Documentation Review and Improvements
     5a) Create a "Features List" that keeps track of all of the cool features in
     the program for advertising/showing to other people
-6) Explore git tags and prep to make a formal release
+5) Explore git tags and prep to make a formal release
 
 
 Plan for Release 1.1:
