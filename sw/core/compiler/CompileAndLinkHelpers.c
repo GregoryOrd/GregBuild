@@ -49,7 +49,7 @@ int testFilesSize(const TestFileList* testFiles)
 
 void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
-   LinkedList* options = determineOptionsListFromCompiler(compiler);
+   LinkedList* options = determineLinkerOptionsListFromCompiler(compiler);
    linkerArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
    for (int i = 0; i < linkerArgs->size; i++)
@@ -89,7 +89,7 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
-   LinkedList* options = determineOptionsListFromCompiler(compiler);
+   LinkedList* options = determineLinkerOptionsListFromCompiler(compiler);
    // The +7 is for the known args below
    // The -1 is to not include the main function .o file
    linkerArgs->size = tempObjectFiles->size + options->size + 7 - 1;
@@ -127,7 +127,7 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 }
 
-LinkedList* determineOptionsListFromCompiler(const char* compiler)
+LinkedList* determineCompilerOptionsListFromCompiler(const char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))
@@ -141,9 +141,23 @@ LinkedList* determineOptionsListFromCompiler(const char* compiler)
    return options;
 }
 
+LinkedList* determineLinkerOptionsListFromCompiler(const char* compiler)
+{
+   LinkedList* options;
+   if (stringsAreEqual(compiler, hostCompiler()))
+   {
+      options = hostLinkerOptions();
+   }
+   else
+   {
+      options = targetLinkerOptions();
+   }
+   return options;
+}
+
 void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, const char* compiler)
 {
-   LinkedList* options = determineOptionsListFromCompiler(compiler);
+   LinkedList* options = determineCompilerOptionsListFromCompiler(compiler);
    compilerArgs->size = options->size + 6;
    compilerArgs->args = calloc(compilerArgs->size, sizeof(void*));
    for (int i = 0; i < compilerArgs->size - 1; i++)

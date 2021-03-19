@@ -62,7 +62,7 @@ int compileIntoTempObjectFilesWithCompiler(
 int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, const char* compiler)
 {
    resetObjectFileListForTarget(compiler, tempObjectFiles);
-   LinkedList* options = determineOptionsListFromCompiler(compiler);
+   LinkedList* options = determineCompilerOptionsListFromCompiler(compiler);
    int result = 0;
 
    result |= compileTestFiles(compiler, testFiles, tempObjectFiles);
