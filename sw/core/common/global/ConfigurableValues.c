@@ -1,7 +1,6 @@
 #include "ConfigurableValues.h"
 
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,7 +14,7 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-#define NUM_COMPILER_CONFIG_PARAMS    10
+#define NUM_COMPILER_CONFIG_PARAMS    11
 #define SET_CONFIGURATION_TYPE        1
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
@@ -49,12 +48,14 @@ static void initTargetExcludedFilesList();
 static void freeStringData(void* data);
 static int listTypeFromData(void* data);
 
-static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {"host",         "target",           "compilerOption",     "hostCompilerOption", "targetCompilerOption",
-                                                                       "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile",   "targetExcludedFile"};
+static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {
+    "host",         "target",           "executableName",     "compilerOption",   "hostCompilerOption", "targetCompilerOption",
+    "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile", "targetExcludedFile"};
 
 static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
     {.actions = {string_copy, NULL}, .dataToActOn = {targetCompiler_, NULL}},                          // target
+    {.actions = {string_copy, NULL}, .dataToActOn = {projectExecutableName_, NULL}},                   // executableName
     {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // compilerOption
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostCompilerOption
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetCompilerOption
@@ -147,7 +148,6 @@ void setConfigurationForSingleParameter(HashTable* table, const char* param, con
    {
       SET_CONFIGURATION_ACTION action = setConfiguration->actions[actionNum];
       void* data = setConfiguration->dataToActOn[actionNum];  // Action #1 uses Data #1, Action #2 uses Data #2, etc.
-
       executeActionOnDataWithValue(action, data, value);
    }
 }
@@ -211,30 +211,30 @@ void setDataToActOn(int i)
 {
    switch (i)
    {
-      case 2:  // compilerOption
+      case 3:  // compilerOption
          configurations[i].dataToActOn[0] = (void*)hostCompilerOptions_;
          configurations[i].dataToActOn[1] = (void*)targetCompilerOptions_;
          break;
-      case 3:  // hostCompilerOption
+      case 4:  // hostCompilerOption
          configurations[i].dataToActOn[0] = (void*)hostCompilerOptions_;
          break;
-      case 4:  // targetCompilerOption
+      case 5:  // targetCompilerOption
          configurations[i].dataToActOn[0] = (void*)targetCompilerOptions_;
          break;
-      case 5:  // linkerOption
+      case 6:  // linkerOption
          configurations[i].dataToActOn[0] = (void*)hostLinkerOptions_;
          configurations[i].dataToActOn[1] = (void*)targetLinkerOptions_;
          break;
-      case 6:  // hostLinkerOption
+      case 7:  // hostLinkerOption
          configurations[i].dataToActOn[0] = (void*)hostLinkerOptions_;
          break;
-      case 7:  // targetLinkerOption
+      case 8:  // targetLinkerOption
          configurations[i].dataToActOn[0] = (void*)targetLinkerOptions_;
          break;
-      case 8:  // hostExcludedFiles
+      case 9:  // hostExcludedFiles
          configurations[i].dataToActOn[0] = (void*)hostExcludedFiles_;
          break;
-      case 9:  // targetExcludedFiles
+      case 10:  // targetExcludedFiles
          configurations[i].dataToActOn[0] = (void*)targetExcludedFiles_;
          break;
    }
@@ -309,6 +309,8 @@ void freeStringData(void* data) { free(data); }
 const char* hostCompiler() { return hostCompiler_; }
 
 const char* targetCompiler() { return targetCompiler_; }
+
+const char* projectExecutableName() { return projectExecutableName_; }
 
 LinkedList* hostCompilerOptions()
 {

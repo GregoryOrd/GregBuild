@@ -1,5 +1,6 @@
 host:gcc
 target:avr-gcc
+executableName:Blink.elf
 
 compilerOption:-DF_CPU=16000000UL
 compilerOption:-Og

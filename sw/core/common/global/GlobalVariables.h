@@ -20,7 +20,7 @@ extern "C"
 
    const char* hostCompiler();
    const char* targetCompiler();
-   // const char* projectExecutableName();
+   const char* projectExecutableName();
 
    LinkedList* hostCompilerOptions();
    LinkedList* targetCompilerOptions();

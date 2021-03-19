@@ -49,15 +49,7 @@ int testFilesSize(const TestFileList* testFiles)
 
 void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
-   LinkedList* options;
-   if (stringsAreEqual(compiler, hostCompiler()))
-   {
-      options = hostLinkerOptions();
-   }
-   else
-   {
-      options = targetLinkerOptions();
-   }
+   LinkedList* options = determineOptionsListFromCompiler(compiler);
    linkerArgs->size = numObjectFilesFromSource(tempObjectFiles) + options->size + 4;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
    for (int i = 0; i < linkerArgs->size; i++)
@@ -71,8 +63,11 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
       strcpy(linkerArgs->args[j + 1], (char*)at_ll(options, LINKER_OPTION_TYPE, j));
    }
 
+   char distDirectoryExecutableName[WINDOWS_MAX_PATH_LENGTH] = DIST;
+   strcat(distDirectoryExecutableName, "/");
+   strcat(distDirectoryExecutableName, (char*)projectExecutableName());
    strcpy(linkerArgs->args[linkerArgs->size - 3], "-o");
-   strcpy(linkerArgs->args[linkerArgs->size - 2], PROJECT_EXE);
+   strcpy(linkerArgs->args[linkerArgs->size - 2], distDirectoryExecutableName);
    linkerArgs->args[linkerArgs->size - 1], NULL;
 }
 
@@ -94,15 +89,7 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
-   LinkedList* options;
-   if (stringsAreEqual(compiler, hostCompiler()))
-   {
-      options = hostLinkerOptions();
-   }
-   else
-   {
-      options = targetLinkerOptions();
-   }
+   LinkedList* options = determineOptionsListFromCompiler(compiler);
    // The +7 is for the known args below
    // The -1 is to not include the main function .o file
    linkerArgs->size = tempObjectFiles->size + options->size + 7 - 1;

@@ -28,9 +28,8 @@
 #define TEMP_TEST_MAIN_EXE "temp/TestMain"
 #endif
 
-#define DIST        "dist"
-#define PROJECT_EXE "dist/Blink.elf"
-#define SRC_DIR     "src"
+#define DIST    "dist"
+#define SRC_DIR "src"
 
 #define NUM_SUPPORTED_COMMAND_LINE_OPTIONS 2
 
@@ -42,12 +41,12 @@
 #define DELETE_TEMP_DIR_DESCRIPTION "Don't Delete the temp Directory"
 #define DELETE_TEMP_DIR_FLAG_VALUE  1  // The value 1 here means delete the temp directory
 
-#define BUILD_SEQUENCE_STEP_TYPE   1
-#define PLUGIN_MODULE_LL_TYPE      2
-#define COMPILER_OPTION_TYPE       3
-#define LINKER_OPTION_TYPE         4
-#define HOST_EXCLUDED_FILE_TYPE    5
-#define TARGET_EXCLUDED_FILE_TYPE  6
+#define BUILD_SEQUENCE_STEP_TYPE  1
+#define PLUGIN_MODULE_LL_TYPE     2
+#define COMPILER_OPTION_TYPE      3
+#define LINKER_OPTION_TYPE        4
+#define HOST_EXCLUDED_FILE_TYPE   5
+#define TARGET_EXCLUDED_FILE_TYPE 6
 
 #define PLUGINS_LIB_DIRECTORY          "./lib/plugins"
 #define PLUGINS_LOAD_ORDER_CONFIG_FILE PLUGINS_LIB_DIRECTORY "/order"

@@ -1,0 +1,3 @@
+host:gcc
+target:gcc
+executableName:HelloWorld.exe

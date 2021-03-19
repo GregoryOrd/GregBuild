@@ -8,7 +8,7 @@ Plan for Release 1.0:
    directory paths, as well as any subdirectory under a specific directory name
     - for example, exclude all "drivers" directories on the host build
       and exclude all "stubs" directories on the target build
-2) Make the PROJECT_EXE and SRC_DIR variables configurable
+2) Make the SRC_DIR variable configurable
 3) Add plugin(s) for creating a .hex from the outputted .elf 
    and loading the .hex onto the Arduino through the Atmel ICE 
 4) Make the paths to the test framework .so and .h file configurable
