@@ -17,11 +17,19 @@
 //////////////////////////////////////////////////////////////////////
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
-LinkedList* determineOptionsListFromCompiler(const char* compiler);
-int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
-int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
-void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObjectFiles);
-int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles);
+static LinkedList* determineOptionsListFromCompiler(const char* compiler);
+static int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
+static int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
+static void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObjectFiles);
+static int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles);
+static bool sameCompiler();
+static bool isHost(const char* compiler);
+static bool isTarget(const char* compiler);
+static bool hostAndNotExcluded(const char* compiler, const char* fileName);
+static bool targetAndNotExcluded(const char* compiler, const char* fileName);
+static bool sameCompilerAndNotExcluded(const char* compiler, const char* fileName);
+static bool hostAndNotExcludedOrSameCompilerAndNotExcluded(const char* compiler, const char* fileName);
+static bool hostOrTargetOrSameCompilerAndNotExcluded(const char* compiler, const char* fileName);
 
 //////////////////////////////////////////////////////////////////////
 //              Function Implementation Section                     //
@@ -92,23 +100,40 @@ int compileFileAndAddToTempObjectList(int fileListType, const void* list, int in
    return result;
 }
 
+bool sameCompiler() { return stringsAreEqual(hostCompiler(), targetCompiler()); }
+bool isHost(const char* compiler) { return !sameCompiler() && stringsAreEqual(hostCompiler(), compiler); }
+bool isTarget(const char* compiler) { return !sameCompiler() && stringsAreEqual(targetCompiler(), compiler); }
+bool hostAndNotExcluded(const char* compiler, const char* fileName) { return isHost(compiler) && !contains_string_ll(hostExcludedFiles(), fileName, HOST_EXCLUDED_FILE_TYPE); }
+bool targetAndNotExcluded(const char* compiler, const char* fileName)
+{
+   return isTarget(compiler) && !contains_string_ll(targetExcludedFiles(), fileName, TARGET_EXCLUDED_FILE_TYPE);
+}
+bool sameCompilerAndNotExcluded(const char* compiler, const char* fileName)
+{
+   return sameCompiler() && !contains_string_ll(hostExcludedFiles(), fileName, HOST_EXCLUDED_FILE_TYPE) &&
+          !contains_string_ll(targetExcludedFiles(), fileName, TARGET_EXCLUDED_FILE_TYPE);
+}
+bool hostAndNotExcludedOrSameCompilerAndNotExcluded(const char* compiler, const char* fileName)
+{
+   return hostAndNotExcluded(compiler, fileName) || sameCompilerAndNotExcluded(compiler, fileName);
+}
+bool hostOrTargetOrSameCompilerAndNotExcluded(const char* compiler, const char* fileName)
+{
+   return hostAndNotExcluded(compiler, fileName) || targetAndNotExcluded(compiler, fileName) || sameCompilerAndNotExcluded(compiler, fileName);
+}
+
 int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles)
 {
    int result = 0;
    if (testBuild())
    {
-      bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
-      bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
       int numTestFiles = testFilesSize(testFiles);
       for (int i = 0; i < numTestFiles; i++)
       {
-         bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-         bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), testFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
-                                           !contains_string_ll(targetExcludedFiles(), testFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-         // Only host or sameCompiler because we don't want to compile tests for the target
-         if (hostAndNotExcluded || sameCompilerAndNotExcluded)
+         const char* fileName = testFiles->files[i].name;
+         if (hostAndNotExcludedOrSameCompilerAndNotExcluded(compiler, fileName))
          {
-            result |= compileFileAndAddToTempObjectList(TEST_FILE_LIST_TYPE, testFiles, i, compiler, testFiles->files[i].name, tempObjectFiles);
+            result |= compileFileAndAddToTempObjectList(TEST_FILE_LIST_TYPE, testFiles, i, compiler, fileName, tempObjectFiles);
          }
       }
    }
@@ -122,17 +147,10 @@ int compileTestFiles(const char* compiler, const TestFileList* testFiles, Object
 int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles)
 {
    int result = 0;
-   bool sameCompiler = stringsAreEqual(hostCompiler(), targetCompiler());
-   bool host = !sameCompiler && stringsAreEqual(hostCompiler(), compiler);
-   bool target = !sameCompiler && stringsAreEqual(targetCompiler(), compiler);
-
    for (int i = 0; i < sourceFiles->size; i++)
    {
-      bool hostAndNotExcluded = host && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE);
-      bool targetAndNotExcluded = target && !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-      bool sameCompilerAndNotExcluded = sameCompiler && !contains_string_ll(hostExcludedFiles(), sourceFiles->files[i].name, HOST_EXCLUDED_FILE_TYPE) &&
-                                        !contains_string_ll(targetExcludedFiles(), sourceFiles->files[i].name, TARGET_EXCLUDED_FILE_TYPE);
-      if (hostAndNotExcluded || targetAndNotExcluded || sameCompilerAndNotExcluded)
+      const char* fileName = sourceFiles->files[i].name;
+      if (hostOrTargetOrSameCompilerAndNotExcluded(compiler, fileName))
       {
          result |= compileFileAndAddToTempObjectList(SRC_FILE_LIST_TYPE, sourceFiles, i, compiler, sourceFiles->files[i].name, tempObjectFiles);
       }
