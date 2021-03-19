@@ -154,7 +154,7 @@ LinkedList* determineOptionsListFromCompiler(const char* compiler)
    return options;
 }
 
-void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, char* compiler)
+void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, const char* compiler)
 {
    LinkedList* options = determineOptionsListFromCompiler(compiler);
    compilerArgs->size = options->size + 6;

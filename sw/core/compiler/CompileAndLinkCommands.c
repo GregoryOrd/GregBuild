@@ -20,7 +20,7 @@
 static int compileTestFiles(const char* compiler, const TestFileList* testFiles, ObjectFileList* tempObjectFiles);
 static int compileSourceFiles(const char* compiler, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 static void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObjectFiles);
-static int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles);
+static int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, const char* compiler, const char* fileName, ObjectFileList* tempObjectFiles);
 static bool sameCompiler();
 static bool isHost(const char* compiler);
 static bool isTarget(const char* compiler);
@@ -86,7 +86,7 @@ void resetObjectFileListForTarget(const char* compiler, ObjectFileList* tempObje
    }
 }
 
-int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, char* compiler, const char* fileName, ObjectFileList* tempObjectFiles)
+int compileFileAndAddToTempObjectList(int fileListType, const void* list, int index, const char* compiler, const char* fileName, ObjectFileList* tempObjectFiles)
 {
    char objectFileName[WINDOWS_MAX_PATH_LENGTH] = "";
    char tempObjectFile[WINDOWS_MAX_PATH_LENGTH] = "";
