@@ -14,7 +14,7 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-#define NUM_COMPILER_CONFIG_PARAMS    12
+#define NUM_COMPILER_CONFIG_PARAMS    13
 #define SET_CONFIGURATION_TYPE        1
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
@@ -49,8 +49,19 @@ static void freeStringData(void* data);
 static int listTypeFromData(void* data);
 
 static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {
-    "host",         "target",           "executableName",     "compilerOption",   "hostCompilerOption", "targetCompilerOption",
-    "linkerOption", "hostLinkerOption", "targetLinkerOption", "hostExcludedFile", "targetExcludedFile", "buildStartingDirectory"};
+    "host",
+    "target",
+    "executableName",
+    "compilerOption",
+    "hostCompilerOption",
+    "targetCompilerOption",
+    "linkerOption",
+    "hostLinkerOption",
+    "targetLinkerOption",
+    "hostExcludedFile",
+    "targetExcludedFile",
+    "buildStartingDirectory",
+    "testFrameworkLibrary"};
 
 static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
@@ -65,6 +76,7 @@ static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostExcludedFiles
     {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetExcludedFiles
     {.actions = {string_copy, NULL}, .dataToActOn = {buildStartingDirectory_, NULL}},                  // buildStartingDirectory
+    {.actions = {string_copy, NULL}, .dataToActOn = {testFrameworkLibrary_, NULL}},                    // testFrameworkLibrary
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -314,6 +326,8 @@ const char* targetCompiler() { return targetCompiler_; }
 const char* projectExecutableName() { return projectExecutableName_; }
 
 const char* buildStartingDirectory() { return buildStartingDirectory_; }
+
+const char* testFrameworkLibrary() { return testFrameworkLibrary_; }
 
 LinkedList* hostCompilerOptions()
 {

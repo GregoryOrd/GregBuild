@@ -193,7 +193,7 @@ int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
    exitIfError(errorOnPreviousStep);
    if (tempObjectFiles->size > 0)
    {
-      char* const argv[] = {(char*)hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, LIB_GREG_TEST_LIBRARY, NULL};
+      char* const argv[] = {(char*)hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, (char*)testFrameworkLibrary(), NULL};
       return popenChildProcess(7, argv);
    }
    return 0;

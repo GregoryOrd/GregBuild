@@ -110,7 +110,7 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 
    strcpy(linkerArgs->args[linkerArgs->size - 3], "-L./");
-   strcpy(linkerArgs->args[linkerArgs->size - 2], LIB_GREG_TEST_LIBRARY);
+   strcpy(linkerArgs->args[linkerArgs->size - 2], testFrameworkLibrary());
    linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 

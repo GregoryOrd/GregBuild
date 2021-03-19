@@ -3,13 +3,9 @@
 
 #ifdef __WINDOWS__
 #define TEST_PROJECT_LIBRARY      "TestProject.dll"
-#define GREG_TEST_LIBRARY         "GregTest.dll"
-#define LIB_GREG_TEST_LIBRARY     "lib/GregTest.dll"
 #define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.dll"
 #else
 #define TEST_PROJECT_LIBRARY      "TestProject.so"
-#define GREG_TEST_LIBRARY         "GregTest.so"
-#define LIB_GREG_TEST_LIBRARY     "/usr/lib/GregTest.so"
 #define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.so"
 #endif
 

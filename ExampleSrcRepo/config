@@ -2,3 +2,4 @@ host:gcc
 target:gcc
 executableName:HelloWorld.exe
 buildStartingDirectory:src
+testFrameworkLibrary:/usr/lib/GregTest.so

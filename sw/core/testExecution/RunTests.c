@@ -46,15 +46,17 @@ void copyDllsToCurrentDirectory()
    char* argv[] = {cp, TEMP_TEST_PROJECT_LIBRARY, CURRENT_DIR, NULL};
    forkAndRunChildProcess(argv);
 
-   char* argv1[] = {cp, LIB_GREG_TEST_LIBRARY, CURRENT_DIR, NULL};
+   char* argv1[] = {cp, (char*)testFrameworkLibrary(), CURRENT_DIR, NULL};
    forkAndRunChildProcess(argv1);
 }
 
 void removeDllsFromCurrentDirectory()
 {
-   char* argv[] = {rm, GREG_TEST_LIBRARY, NULL};
-   forkAndRunChildProcess(argv);
-
-   char* argv1[] = {rm, TEST_PROJECT_LIBRARY, NULL};
-   forkAndRunChildProcess(argv1);
+#ifdef __WINDOWS__
+   char* argv[] = {rm, "*.dll", NULL};
+   popenChildProcess_NoCommandPrint(argv);
+#else
+   char* argv[] = {rm, "*.so", NULL};
+   popenChildProcess_NoCommandPrint(3, argv);
+#endif
 }
