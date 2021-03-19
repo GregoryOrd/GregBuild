@@ -42,7 +42,7 @@ int compileIntoTempObjectFiles(
 }
 
 int compileIntoTempObjectFilesWithCompiler(
-    const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler, const char* basePath)
+    const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, const char* compiler, const char* basePath)
 {
    int error = 0;
 
@@ -59,7 +59,7 @@ int compileIntoTempObjectFilesWithCompiler(
    return 0;
 }
 
-int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, char* compiler)
+int compileIntoObjectFiles(const TestFileList* testFiles, const SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles, const char* compiler)
 {
    resetObjectFileListForTarget(compiler, tempObjectFiles);
    LinkedList* options = determineOptionsListFromCompiler(compiler);
@@ -193,7 +193,7 @@ int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
    exitIfError(errorOnPreviousStep);
    if (tempObjectFiles->size > 0)
    {
-      char* const argv[] = {hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, LIB_GREG_TEST_LIBRARY, NULL};
+      char* const argv[] = {(char*)hostCompiler(), "-o", TEMP_TEST_MAIN, TEMP_TEST_MAIN_C, "-L./", TEMP_TEST_PROJECT_LIBRARY, LIB_GREG_TEST_LIBRARY, NULL};
       return popenChildProcess(7, argv);
    }
    return 0;
@@ -211,7 +211,7 @@ int compileIntoProjectExecutable(
    return linkObjectFiles(targetCompiler(), tempObjectFiles);
 }
 
-int linkObjectFiles(char* compiler, const ObjectFileList* tempObjectFiles)
+int linkObjectFiles(const char* compiler, const ObjectFileList* tempObjectFiles)
 {
    ArgList* linkerArgs = malloc(sizeof(ArgList));
    initArgsForLinkingProjectExecutable(linkerArgs, tempObjectFiles, compiler);

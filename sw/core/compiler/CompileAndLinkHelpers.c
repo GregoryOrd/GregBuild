@@ -47,7 +47,7 @@ int testFilesSize(const TestFileList* testFiles)
    return testFilesSize;
 }
 
-void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
+void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))
@@ -92,7 +92,7 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
    }
 }
 
-void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, char* compiler)
+void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
    LinkedList* options;
    if (stringsAreEqual(compiler, hostCompiler()))

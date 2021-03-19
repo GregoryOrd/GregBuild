@@ -306,9 +306,9 @@ void freeTargetExcludedFilesList() { freeLinkedList(targetExcludedFiles_, freeSt
 
 void freeStringData(void* data) { free(data); }
 
-char* hostCompiler() { return hostCompiler_; }
+const char* hostCompiler() { return hostCompiler_; }
 
-char* targetCompiler() { return targetCompiler_; }
+const char* targetCompiler() { return targetCompiler_; }
 
 LinkedList* hostCompilerOptions()
 {

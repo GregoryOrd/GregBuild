@@ -18,8 +18,9 @@ extern "C"
 
    int readConfigurationsFromFile();
 
-   char* hostCompiler();
-   char* targetCompiler();
+   const char* hostCompiler();
+   const char* targetCompiler();
+   // const char* projectExecutableName();
 
    LinkedList* hostCompilerOptions();
    LinkedList* targetCompilerOptions();
