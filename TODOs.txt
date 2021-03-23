@@ -5,15 +5,13 @@ Small Refactorings / Unscheduled Improvements
 
 Plan for Release 1.0:
 ------------------------
-1) Don't exit on tests failed
-    - We still want to remove the temp folder
-2) Add plugin(s) loading the program onto the Arduino through the Atmel ICE
-3) Documentation Review and Improvements
-    3a) Create a "Features List" that keeps track of all of the cool features in
+1) Add plugin(s) loading the program onto the Arduino through the Atmel ICE
+2) Documentation Review and Improvements
+    2a) Create a "Features List" that keeps track of all of the cool features in
         the program for advertising/showing to other people
-    3b) Also have some documentation about the list of things that are configurable from the 
+    2b) Also have some documentation about the list of things that are configurable from the 
         config file
-4) Explore git tags and prep to make a formal release
+3) Explore git tags and prep to make a formal release
 
 
 
