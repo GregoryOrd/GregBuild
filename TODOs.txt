@@ -1,17 +1,13 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
-0) Don't exit on tests failed
-    - We still want to remove the temp folder
+- No small refactorings or unscheduled improvements
+
 
 Plan for Release 1.0:
 ------------------------
-1) Extend excluding files from both host and target builds to include
-   directory paths, as well as any subdirectory under a specific directory name
-    - for example, exclude all "drivers" directories on the host build
-      and exclude all "stubs" directories on the target build
-2) Add plugin(s) for creating a .hex from the outputted .elf 
-   and loading the .hex onto the Arduino through the Atmel ICE 
-------------------------------------------------------------------------
+1) Don't exit on tests failed
+    - We still want to remove the temp folder
+2) Add plugin(s) loading the program onto the Arduino through the Atmel ICE
 3) Documentation Review and Improvements
     3a) Create a "Features List" that keeps track of all of the cool features in
         the program for advertising/showing to other people
@@ -20,22 +16,27 @@ Plan for Release 1.0:
 4) Explore git tags and prep to make a formal release
 
 
+
 Plan for Release 1.1:
 ------------------------
 0) Add in tests for the toolkit
 1) Add tests to this repo.
     - Use version 1.0 of GregBuild 
     - Introduce some chickens and some eggs, then hope things don't get too weird with that
-2) Modify test main writing to print a no tests run message
+2) Extend excluding files from both host and target builds to include
+   directory paths, as well as any subdirectory under a specific directory name
+    - for example, exclude all "drivers" directories on the host build
+      and exclude all "stubs" directories on the target build
+3) Modify test main writing to print a no tests run message
     - This has to be after the result() function in GregTest is modified to return
     a 3-state enum instead of boolean
-3) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
+4) Dependency management (See DepManagementIdea_Img1.jpg and DepManagementIdea_Img2.jpg)
     - Compiling into libraries base on GBScripts found througout the repo
     - Maintaining a Dependency graph based on these scripts, and linking 
     libraries in an appropriate order based on the dependencies
     - Will probably need a stack data structure implementation
     and a graph data structure implementation in the toolkit
-4) Add a config file option to define the behviour when the host and target
+5) Add a config file option to define the behviour when the host and target
     are different.
         - Two Options:
             1) Try to build an executable for both platforms
