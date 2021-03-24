@@ -36,7 +36,7 @@ int executeBuildSequence(
       if (!error && flagVal)
       {
          printBuildSequenceExecutionMessage(step);
-         error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, buildStartingDirectory());
+         error = (step->function_ptr)(testFiles, sourceFiles, tempObjectFiles, error, buildStartingDirectory(), projectExecutableName());
       }
    }
 

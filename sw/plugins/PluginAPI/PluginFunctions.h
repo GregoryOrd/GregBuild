@@ -54,9 +54,9 @@ struct CommandLineOption {
 
 typedef struct BuildSequenceStep {
   CommandLineOption option; // To run the function, the flagValue in here needs to be true
-  int (*function_ptr)(TestFileList *testFiles, SourceFileList *sourceFiles,
-                      ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
-                      char *basePath);
+  int (*function_ptr)(const TestFileList* testFiles, const SourceFileList* sourceFiles,
+                      const ObjectFileList* tempObjectFiles, int errorOnPreviousStep,
+                      const char* basePath, const char* finalExecutableName);
   char functionName[WINDOWS_MAX_PATH_LENGTH];
 } BuildSequenceStep;
 

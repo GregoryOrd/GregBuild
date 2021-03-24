@@ -4,9 +4,9 @@
 #include "FileStructureDefs.h"
 #include "../../external/GregCToolkit/sw/CommandLineOptions/CommandLineOptionsStruct.h"
 
-typedef  int (*STEP_FUNCTION)(const TestFileList *testFiles, const SourceFileList *sourceFiles,
-                      const ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
-                      const char *basePath);
+typedef  int (*STEP_FUNCTION)(const TestFileList* testFiles, const SourceFileList* sourceFiles,
+                      const ObjectFileList* tempObjectFiles, int errorOnPreviousStep,
+                      const char* basePath, const char* finalExecutableName);
 
 typedef struct BuildSequenceStep {
   CommandLineOption option; // To run the function, the flagValue in here needs to be true
