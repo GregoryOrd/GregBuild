@@ -21,7 +21,7 @@ int loadOntoArduinoWithAvrdude(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath,
     const char* projectExecutableName)
 {
-   char flashInstruction[300] = "flash:w:";
+   char flashInstruction[300] = "flash:w:dist/";
    strcat(flashInstruction, projectExecutableName);
    strcat(flashInstruction, ":e");
 
