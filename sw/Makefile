@@ -213,7 +213,7 @@ Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/RPToArduinoLoaderPl
 	cp $@ ~/ExampleSrcRepo/lib/plugins
 	cp $@ ~/Blink/lib/plugins
 
-../lib/plugins/RPToArduinoLoaderPlugin.so: plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.c plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.h
+../lib/plugins/RPToArduinoLoaderPlugin.so: plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.c plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.h $(BUILD)/$(TOOLKIT)/$(EXTERNAL_PROGRAM_EXECUTION)/ExternalProgramExecution.o
 	mkdir -p ../lib/plugins
 	mkdir -p ../ExampleSrcRepo/lib/plugins
 	mkdir -p ../Blink/lib/plugins

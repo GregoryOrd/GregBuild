@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
+
 BuildSequenceStep* after_removeTempDir()
 {
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
@@ -19,6 +21,10 @@ int loadOntoArduinoWithAvrdude(
     const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath,
     const char* projectExecutableName)
 {
-   printf("Arduino Loader Plugin is Seeing the Executable Name: %s\n", projectExecutableName);
-   return 0;
+   char flashInstruction[300] = "flash:w:";
+   strcat(flashInstruction, projectExecutableName);
+   strcat(flashInstruction, ":e");
+
+   char* const argv[] = {"sudo", "avrdude", "-v", "-p", "atmega328p", "-c", "atmelice_isp", "-P", "usb/001/002", "-b", "115200", "-U", flashInstruction};
+   return popenChildProcess(13, argv);
 }
