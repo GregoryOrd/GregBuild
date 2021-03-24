@@ -3,8 +3,8 @@
 
 #include "../PluginAPI/PluginFunctions.h"
 
-int printHelloWorld(TestFileList *testFiles, SourceFileList *sourceFiles,
-                    ObjectFileList *tempObjectFiles, int errorOnPreviousStep,
-                    char *basePath);
+int printHelloWorld(const TestFileList* testFiles, const SourceFileList* sourceFiles,
+                    const ObjectFileList* tempObjectFiles, int errorOnPreviousStep,
+                    const char* basePath, const char* projectExecutableName);
 
 #endif

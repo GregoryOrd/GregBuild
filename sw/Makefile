@@ -200,7 +200,7 @@ $(BUILD)/$(TOOLKIT)/$(STRING)/%.o: $(TOOLKIT_SW)/$(STRING)/%.c $(TOOLKIT_SW)/$(S
 ######						Plugin Rules	     					  ######
 ############################################################################
 
-Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/TheBestPlugin.so
+Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/RPToArduinoLoaderPlugin.so
 
 ../lib/plugins/TimeTrackingPlugin.so: plugins/TimeTrackingPlugin/TimeTrackingPlugin.c plugins/TimeTrackingPlugin/TimeTrackingPlugin.h
 	mkdir -p ../lib/plugins
@@ -213,7 +213,7 @@ Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/TheBestPlugin.so
 	cp $@ ~/ExampleSrcRepo/lib/plugins
 	cp $@ ~/Blink/lib/plugins
 
-../lib/plugins/TheBestPlugin.so: plugins/TheBestPlugin/TheBestPlugin.c plugins/TheBestPlugin/TheBestPlugin.h
+../lib/plugins/RPToArduinoLoaderPlugin.so: plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.c plugins/RPToArduinoLoaderPlugin/RPToArduinoLoaderPlugin.h
 	mkdir -p ../lib/plugins
 	mkdir -p ../ExampleSrcRepo/lib/plugins
 	mkdir -p ../Blink/lib/plugins
@@ -221,6 +221,7 @@ Plugins: ../lib/plugins/TimeTrackingPlugin.so ../lib/plugins/TheBestPlugin.so
 	mkdir -p ~/Blink/lib/plugins
 	$(CC) $(CFLAGS) -fPIC -shared -o $@ $^
 	cp $@ ../ExampleSrcRepo/lib/plugins
+	cp $@ ../Blink/lib/plugins
 	cp $@ ~/ExampleSrcRepo/lib/plugins
 	cp $@ ~/Blink/lib/plugins
 
