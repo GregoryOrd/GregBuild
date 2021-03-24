@@ -3,19 +3,18 @@ Small Refactorings / Unscheduled Improvements
 - No small refactorings or unscheduled improvements
 
 
-Plan for Release 1.0:
+Plan for Release 0.0.1:
 ------------------------
-1) Add plugin(s) loading the program onto the Arduino through the Atmel ICE
-2) Documentation Review and Improvements
+1) Documentation Review and Improvements
     2a) Create a "Features List" that keeps track of all of the cool features in
         the program for advertising/showing to other people
     2b) Also have some documentation about the list of things that are configurable from the 
         config file
-3) Explore git tags and prep to make a formal release
+2) Explore git tags and prep to make a formal release
 
 
 
-Plan for Release 1.1:
+Plan for Release 0.0.2:
 ------------------------
 0) Add in tests for the toolkit
 1) Add tests to this repo.
@@ -45,7 +44,7 @@ Plan for Release 1.1:
 
 
 
-Plan for Release 1.2:
+Plan for Release 0.0.3:
 ------------------------
 1) Make GregBuild smart enough to not build files that have not been modified
     - Will likely no to switch the default flag value for the --leave-temp command
@@ -61,7 +60,7 @@ Plan for Release 1.2:
 
 
 
-Plan for Release 1.3:
+Plan for Release 0.0.4:
 ------------------------
 1) Configurablity for exiting or continuing after failing to compile and run tests
     on the host. Continuing would mean to try to build on the target without any of the 
@@ -75,7 +74,7 @@ Plan for Release 1.3:
      for debugging
 
 
-Plan for Release 1.4:
+Plan for Release 0.0.5:
 -------------------------
 1) Multithreaded solution for gathering the test and source files
     a) Split the subdirectories from the top level?
@@ -90,7 +89,7 @@ Plan for Release 1.4:
     b) Implement logic to swtich between single and multithreaded approach based on this information
 
 
-Plan for Release 1.5:
+Plan for Release 0.0.6:
 -------------------------
 1) Sort alphabetically when printing the list of supported command line options in the
    printSupportedOptions() functions for both CommandLineOptions.h and CommandLineOptions_ll.h
