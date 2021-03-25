@@ -26,6 +26,7 @@
 *.dll
 *.so
 *.so.*
+!dist/RPToArduinoLoaderPlugin.so
 *.dylib
 
 # Executables

@@ -10,6 +10,10 @@ Plan for Release 0.0.1:
         the program for advertising/showing to other people
     2b) Also have some documentation about the list of things that are configurable from the 
         config file
+    2c) Cleanup Architecture.md
+        - This might be the actual "feature list" document
+    2d) Write Plugins.md
+    2e) Write RaspberryPi_Arduino_Loader_Plugin.md
 2) Explore git tags and prep to make a formal release
 
 
