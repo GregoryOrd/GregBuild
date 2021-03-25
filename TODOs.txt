@@ -14,7 +14,8 @@ Plan for Release 0.0.1:
         - This might be the actual "feature list" document
     2d) Write Plugins.md
     2e) Write RaspberryPi_Arduino_Loader_Plugin.md
-2) Explore git tags and prep to make a formal release
+2) Think about setting up an installer
+3) Explore git tags and prep to make a formal release
 
 
 
