@@ -91,8 +91,7 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
 {
    LinkedList* options = determineLinkerOptionsListFromCompiler(compiler);
    // The +7 is for the known args below
-   // The -1 is to not include the main function .o file
-   linkerArgs->size = tempObjectFiles->size + options->size + 7 - 1;
+   linkerArgs->size = tempObjectFiles->size + options->size + 7;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
    for (int i = 0; i < linkerArgs->size - 1; i++)
    {
