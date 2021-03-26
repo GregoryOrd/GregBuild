@@ -179,7 +179,7 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
       ArgList* linkerArgs = malloc(sizeof(ArgList));
       initArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles, hostCompiler());
       fileArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles);
-      popenChildProcess(linkerArgs->size, (char* const*)linkerArgs->args);
+      forkAndRunChildProcess((char* const*)linkerArgs->args);
 
       freeArgList(linkerArgs, true);
    }
