@@ -5,17 +5,7 @@ Small Refactorings / Unscheduled Improvements
 
 Plan for Release 0.0.1:
 ------------------------
-1) Documentation Review and Improvements
-    2a) Create a "Features List" that keeps track of all of the cool features in
-        the program for advertising/showing to other people
-    2b) Also have some documentation about the list of things that are configurable from the 
-        config file
-    2c) Cleanup Architecture.md
-        - This might be the actual "feature list" document
-    2d) Write Plugins.md
-    2e) Write RaspberryPi_Arduino_Loader_Plugin.md
-2) Think about setting up an installer
-3) Explore git tags and prep to make a formal release
+2) Explore git tags and prep to make a formal release
 
 
 
@@ -60,8 +50,9 @@ Plan for Release 0.0.3:
     the functions in PluginFunctions.h
 2) Tell the file name as well as the test case name on test failure
 3) Add ability to build from deeper withing the src file tree
-2) Implement HashTable for storing file lists
+) Implement HashTable for storing file lists
     - Will provide more efficient lookups for large sets of files
+5) Think about setting up an installer
 
 
 

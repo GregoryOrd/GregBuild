@@ -1,30 +1,45 @@
 # GregBuild
 
-A simple build system for C projects. Uses [GregTest](https://github.com/GregoryOrd/GregTest) to execute unit tests during the build process. At the moment it is very simplistic and does not have many features have different configurations or extensibility, although some of this may be coming later. See the "Configurability" section of [Architecture.md](sw/Architecture.md) for more details on what future features may be coming to expand the usability of GregBuild for more use cases.
+A build system for C/C++ projects. GregBuild can use any test framework that
+is contained within a single .so library and any number of .h header files. By default
+GregBuild will use [GregTest](https://github.com/GregoryOrd/GregTest) to execute unit 
+tests during the build process. GregTest ships as a single .so and a single .h. The path
+to the test framework library .so is configurable in the .config file.
 
 ## Platform
 
-This build system is being developed on a Windows machine using gcc and Cygwin. Some code has tried to use things such a pre-processor directives to provide cross-platform support. However, this is untested and may stil need some tweaking to get working. 
+Currently GregBuild is only supported on linux platforms. However, Windows users, can
+still use GregBuild on their machines if they run it inside of a Windows Subsystem for 
+Linux environment. When examining file names for GregBuild and GregTest binaries, LX
+refers to x86 and RP refers to Raspberry Pi Zero, where GregBuild has also been used.
 
-## Compilers
+## Cross-Compiling
 
-Different compilers can be used by GregBuild by adding a config file inside of your repository. See [CompilerConfiguration.md](CompilerConfiguration.md) for me details. Please ensure the compiler and all of its depencies are in a location that
-can be reached by GregBuild. For example, if running GregBuild inside of Cygwin,
-please make sure the compiler is also located within Cygwin. It may vary based on where Cygwin is installed. But using my path as an example, the compiler files should be located somewhere under "C:/cygwin64"
+A main feature of GregBuild is that is was designed to support cross-compiling.
+GregBuild works in a interesting way such that it uses two compilers, each of which
+can be specified by the user. The user can swap these compilers out using the config
+file in the root of the repository. 
 
-## Adding dirent to MSVC include path
+The first compiler is designated as the "host" compiler. This is the compiler for the 
+hardware that GregBuild is running on. This compiler is used to compile code for 
+execution in test on the host hardware.
 
-In this project dirent.h is used to recurse through the file system. At the time of writing the functions for this recursion I was developing with VS Code and compiling with gcc and Cygwin. By default the VS CODE and the MSVC compiler do not include dirent.h, but Cygwin does. This meant that I would get a file not found error inside of my IDE, but would not have the problem when compiling. To remove this error inside the IDE, I added dirent.h to the MSVC include path. In my case, the include path was
+The second compiler is designated as the "target" compiler. This compiler can be the 
+same as the host or can be different. If it is different, the source code, excluding
+tests, is re-compiled with this compiler after the tests are run to produce an
+executable that will run on the target hardware.
 
-- C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.24.28314/include
+For example, in the ExampleSrcRepo (included in the GregBuild repo as an example), the host and target compiler are the same. This means that GregBuild will compile the code on the host machine, run the tests on the host machine, and  then produce an executable
+for the host machine. 
 
-The dirent.h file that I placed here came from a github repo owned by Toni Ronkko:
-- [https://github.com/tronkko/dirent/blob/master/include/dirent.h](https://github.com/tronkko/dirent/blob/master/include/dirent.h)
+In the Blink example repo, the host and target are different. This means that GregBuild will compile the code and tests on the host machine, run the tests on the host machine, 
+and then if the tests pass, compile again (excluding the tests) with the target 
+compiler to produce an executable for the target hardware.
 
-## Adding ATmega 328p Files to MSVC include path and VS Code Configuration
+## Configuration
 
-The "Blink" example repo used here is being used for testing the GregBuild can cross-compile to a different target hardware.
-For this testing, I am using a development board with an Atmega328p. To support this,
-the includes for the avr-gcc compiler were also copied into the MSVC include path.
+Many different things are configurable settings for GregBuild. To specify these settings
+place a file name "config" with no extension at the root of the repository.
 
-After adding to the MSVC include path, there are still issues when <avr/io.h> is included. This header looks for the defined microcontroller (Atmega328p) and then includes <avr/iom328p.h>. However, VS code doesn't know what microcontroller to use, so it has issues with this. To remove the VS code errors, add "__AVR_ATmega328P__" to the defines list inside .vscode/c_cpp_properties.json.
+See [Configuration.md](CustomerDocs/Configuration.md) for more details on the available
+configurations settings.

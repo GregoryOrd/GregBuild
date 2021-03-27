@@ -58,4 +58,5 @@ dkms.conf
 .vscode/
 
 dist/*
+!dist/PluginFunctions.h
 */valgrind_output.txt
