@@ -1,12 +1,12 @@
 Small Refactorings / Unscheduled Improvements
 -----------------------------------------------
-- No small refactorings or unscheduled improvements
-
-
-Plan for Release 0.0.1:
-------------------------
-2) Explore git tags and prep to make a formal release
-
+- Add a configurable value that is used as both a compiler option and a linker option
+	- Alternatively, in the short term, have a configurable value for the mmcu flag
+	and use this during both compiling and linking if it is provided by the user in the 
+	config file
+	- This is to address the issue found while trying to use an ISR on the arduino where
+	the user needed to specify targetCompilerOption:-mmcu=atmega328p and 
+	targetLinkerOption:-mmcu=atmega328p 
 
 
 Plan for Release 0.0.2:
