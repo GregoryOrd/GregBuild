@@ -7,6 +7,7 @@ Small Refactorings / Unscheduled Improvements
 	- This is to address the issue found while trying to use an ISR on the arduino where
 	the user needed to specify targetCompilerOption:-mmcu=atmega328p and 
 	targetLinkerOption:-mmcu=atmega328p 
+- Add the -fno-common compiler flag to makefiles
 
 
 Plan for Release 0.0.2:
