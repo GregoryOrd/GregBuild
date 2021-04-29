@@ -27,6 +27,7 @@ The name column is the parameter text that goes in the "config" file.
 | targetExcludedFile | Adds to a list of files to be excluded from the compilation with the target compiler. This does not include test files which will always be excluded. An example of a file you might wish to exclude here could be a stub file that was only used as a placeholder in testing. |
 | buildStartingDirectory | GregBuild should be run from the root of the repository so that it can find files such as the config file. However, once GregBuild starts looking for code, specifying this setting can tell GregBuild a subdirectory for where to start looking for the source code. Note that this setting is not nessecary to set, but can be an optimization so that GregBuild doesn't waste time looking through subdirectories that don't contain any source code. |
 | testFrameworkLibrary | The path to the test framework library that you want GregBuild to use. This will default to /usr/lib/GregTest.so |
+| hardwareSimulationLibrary | Adds to a list of libraries that the host compiler uses when linking the tests. This is useful for stubbing out or simulating target hardware specific files that you may not have access to with the host compiler. |
 
 
 ## Telling GregBuild What Compiler To Use
@@ -36,8 +37,8 @@ the root directory of the repo to be built with GregBuild. Add a line to specify
 host compiler and a line to specify the target compiler. For example:
 
 ```
-host:/usr/bin/gcc.exe
-target:/opt/avr8-gnu-toolchain/bin/avr-gcc.exe
+host:gcc.exe
+target:avr-gcc.exe
 ```
 
 If there are issues compiling with the host compiler, GregBuild will skip running the tests and proceed to attempting to compile with the host compiler. In the case that
@@ -48,12 +49,11 @@ If you want to build just for the host system, set the target compiler to match
 the host compiler:
 
 ```
-host:/usr/bin/gcc.exe
-target:/usr/bin/gcc.exe
+host:gcc.exe
+target:gcc.exe
 ```
 
-For GregBuild to use your compiler path, that compiler path needs to work with the environment outside of GregBuild. For example, inside of Cygwin the above samples
-will work. However, trying to use "C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe" may not work as Cygwin could give an error saying "command not found".
+For GregBuild to use your compiler path, that compiler path needs to work with the environment outside of GregBuild. For example, inside of a linux or Cygwin environment with the compilers installed the above samples will work. However, trying to use "C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe" may not work as Cygwin could give an error saying "command not found".
 
 
 ## Configuring Compiler Options
