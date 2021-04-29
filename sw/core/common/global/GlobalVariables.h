@@ -32,9 +32,12 @@ extern "C"
    LinkedList* hostExcludedFiles();
    LinkedList* targetExcludedFiles();
 
+   LinkedList* hardwareSimulationLibraries();
+
    void freeGlobalOptionsLists();
    void freeHostExcludedFilesList();
    void freeTargetExcludedFilesList();
+   void freeHardwareSimulationLibrariesList();
 
 #ifdef __cplusplus
 }

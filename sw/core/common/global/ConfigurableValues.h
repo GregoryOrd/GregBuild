@@ -24,6 +24,8 @@ static LinkedList* targetLinkerOptions_ = NULL;
 static LinkedList* hostExcludedFiles_ = NULL;
 static LinkedList* targetExcludedFiles_ = NULL;
 
+static LinkedList* hardwareSimulationLibraries_ = NULL;
+
 #define CONFIG_FILE "./config"
 
 #endif

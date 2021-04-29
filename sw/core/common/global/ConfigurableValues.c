@@ -14,7 +14,7 @@
 //              Private Data and Function Prototypes                //
 //////////////////////////////////////////////////////////////////////
 
-#define NUM_COMPILER_CONFIG_PARAMS    13
+#define NUM_COMPILER_CONFIG_PARAMS    14
 #define SET_CONFIGURATION_TYPE        1
 #define actionPerConfigurationSetting 2
 #define dataMembersPerAction          1
@@ -45,6 +45,7 @@ static void initHostLinkerOptionsList();
 static void initTargetLinkerOptionsList();
 static void initHostExcludedFilesList();
 static void initTargetExcludedFilesList();
+static void initHardwareSimulationLibrariesList();
 static void freeStringData(void* data);
 static int listTypeFromData(void* data);
 
@@ -61,22 +62,24 @@ static const char* compilerConfigParams[NUM_COMPILER_CONFIG_PARAMS] = {
     "hostExcludedFile",
     "targetExcludedFile",
     "buildStartingDirectory",
-    "testFrameworkLibrary"};
+    "testFrameworkLibrary",
+    "hardwareSimulationLibrary"};
 
 static SetConfiguration configurations[NUM_COMPILER_CONFIG_PARAMS] = {
-    {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // host
-    {.actions = {string_copy, NULL}, .dataToActOn = {targetCompiler_, NULL}},                          // target
-    {.actions = {string_copy, NULL}, .dataToActOn = {projectExecutableName_, NULL}},                   // executableName
-    {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // compilerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostCompilerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetCompilerOption
-    {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // compilerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostLinkerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetLinkerOption
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // hostExcludedFiles
-    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // targetExcludedFiles
-    {.actions = {string_copy, NULL}, .dataToActOn = {buildStartingDirectory_, NULL}},                  // buildStartingDirectory
-    {.actions = {string_copy, NULL}, .dataToActOn = {testFrameworkLibrary_, NULL}},                    // testFrameworkLibrary
+    {.actions = {string_copy, NULL}, .dataToActOn = {hostCompiler_, NULL}},                            // (0) host
+    {.actions = {string_copy, NULL}, .dataToActOn = {targetCompiler_, NULL}},                          // (1) target
+    {.actions = {string_copy, NULL}, .dataToActOn = {projectExecutableName_, NULL}},                   // (2) executableName
+    {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // (3) compilerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (4) hostCompilerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (5) targetCompilerOption
+    {.actions = {append_string_voidArgs_ll, append_string_voidArgs_ll}, .dataToActOn = {NULL, NULL}},  // (6) compilerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (7) hostLinkerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (8) targetLinkerOption
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (9) hostExcludedFiles
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (10) targetExcludedFiles
+    {.actions = {string_copy, NULL}, .dataToActOn = {buildStartingDirectory_, NULL}},                  // (11) buildStartingDirectory
+    {.actions = {string_copy, NULL}, .dataToActOn = {testFrameworkLibrary_, NULL}},                    // (12) testFrameworkLibrary
+    {.actions = {append_string_voidArgs_ll, NULL}, .dataToActOn = {NULL}},                             // (13) hardwareSimulationLibrary
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -88,6 +91,7 @@ int readConfigurationsFromFile()
    initOptionLists();
    initHostExcludedFilesList();
    initTargetExcludedFilesList();
+   initHardwareSimulationLibrariesList();
 
    HashTable* table = setupConfigurationsHashTable();
    ArgList* argList = malloc(sizeof(ArgList));
@@ -201,6 +205,10 @@ int listTypeFromData(void* data)
    {
       return TARGET_EXCLUDED_FILE_TYPE;
    }
+   else if (data == hardwareSimulationLibraries_)
+   {
+      return HARDWARE_SIMULATION_LIBRARY;
+   }
 }
 
 void freeSetupConfigurations() {}
@@ -249,6 +257,9 @@ void setDataToActOn(int i)
          break;
       case 10:  // targetExcludedFiles
          configurations[i].dataToActOn[0] = (void*)targetExcludedFiles_;
+         break;
+      case 13:  // hardwareSimulationLibraries
+         configurations[i].dataToActOn[0] = (void*)hardwareSimulationLibraries_;
          break;
    }
 }
@@ -305,6 +316,12 @@ void initTargetExcludedFilesList()
    initEmptyLinkedList(targetExcludedFiles_, TARGET_EXCLUDED_FILE_TYPE);
 }
 
+void initHardwareSimulationLibrariesList()
+{
+   hardwareSimulationLibraries_ = malloc(sizeof(LinkedList));
+   initEmptyLinkedList(hardwareSimulationLibraries_, HARDWARE_SIMULATION_LIBRARY);
+}
+
 void freeGlobalOptionsLists()
 {
    freeLinkedList(hostCompilerOptions_, freeStringData);
@@ -316,6 +333,8 @@ void freeGlobalOptionsLists()
 void freeHostExcludedFilesList() { freeLinkedList(hostExcludedFiles_, freeStringData); }
 
 void freeTargetExcludedFilesList() { freeLinkedList(targetExcludedFiles_, freeStringData); }
+
+void freeHardwareSimulationLibrariesList() { freeLinkedList(hardwareSimulationLibraries_, freeStringData); }
 
 void freeStringData(void* data) { free(data); }
 
@@ -381,4 +400,13 @@ LinkedList* targetExcludedFiles()
       initTargetExcludedFilesList();
    }
    return targetExcludedFiles_;
+}
+
+LinkedList* hardwareSimulationLibraries()
+{
+   if (hardwareSimulationLibraries_ == NULL)
+   {
+      initHardwareSimulationLibrariesList();
+   }
+   return hardwareSimulationLibraries_;
 }
