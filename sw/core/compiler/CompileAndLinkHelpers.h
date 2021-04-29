@@ -19,6 +19,7 @@ void initArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler);
 void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles);
+void initArgsForCreatingTestMainExecutable(ArgList* linkerArgs);
 LinkedList* determineCompilerOptionsListFromCompiler(const char* compiler);
 LinkedList* determineLinkerOptionsListFromCompiler(const char* compiler);
 void argsForCompilingToObjectFile(ArgList* compilerArgs, const char* filename, const char* tempObjectFileName, const char* compiler);

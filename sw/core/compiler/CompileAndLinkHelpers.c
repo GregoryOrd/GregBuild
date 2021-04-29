@@ -131,6 +131,32 @@ void fileArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    }
 }
 
+void initArgsForCreatingTestMainExecutable(ArgList* linkerArgs)
+{
+   int numConcreteArgs = 8;
+   LinkedList* hardwareSimLibraries = hardwareSimulationLibraries();
+   linkerArgs->size = hardwareSimLibraries->size + numConcreteArgs;
+   linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
+   for (int i = 0; i < linkerArgs->size - 1; i++)
+   {
+      linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
+   }
+
+   strcpy(linkerArgs->args[0], (char*)hostCompiler());
+   strcpy(linkerArgs->args[1], "-o");
+   strcpy(linkerArgs->args[2], TEMP_TEST_MAIN);
+   strcpy(linkerArgs->args[3], TEMP_TEST_MAIN_C);
+   strcpy(linkerArgs->args[4], "-L./");
+   strcpy(linkerArgs->args[5], TEMP_TEST_PROJECT_LIBRARY);
+   strcpy(linkerArgs->args[6], (char*)testFrameworkLibrary());
+
+   for (int i = 0; i < hardwareSimLibraries->size; i++)
+   {
+      strcpy(linkerArgs->args[numConcreteArgs - 1 + i], at_ll(hardwareSimLibraries, HARDWARE_SIMULATION_LIBRARY, i));
+   }
+   linkerArgs->args[linkerArgs->size - 1] = NULL;
+}
+
 LinkedList* determineCompilerOptionsListFromCompiler(const char* compiler)
 {
    LinkedList* options;
