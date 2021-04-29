@@ -8,6 +8,7 @@ Small Refactorings / Unscheduled Improvements
 	the user needed to specify targetCompilerOption:-mmcu=atmega328p and 
 	targetLinkerOption:-mmcu=atmega328p 
 - Add the -fno-common compiler flag to makefiles
+- Does linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary need the -L./ argument?
 
 
 Plan for Release 0.0.2:

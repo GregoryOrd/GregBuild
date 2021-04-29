@@ -90,8 +90,9 @@ void fileArgsForLinkingProjectExecutable(ArgList* linkerArgs, const ObjectFileLi
 void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList* tempObjectFiles, const char* compiler)
 {
    LinkedList* options = determineLinkerOptionsListFromCompiler(compiler);
+   LinkedList* hardwareSimLibraries = hardwareSimulationLibraries();
    // The +7 is for the known args below
-   linkerArgs->size = tempObjectFiles->size + options->size + 7;
+   linkerArgs->size = tempObjectFiles->size + options->size + hardwareSimLibraries->size + 7;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
    for (int i = 0; i < linkerArgs->size - 1; i++)
    {
@@ -108,8 +109,12 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
       strcpy(linkerArgs->args[j + 4], (char*)at_ll(options, LINKER_OPTION_TYPE, j));
    }
 
-   strcpy(linkerArgs->args[linkerArgs->size - 3], "-L./");
-   strcpy(linkerArgs->args[linkerArgs->size - 2], testFrameworkLibrary());
+   strcpy(linkerArgs->args[linkerArgs->size - (hardwareSimLibraries->size + 3)], "-L./");
+   strcpy(linkerArgs->args[linkerArgs->size - (hardwareSimLibraries->size + 2)], testFrameworkLibrary());
+   for (int i = 0; i < hardwareSimLibraries->size; i++)
+   {
+      strcpy(linkerArgs->args[linkerArgs->size - (hardwareSimLibraries->size + 1) + i], at_ll(hardwareSimLibraries, HARDWARE_SIMULATION_LIBRARY, i));
+   }
    linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 

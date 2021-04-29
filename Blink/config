@@ -3,10 +3,6 @@ target:avr-gcc
 executableName:Blink.elf
 buildStartingDirectory:src
 
-hardwareSimulationLibrary:SomeLibraryRightHere.so
-hardwareSimulationLibrary:AnotherLibraryOverThere.so
-hardwareSimulationLibrary:ThirdTimesTheCharm.so
-
 compilerOption:-DF_CPU=16000000UL
 compilerOption:-Og
 compilerOption:-D__DELAY_BACKWARD_COMPATIBLE__
