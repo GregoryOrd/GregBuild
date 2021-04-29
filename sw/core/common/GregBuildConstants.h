@@ -36,12 +36,13 @@
 #define DELETE_TEMP_DIR_DESCRIPTION "Don't Delete the temp Directory"
 #define DELETE_TEMP_DIR_FLAG_VALUE  1  // The value 1 here means delete the temp directory
 
-#define BUILD_SEQUENCE_STEP_TYPE  1
-#define PLUGIN_MODULE_LL_TYPE     2
-#define COMPILER_OPTION_TYPE      3
-#define LINKER_OPTION_TYPE        4
-#define HOST_EXCLUDED_FILE_TYPE   5
-#define TARGET_EXCLUDED_FILE_TYPE 6
+#define BUILD_SEQUENCE_STEP_TYPE    1
+#define PLUGIN_MODULE_LL_TYPE       2
+#define COMPILER_OPTION_TYPE        3
+#define LINKER_OPTION_TYPE          4
+#define HOST_EXCLUDED_FILE_TYPE     5
+#define TARGET_EXCLUDED_FILE_TYPE   6
+#define HARDWARE_SIMULATION_LIBRARY 7
 
 #define PLUGINS_LIB_DIRECTORY          "./lib/plugins"
 #define PLUGINS_LOAD_ORDER_CONFIG_FILE PLUGINS_LIB_DIRECTORY "/order"
