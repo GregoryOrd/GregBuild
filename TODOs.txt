@@ -9,6 +9,7 @@ Small Refactorings / Unscheduled Improvements
 	targetLinkerOption:-mmcu=atmega328p 
 - Add the -fno-common compiler flag to makefiles
 - Does linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary need the -L./ argument?
+- Add configurability for whether or not to continue with the target build if the tests fail on the host
 
 
 Plan for Release 0.0.2:
