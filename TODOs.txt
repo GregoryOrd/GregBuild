@@ -10,7 +10,13 @@ Small Refactorings / Unscheduled Improvements
 - Add the -fno-common compiler flag to makefiles
 - Does linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary need the -L./ argument?
 - Add configurability for whether or not to continue with the target build if the tests fail on the host
-
+- Add option to specify a project specific include directory. Then all of our header includes
+can be relative to that directory instead of relative to the directory where the file is.
+    - Might help to avoid needing included paths like:
+        - #include "../../../../../sim/hardwareSim.h"
+        - This comes from a test file which is a few folders deep in its repo structure
+        - Using a relative include path like the following would be much easier:
+            - #include <sim/hardwareSim.h>
 
 Plan for Release 0.0.2:
 ------------------------
