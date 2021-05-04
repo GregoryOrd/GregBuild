@@ -43,5 +43,6 @@ int main(int argc, const char* argv[])
    freeGlobalOptionsLists();
    freeHostExcludedFilesList();
    freeTargetExcludedFilesList();
+   freeHardwareSimulationLibrariesList();
    return error;
 }
