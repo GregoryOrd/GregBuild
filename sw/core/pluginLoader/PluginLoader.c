@@ -53,24 +53,7 @@ void freePluginList(PluginList* list)
    free(list);
 }
 
-void freePluginModules(LinkedList* pluginModules)
-{
-#ifdef __WINDOWS__
-   for (int i = 0; i < pluginModules->size; i++)
-   {
-      const HMODULE* lib = (const HMODULE*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
-      FreeLibrary(*lib);
-   }
-   free(pluginModules, freeModuleNode);
-#else
-   for (int i = 0; i < pluginModules->size; i++)
-   {
-      void* lib = (void*)at_ll(pluginModules, PLUGIN_MODULE_LL_TYPE, i);
-      dlclose(lib);
-   }
-   freeLinkedList(pluginModules, freeModuleNode);
-#endif
-}
+void freePluginModules(LinkedList* pluginModules) { freeLinkedList(pluginModules, freeModuleNode); }
 
 void freeModuleNode(void* data) {}
 
