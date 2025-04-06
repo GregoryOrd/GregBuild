@@ -17,6 +17,8 @@ can be relative to that directory instead of relative to the directory where the
         - This comes from a test file which is a few folders deep in its repo structure
         - Using a relative include path like the following would be much easier:
             - #include <sim/hardwareSim.h>
+- Add a clean command
+- Add a message after build that tells how much time the build took
 
 Plan for Release 0.0.2:
 ------------------------
