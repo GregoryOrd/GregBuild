@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libgen.h> 
+#include <unistd.h>
 
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/CommandLineExecutables.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
@@ -91,7 +93,7 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
 {
    LinkedList* options = determineLinkerOptionsListFromCompiler(compiler);
    // The +7 is for the known args below
-   linkerArgs->size = tempObjectFiles->size + options->size + 7;
+   linkerArgs->size = tempObjectFiles->size - 1 + options->size + 7;
    linkerArgs->args = calloc(linkerArgs->size, sizeof(void*));
    for (int i = 0; i < linkerArgs->size - 1; i++)
    {
@@ -103,13 +105,31 @@ void initArgsForLinkingTestExecutable(ArgList* linkerArgs, const ObjectFileList*
    strcpy(linkerArgs->args[2], "-o");
    strcpy(linkerArgs->args[3], TEMP_TEST_PROJECT_LIBRARY);
 
-   for (int j = 0; j < options->size; j++)
+   for (int j = 0; j < options->size - 1; j++)
    {
       strcpy(linkerArgs->args[j + 4], (char*)at_ll(options, LINKER_OPTION_TYPE, j));
    }
 
-   strcpy(linkerArgs->args[linkerArgs->size - 3], "-L./");
-   strcpy(linkerArgs->args[linkerArgs->size - 2], testFrameworkLibrary());
+   char testFrameworkPath[WINDOWS_MAX_PATH_LENGTH];
+   strcpy(testFrameworkPath, testFrameworkLibrary());
+   char *filename = strdup(testFrameworkPath);  
+   char *base = basename(filename);
+
+   char *dot = strrchr(base, '.');
+   if (dot != NULL) {
+       *dot = '\0'; 
+   }
+
+   char testFrameworkLinkerArg[WINDOWS_MAX_PATH_LENGTH];
+   snprintf(testFrameworkLinkerArg, sizeof(testFrameworkLinkerArg), "-l%s", base + 3);
+
+   char cwd[WINDOWS_MAX_PATH_LENGTH];
+   getcwd(cwd, sizeof(cwd));
+   char tempLibraryPath[WINDOWS_MAX_PATH_LENGTH + 7];
+   snprintf(tempLibraryPath, sizeof(tempLibraryPath), "-L%s/temp", cwd);
+
+   strcpy(linkerArgs->args[linkerArgs->size - 3], tempLibraryPath);
+   strcpy(linkerArgs->args[linkerArgs->size - 2], testFrameworkLinkerArg);
    linkerArgs->args[linkerArgs->size - 1] = NULL;
 }
 
@@ -137,12 +157,17 @@ void initArgsForCreatingTestMainExecutable(ArgList* linkerArgs)
       linkerArgs->args[i] = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
    }
 
+   char cwd[WINDOWS_MAX_PATH_LENGTH];
+   getcwd(cwd, sizeof(cwd));
+   char tempLibraryPath[WINDOWS_MAX_PATH_LENGTH + 7];
+   snprintf(tempLibraryPath, sizeof(tempLibraryPath), "-L%s/temp", cwd);
+
    strcpy(linkerArgs->args[0], (char*)hostCompiler());
    strcpy(linkerArgs->args[1], "-o");
    strcpy(linkerArgs->args[2], TEMP_TEST_MAIN);
    strcpy(linkerArgs->args[3], TEMP_TEST_MAIN_C);
-   strcpy(linkerArgs->args[4], "-L./");
-   strcpy(linkerArgs->args[5], TEMP_TEST_PROJECT_LIBRARY);
+   strcpy(linkerArgs->args[4], tempLibraryPath);
+   strcpy(linkerArgs->args[5], TEMP_TEST_PROJECT_LIBRARYLINKER_ARG);
    strcpy(linkerArgs->args[6], (char*)testFrameworkLibrary());
 
    for (int i = 0; i < hardwareSimLibraries->size; i++)

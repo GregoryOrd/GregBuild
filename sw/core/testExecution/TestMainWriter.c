@@ -111,7 +111,6 @@ void reallocTestCasesList(TestFileList* testFiles, int index)
 
 void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName, char* srcFileName)
 {
-   printf("getTestNameFromThirdToken: %s || %s\n", srcFileName, testCaseName);
    bool secondTokenIsUpperT = false;
    int tokenCount = 0;
    while (token = strtok_r(temp, " \n", &temp))
@@ -137,13 +136,11 @@ void demangleToken(char* token)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    getDemangleCommand(command, token);
-   printf("Demangle Command: %s\n", command);
 
    FILE* pipe = popen(command, "r");
    char buffer[BUFFER_SIZE];
    fgets(buffer, BUFFER_SIZE, pipe);
    pclose(pipe);
-   printf("Result Buffer: %s\n", buffer);
    strcpy(token, buffer);
    removeTrailingNewLine(token);
 }
@@ -214,7 +211,6 @@ void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTe
    for (int i = 0; i < numTests; i++)
    {
       const char* testName = cases[i].testName;
-      printf("Adding Test Case to TestMain.c: %s\n", testName);
       strcat(main, "\tvoid (*");
       strcat(main, testName);
       strcat(main, "_fun_ptr_)(void) = &");

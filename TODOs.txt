@@ -19,6 +19,20 @@ can be relative to that directory instead of relative to the directory where the
             - #include <sim/hardwareSim.h>
 - Add a clean command
 - Add a message after build that tells how much time the build took
+- Would be nice to build both target and host executables for testing on the host
+
+- Check if files have already been built.
+    - Keep the temp directory
+    - Check the last modified date of the source file against the object file
+    - Add a clean command option
+
+- There are issues linking with the TestProject.so file on linux
+- Perhaps some of these issues are due to initial development being on WSL instead of real linux.
+
+New Bugs
+-------------
+- compileIntoTempObjectFiles seems to take a really long time on GregMessaging/server which is only one file right now.
+
 
 Plan for Release 0.0.2:
 ------------------------

@@ -5,8 +5,9 @@
 #define TEST_PROJECT_LIBRARY      "TestProject.dll"
 #define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.dll"
 #else
-#define TEST_PROJECT_LIBRARY      "TestProject.so"
-#define TEMP_TEST_PROJECT_LIBRARY "temp/TestProject.so"
+#define TEST_PROJECT_LIBRARY      "libtestproject.so"
+#define TEMP_TEST_PROJECT_LIBRARY "temp/libtestproject.so"
+#define TEMP_TEST_PROJECT_LIBRARYLINKER_ARG "-ltestproject"
 #endif
 
 #define CURRENT_DIR "."

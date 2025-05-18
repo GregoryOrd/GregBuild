@@ -179,6 +179,12 @@ int linkObjectFilesWithGregTestLibraryToMakeProjectTestLibrary(
       ArgList* linkerArgs = malloc(sizeof(ArgList));
       initArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles, hostCompiler());
       fileArgsForLinkingTestExecutable(linkerArgs, tempObjectFiles);
+
+      for(int i = 0; i < linkerArgs->size; i++)
+      {
+         printf("Linker Args: %s\n", (char*)linkerArgs->args[i]);
+      }
+
       forkAndRunChildProcess((char* const*)linkerArgs->args);
 
       freeArgList(linkerArgs, true);
@@ -195,6 +201,12 @@ int createTestMainExecutableFromProjectLibraryAndGregTestLibrary(
    {
       ArgList* linkerArgs = malloc(sizeof(ArgList));
       initArgsForCreatingTestMainExecutable(linkerArgs);
+
+      for(int i = 0; i < linkerArgs->size; i++)
+      {
+         printf("Linker Args: %s\n", (char*)linkerArgs->args[i]);
+      }
+
       forkAndRunChildProcess((char* const*)linkerArgs->args);
 
       freeArgList(linkerArgs, true);
