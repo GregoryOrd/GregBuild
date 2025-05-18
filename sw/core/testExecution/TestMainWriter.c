@@ -13,9 +13,9 @@
 //////////////////////////////////////////////////////////////////////
 
 static const int BUFFER_SIZE = 4096;
-static void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index);
-static void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken);
-static void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index);
+static void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index, char* srcFileName);
+static void getTestNameFromThirdToken(char* token, char* temp, char* thirdToken, char* srcFileName);
+static void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index, char* srcFileName);
 static void populateTestCases(TestFileList* testFiles, int index);
 static void nmAndGrepCommand(char* command, const char* objectFileName);
 static void addTestCase(char* testCaseName, TestFileList* testFile, int index);
@@ -48,16 +48,20 @@ void populateTestCases(TestFileList* testFiles, int index)
 {
    char objectFileName[WINDOWS_MAX_PATH_LENGTH];
    determineObjectFilePathUsingListType(TEST_FILE_LIST_TYPE, objectFileName, hostCompiler(), testFiles, index);
-   getTestNamesFromTestObjectFile(testFiles, objectFileName, index);
+
+   char srcFileName[WINDOWS_MAX_PATH_LENGTH];
+   strcpy(srcFileName, testFiles->files[index].name);
+
+   getTestNamesFromTestObjectFile(testFiles, objectFileName, index, srcFileName);
 }
 
-void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index)
+void getTestNamesFromTestObjectFile(TestFileList* testFiles, const char* objectFileName, int index, char* srcFileName)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    nmAndGrepCommand(command, objectFileName);
 
    FILE* pipe = popen(command, "r");
-   readFileFromPipeBuffer(testFiles, pipe, index);
+   readFileFromPipeBuffer(testFiles, pipe, index, srcFileName);
    pclose(pipe);
 }
 
@@ -72,7 +76,7 @@ void nmAndGrepCommand(char* command, const char* objectFileName)
    strcat(command, "T");
 }
 
-void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index)
+void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index, char* srcFileName)
 {
    char buffer[BUFFER_SIZE];
    while (fgets(buffer, BUFFER_SIZE, pipe))
@@ -80,7 +84,7 @@ void readFileFromPipeBuffer(TestFileList* testFiles, FILE* pipe, int index)
       char* token;
       char* temp = strdup(buffer);
       char* testCaseName = calloc(WINDOWS_MAX_PATH_LENGTH, sizeof(char));
-      getTestNameFromThirdToken(token, temp, testCaseName);
+      getTestNameFromThirdToken(token, temp, testCaseName, srcFileName);
       addTestCase(testCaseName, testFiles, index);
 
       free(testCaseName);
@@ -105,8 +109,9 @@ void reallocTestCasesList(TestFileList* testFiles, int index)
    testFiles->files[index].numTestCases++;
 }
 
-void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
+void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName, char* srcFileName)
 {
+   printf("getTestNameFromThirdToken: %s || %s\n", srcFileName, testCaseName);
    bool secondTokenIsUpperT = false;
    int tokenCount = 0;
    while (token = strtok_r(temp, " \n", &temp))
@@ -117,7 +122,7 @@ void getTestNameFromThirdToken(char* token, char* temp, char* testCaseName)
       }
       else if (tokenCount == 2 && secondTokenIsUpperT)
       {
-         if (isCpp(token))
+         if (isCpp(srcFileName))
          {
             demangleToken(token);
             removeFunctionBrackets(token);
@@ -132,11 +137,13 @@ void demangleToken(char* token)
 {
    char command[WINDOWS_MAX_PATH_LENGTH + 8] = "";
    getDemangleCommand(command, token);
+   printf("Demangle Command: %s\n", command);
 
    FILE* pipe = popen(command, "r");
    char buffer[BUFFER_SIZE];
    fgets(buffer, BUFFER_SIZE, pipe);
    pclose(pipe);
+   printf("Result Buffer: %s\n", buffer);
    strcpy(token, buffer);
    removeTrailingNewLine(token);
 }
@@ -207,6 +214,7 @@ void addTestMainCFunctionPointerDefinitionsForSpecificFile(char* main, int numTe
    for (int i = 0; i < numTests; i++)
    {
       const char* testName = cases[i].testName;
+      printf("Adding Test Case to TestMain.c: %s\n", testName);
       strcat(main, "\tvoid (*");
       strcat(main, testName);
       strcat(main, "_fun_ptr_)(void) = &");
