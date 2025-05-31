@@ -6,7 +6,7 @@
 
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 
-BuildSequenceStep* after_removeTempDir()
+BuildSequenceStep* after_cleanTempDir()
 {
    BuildSequenceStep* step = malloc(sizeof(BuildSequenceStep));
    step->function_ptr = loadOntoArduinoWithAvrdude;

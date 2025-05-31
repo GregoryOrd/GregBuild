@@ -86,7 +86,7 @@ typedef struct BuildSequenceStep {
 //      - The source files have already been compiled into .o files at this
 //      point
 //      - This step just links together the .o files that were created in step 2
-// 8) removeTempDir()
+// 8) cleanTempDir()
 //      - Can be skipped with --leave-temp command line options
 //      - Remove the temp directory where the .o files live
 //      - Note: this step might be changed soon in the future to add smart
@@ -122,6 +122,9 @@ ObjectFileList* tempObjectFiles, int errorOnPreviousStep, char* basePath)
 }
 */
 
+BuildSequenceStep* before_cleanTempDir();
+BuildSequenceStep* after_cleanTempDir();
+
 BuildSequenceStep *before_loadTestsAndSourceFiles();
 BuildSequenceStep *after_loadTestsAndSourceFiles();
 
@@ -142,8 +145,5 @@ BuildSequenceStep* after_runTestsWithExitStatusCheck();
 
 BuildSequenceStep* before_compileIntoProjectExecutable();
 BuildSequenceStep* after_compileIntoProjectExecutable();
-
-BuildSequenceStep* before_removeTempDir();
-BuildSequenceStep* after_removeTempDir();
 
 #endif

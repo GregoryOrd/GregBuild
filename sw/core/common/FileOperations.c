@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
 #include "../common/GregBuildConstants.h"
@@ -11,9 +12,6 @@ void initFileListsAndTempDir(TestFileList* testFiles, SourceFileList* sourceFile
    initTestFiles(testFiles);
    initSourceFiles(sourceFiles);
    initObjectFileList(tempObjectFiles);
-   makeDir(TEMP_DIR);
-   makeDir(TEMP_DIR_HOST);
-   makeDir(TEMP_DIR_TARGET);
 }
 
 void initTestFiles(TestFileList* testFiles)
@@ -85,7 +83,30 @@ void freeTestFileList(TestFileList* testFileList)
    free(testFileList);
 }
 
-int removeTempDir(const TestFileList* const testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
+int cleanTempDir(const TestFileList* const testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath)
 {
-   return removeDir(TEMP_DIR);
+   return removeDir(TEMP_DIR);   
+}
+
+int makeTempDir()
+{
+   int mkRes = makeDir(TEMP_DIR);
+   if(mkRes != 0){
+      printf("Error creating temp direcotry after cleaning it: %s\n", TEMP_DIR);
+      return mkRes; 
+   }
+
+   mkRes = makeDir(TEMP_DIR_HOST);
+   if(mkRes != 0){
+      printf("Error creating temp direcotry after cleaning it: %s\n", TEMP_DIR_HOST);
+      return mkRes; 
+   }
+
+   mkRes = makeDir(TEMP_DIR_TARGET);
+   if(mkRes != 0){
+      printf("Error creating temp direcotry after cleaning it: %s\n", TEMP_DIR_TARGET);
+      return mkRes; 
+   }
+
+   return mkRes;   
 }

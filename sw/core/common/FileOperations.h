@@ -16,7 +16,8 @@ void resetObjectFileList(ObjectFileList* list);
 void freeFileLists(TestFileList* testFiles, SourceFileList* sourceFiles, ObjectFileList* tempObjectFiles);
 void freeTestFileList(TestFileList* list);
 void freeSourceFileList(SourceFileList* list);
-int removeTempDir(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
+int cleanTempDir(const TestFileList* testFiles, const SourceFileList* sourceFiles, const ObjectFileList* tempObjectFiles, int errorOnPreviousStep, const char* basePath);
+int makeTempDir();
 
 #ifdef __cplusplus
 }

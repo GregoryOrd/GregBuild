@@ -19,8 +19,22 @@ typedef struct BuildSequenceStepInfo
     const char* functionName;
 } BuildSequenceStepInfo;
 
-BuildSequenceStepInfo coreBuildSequenceInfo[9] = 
+BuildSequenceStepInfo coreBuildSequenceInfo[10] = 
 {
+    {
+        DELETE_TEMP_DIR_DESCRIPTION, 
+        DELETE_TEMP_DIR_OPTION_TEXT, 
+        DELETE_TEMP_DIR_FLAG_VALUE, 
+        cleanTempDir, 
+        "cleanTempDir"
+    },
+    {
+        NULL_COMMAND_LINE_DESCRIPTION, 
+        NULL_COMMAND_LINE_OPTION_TEXT, 
+        NULL_COMMAND_LINE_FLAG_VALUE, 
+        makeTempDir, 
+        "makeTempDir"
+    },
     {
         NULL_COMMAND_LINE_DESCRIPTION, 
         NULL_COMMAND_LINE_OPTION_TEXT, 
@@ -76,13 +90,6 @@ BuildSequenceStepInfo coreBuildSequenceInfo[9] =
         NULL_COMMAND_LINE_FLAG_VALUE, 
         compileIntoProjectExecutable, 
         "compileIntoProjectExecutable"
-    },
-    {
-        DELETE_TEMP_DIR_DESCRIPTION, 
-        DELETE_TEMP_DIR_OPTION_TEXT, 
-        DELETE_TEMP_DIR_FLAG_VALUE, 
-        removeTempDir, 
-        "removeTempDir"
     }
 };
 

@@ -33,9 +33,9 @@
 #define NO_TEST_DESCRIPTION "Don't Run Any Tests"
 #define NO_TEST_FLAG_VALUE  1  // The value 1 here means run the tests
 
-#define DELETE_TEMP_DIR_OPTION_TEXT "--leave-temp"
-#define DELETE_TEMP_DIR_DESCRIPTION "Don't Delete the temp Directory"
-#define DELETE_TEMP_DIR_FLAG_VALUE  1  // The value 1 here means delete the temp directory
+#define DELETE_TEMP_DIR_OPTION_TEXT "--clean"
+#define DELETE_TEMP_DIR_DESCRIPTION "Delete the temp Directory"
+#define DELETE_TEMP_DIR_FLAG_VALUE  0  // The value 1 here means delete the temp directory
 
 #define BUILD_SEQUENCE_STEP_TYPE    1
 #define PLUGIN_MODULE_LL_TYPE       2
