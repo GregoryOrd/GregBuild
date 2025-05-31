@@ -7,6 +7,7 @@
 #include "../../external/GregCToolkit/sw/ExternalProgramExecution/ExternalProgramExecution.h"
 #include "../../external/GregCToolkit/sw/FailureHandling/FailureHandling.h"
 #include "../../external/GregCToolkit/sw/FileSystem/ManageDirectories.h"
+#include "../../external/GregCToolkit/sw/FileSystem/CompareFiles.h"
 #include "../../external/GregCToolkit/sw/String/StringUtils.h"
 #include "../common/FileOperations.h"
 #include "../common/GregBuildConstants.h"
@@ -93,10 +94,20 @@ int compileFileAndAddToTempObjectList(int fileListType, const void* list, int in
    ArgList* compilerArgs = malloc(sizeof(ArgList));
    determineObjectFileNameUsingListType(fileListType, objectFileName, list, index);
    addTempObjectFileToList(tempObjectFiles, objectFileName, tempObjectFile, compiler);
-   argsForCompilingToObjectFile(compilerArgs, fileName, tempObjectFile, compiler);
-   int result = popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
-   freeArgList(compilerArgs, true);
-   return result;
+
+   if(compareModificationTimes(fileName, tempObjectFile) < 0)
+   {
+      argsForCompilingToObjectFile(compilerArgs, fileName, tempObjectFile, compiler);
+      int result = popenChildProcess(compilerArgs->size, (char* const*)compilerArgs->args);
+      freeArgList(compilerArgs, true);
+      return result;
+   }
+   else 
+   {
+      printf("Already Built: %s\n", tempObjectFile);
+   }
+
+   return 0;
 }
 
 bool sameCompiler() { return stringsAreEqual(hostCompiler(), targetCompiler()); }
